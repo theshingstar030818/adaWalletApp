@@ -1,0 +1,118 @@
+<!--
+  Generated template for the BtcTradePage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Trade BTC</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding center text-center>
+
+  <ion-segment [(ngModel)]="trade">
+      <ion-segment-button value="buySell">
+        Buy/Sell
+      </ion-segment-button>
+      <ion-segment-button value="sendReceive" center text-center>
+        Send/Receive
+      </ion-segment-button>
+    </ion-segment>
+
+    <div [ngSwitch]="trade">
+      <ion-list *ngSwitchCase="'buySell'">
+          <ion-card>
+            
+              <ion-card-content justify-content-center align-items-center>
+                Coming Soon
+              </ion-card-content>
+            
+            </ion-card>
+      </ion-list>      
+      
+      
+      <ion-list *ngSwitchCase="'sendReceive'">
+
+        <ng-template #hasWallet padding>
+          
+          <ion-card>
+            <ion-card-header>
+              <h1>0.00000000 BTC</h1>
+              <p>US $0.00</p>
+            </ion-card-header>
+            <ion-card-content>
+                Current Address:<br>
+                13DLVYR9Tpug963bxZwHYPFpU5jgEENf8w
+            </ion-card-content>
+          </ion-card>
+          
+
+
+          <ion-footer justify-content-center align-items-center text-center text-wrap>
+            <ion-toolbar justify-content-center align-items-center text-wrap>
+                <button ion-button icon-start>
+                  <ion-icon name="ios-send-outline"></ion-icon>
+                  Send
+                </button>
+                
+                <button ion-button icon-end>
+                  Receive
+                  <ion-icon name="md-download"></ion-icon>
+                </button>
+            </ion-toolbar>
+          </ion-footer>
+
+        </ng-template>
+
+        <ion-grid *ngIf="!btcProvider?.wallet else hasWallet">
+          <ion-row>
+            <ion-col col-6>
+              <ion-card>
+                <ion-card-header>
+                  <ion-row justify-content-center align-items-center (click)="addWallet()">
+                    <button ion-button outline>
+                      <ion-icon name="ios-add-outline"></ion-icon>
+                    </button>            
+                  </ion-row>
+                  <ion-row justify-content-center align-items-center>
+                    Create
+                  </ion-row>
+                  <ion-row justify-content-center align-items-center text-wrap>
+                    Create new wallet
+                  </ion-row>
+                </ion-card-header>          
+              </ion-card>
+            </ion-col>
+
+            <ion-col col-6>
+              <ion-card>
+                <ion-card-header>
+                  <ion-row justify-content-center align-items-center c>
+                    <button ion-button outline >
+                      <ion-icon name="ios-sync-outline"></ion-icon>
+                    </button>            
+                  </ion-row>
+                  <ion-row justify-content-center align-items-center>
+                    Restore
+                  </ion-row>
+                  <ion-row justify-content-center align-items-center text-wrap>
+                    Restore wallet from backup
+                  </ion-row>
+                </ion-card-header>          
+              </ion-card>
+            </ion-col>
+
+          </ion-row>
+        </ion-grid>
+      </ion-list>
+    </div>
+</ion-content>
+
+
+
+
