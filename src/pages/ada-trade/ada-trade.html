@@ -31,7 +31,7 @@
                 <ion-card-content justify-content-center align-items-center>
                   Coming Soon
                 </ion-card-content>
-              
+                <button ion-button (click)="getAllWallets()">getAllWallets</button>
               </ion-card>
         </ion-list>      
         
@@ -43,7 +43,7 @@
             <ion-card justify-content-center align-items-center text-center text-wrap>
               
               <ion-card-header>
-                <h1>723.640644 Ⓐ</h1>
+                <h1>{{ada.wallets[0].amount}} Ⓐ</h1>
                 <p>US $495.58</p>
                 <p>Number of transactions: 2</p>
               </ion-card-header>

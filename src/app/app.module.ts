@@ -1,17 +1,12 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
 import { NgModule, ErrorHandler } from '@angular/core';
-
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { HttpClientModule } from '@angular/common/http';
-
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { SplashScreen } from '@ionic-native/splash-screen';
-
 import { IonicStorageModule } from '@ionic/storage';
-
 import { ConferenceApp } from './app.component';
-
 import { AboutPage } from '../pages/about/about';
 import { PopoverPage } from '../pages/about-popover/about-popover';
 import { AccountPage } from '../pages/account/account';
@@ -50,7 +45,12 @@ import { CoinMarketCapProvider } from '../providers/coin-market-cap/coin-market-
 import { PipesModule } from '../pipes/pipes.module';
 import { CoinIconsProvider } from '../providers/coin-icons/coin-icons';
 import { AdaProvider } from '../providers/ada/ada';
+import { LocalStoreProvider } from '../providers/local-store/local-store';
 
+// AWS imports
+import { User } from '../providers/user';
+import { Cognito } from '../providers/aws.cognito';
+import { DynamoDB } from '../providers/aws.dynamodb';
 
 @NgModule({
   declarations: [
@@ -86,6 +86,7 @@ import { AdaProvider } from '../providers/ada/ada';
     HttpModule,
     HttpClientModule,
     PipesModule,
+    IonicStorageModule.forRoot(),
     IonicModule.forRoot(ConferenceApp, {}, {
       links: [
         { component: TabsPage, name: 'TabsPage', segment: 'tabs-page' },
@@ -114,8 +115,7 @@ import { AdaProvider } from '../providers/ada/ada';
         { component: AdaReceivePage, name: 'AdaReceivePage', segment: 'ada-receive-page' },
         { component: AdaConfirmTransactionPage, name: 'AdaConfirmTransactionPage', segment: 'ada-confirm-transaction-page' },
       ]
-    }),
-    IonicStorageModule.forRoot()
+    })
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -160,6 +160,10 @@ import { AdaProvider } from '../providers/ada/ada';
     AdaRecoverWalletModalPage,
     AdaSendPage,
     AdaReceivePage,
+    LocalStoreProvider,
+    User,
+    Cognito,
+    DynamoDB
   ]
 })
 export class AppModule { }

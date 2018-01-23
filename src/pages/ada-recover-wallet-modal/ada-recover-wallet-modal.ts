@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { split } from 'lodash';
 import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AdaProvider } from '../../providers/ada/ada';
-
+import { RestoreAdaWalletParams, AdaWalletInitData } from '../../providers/ada/types';
 /**
  * Generated class for the AdaRecoverWalletModalPage page.
  *
@@ -43,10 +44,29 @@ export class AdaRecoverWalletModalPage {
   }
 
   restoreWallet(){
-    this.submitAttempt = true;
+    
     console.log(this.slideOneForm.value);
+    this.submitAttempt = true;
     if(this.slideOneForm.valid){
-      this.ada.recoverWallet(this.slideOneForm).then((res)=>{
+      
+      const walletName = '';
+      const walletPassword = '';
+      const assurance = 'CWANormal';
+      const unit = 0;
+      const walletInitData: AdaWalletInitData = {
+        cwInitMeta: {
+          cwName: walletName,
+          cwAssurance: assurance,
+          cwUnit: unit,
+        },
+        cwBackupPhrase: {
+          bpToList: split('recoveryPhrase'), // array of mnemonic words
+        }
+      };
+
+      let restoreAdaWalletParams: RestoreAdaWalletParams = { walletPassword, walletInitData};
+    
+      this.ada.restoreAdaWallet(restoreAdaWalletParams).then((res)=>{
         console.log(res);
       }).catch((error)=>{
         console.error(error);

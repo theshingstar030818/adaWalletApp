@@ -17,7 +17,7 @@ import { AdaProvider } from '../../providers/ada/ada';
 })
 export class AdaRecoveryPhraseVerifyModalPage {
 
-  phrase = ['Charming', 'Victoria', 'Title', 'Mission', 'Parking', 'Loft', 'Amazing', 'Mordern', 'View', 'Sensitive', 'Included', 'Great'];
+  phrase;
   
   constructor(
     public navCtrl: NavController, 
@@ -25,6 +25,7 @@ export class AdaRecoveryPhraseVerifyModalPage {
     public viewCtrl: ViewController,
     public ada: AdaProvider
   ) {
+    this.phrase = ada.walletInitData.cwBackupPhrase.bpToList;
   }
 
   ionViewDidLoad() {
@@ -36,11 +37,11 @@ export class AdaRecoveryPhraseVerifyModalPage {
   }
 
   verifyPhraseAndCreateWallet(){
-    console.log("adding wallet");
-    this.ada.wallets.push({
-      walletName: 'My new wallet'
-    });
+    this.ada.createWallet().then((data)=>{
+      console.log(data);
+    }).catch((error)=>{
+      console.log(error);
+    })
     this.dismiss();
   }
-
 }

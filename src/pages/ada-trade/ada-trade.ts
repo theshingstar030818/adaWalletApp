@@ -17,7 +17,7 @@ import { AdaProvider } from '../../providers/ada/ada';
 export class AdaTradePage {
 
   tabComponent: string = 'AdaPage';
-  trade: string = "buySell";
+  trade: string = "sendReceive";
 
   constructor(
     public navCtrl: NavController,
@@ -26,11 +26,11 @@ export class AdaTradePage {
     public alertCtrl: AlertController,
     public modalCtrl: ModalController
     ) {
-
+      console.log(ada.wallets);
   }
 
   showBtcRecoveryPhraseVerifyModal(){
-    let modal = this.modalCtrl.create('AdaRecoveryPhraseVerifyModalPage', {phrase: [['Charming', 'Victoria', 'Title', 'Mission', 'Parking', 'Loft', 'Amazing', 'Mordern', 'View', 'Sensitive', 'Included', 'Great']]});
+    let modal = this.modalCtrl.create('AdaRecoveryPhraseVerifyModalPage', {});
     modal.present();
   }
 
@@ -54,8 +54,14 @@ export class AdaTradePage {
         {
           text: 'Create Wallet',
           handler: data => {
-            console.log('Saved clicked : ' + data);
-            this.showConfirm();
+            if(data.walletName.length > 0){
+              this.ada.walletInitData.cwInitMeta.cwName = data.walletName;
+              this.ada.getRandomMemonic();
+              this.showConfirm();
+            }else{
+              this.ada.presentToast("Enter Wallet Name");
+              return false;
+            }
           }
         }
       ]
@@ -68,7 +74,7 @@ export class AdaTradePage {
       title: 'RECOVERY PHRASE',
       message: `
       <p >  On the following screen, you will see a 12-word phrase. This is your wallet backup phrase. It can be entered in any version of Daedalus in order to restore your wallet.</p>
-      <p style="color: red;" >  Please make sure nobody looks into your screen unless you want them to have access to your funds.</p>`,
+      <p style="color: red;" > <b>  Please make sure nobody looks into your screen unless you want them to have access to your funds. </b> </p>`,
       buttons: [
         {
           text: 'Disagree',
@@ -78,9 +84,14 @@ export class AdaTradePage {
         },
         {
           text: 'Agree',
-          handler: () => {
-            console.log('Agree clicked');
-            this.showPhraseWrittenDownConfirm();
+          handler: (data) => {
+            console.log('Agree clicked: ' + data);
+            if(data){
+              this.showPhraseWrittenDownConfirm();
+            }else{
+              this.ada.presentToast("Please Agree and then ");
+              return false;
+            }
           }
         }
       ]
@@ -132,4 +143,10 @@ export class AdaTradePage {
     let modal = this.modalCtrl.create('AdaReceivePage', {});
     modal.present();
   }
+
+  // test code 
+  getAllWallets(){
+    this.ada.getAllWallets();
+  }
+
 }

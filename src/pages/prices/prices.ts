@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
 import { CryptoCompareProvider } from '../../providers/crypto-compare/crypto-compare';
 import { CoinMarketCapProvider } from '../../providers/coin-market-cap/coin-market-cap';
 import { CoinIconsProvider } from '../../providers/coin-icons/coin-icons';
-
-import { LoadingController } from 'ionic-angular';
 
 /**
  * Generated class for the PricesPage page.
@@ -59,9 +57,11 @@ export class PricesPage {
         content: "Please wait ...",
     });
   };
+
   presentLoader() {
       this.loader.present()
   };
+
   closeLoader(){
       this.loader.dismiss();
   }
