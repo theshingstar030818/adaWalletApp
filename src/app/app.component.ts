@@ -1,13 +1,13 @@
 import { Component, ViewChild } from '@angular/core';
-import { Events, MenuController, Nav, Platform } from 'ionic-angular';
+import { Config, Events, MenuController, Nav, Platform } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Storage } from '@ionic/storage';
 // import { AboutPage } from '../pages/about/about';
-// import { AccountPage } from '../pages/account/account';
-// import { LoginPage } from '../pages/login/login';
+import { AccountPage } from '../pages/account/account';
+import { LoginPage } from '../pages/login/login';
 // import { MapPage } from '../pages/map/map';
-// import { SignupPage } from '../pages/signup/signup';
-// import { TabsPage } from '../pages/tabs-page/tabs-page';
+import { SignupPage } from '../pages/signup/signup';
+import { TabsPage } from '../pages/tabs-page/tabs-page';
 import { TutorialPage } from '../pages/tutorial/tutorial';
 // import { SchedulePage } from '../pages/schedule/schedule';
 // import { SpeakerListPage } from '../pages/speaker-list/speaker-list';
@@ -18,6 +18,7 @@ import { AdaPage } from '../pages/ada/ada';
 // import { AdaTradePage } from '../pages/ada-trade/ada-trade';
 import { ConferenceData } from '../providers/conference-data';
 import { UserData } from '../providers/user-data';
+import { User } from '../providers/user';
 
 export interface PageInterface {
   title: string;
@@ -47,14 +48,14 @@ export class ConferenceApp {
     // { title: 'Markets', name: 'PricesPage', component: PricesPage, icon: 'ios-trending-up' },
   ];
   loggedInPages: PageInterface[] = [
-    // { title: 'Account', name: 'AccountPage', component: AccountPage, icon: 'person' },
+    { title: 'Account', name: 'AccountPage', component: AccountPage, icon: 'person' },
     { title: 'Support', name: 'SupportPage', component: SupportPage, icon: 'help' },
-    // { title: 'Logout', name: 'TabsPage', component: TabsPage, icon: 'log-out', logsOut: true }
+    { title: 'Logout', name: 'TabsPage', component: TabsPage, icon: 'log-out', logsOut: true }
   ];
   loggedOutPages: PageInterface[] = [
-    // { title: 'Login', name: 'LoginPage', component: LoginPage, icon: 'log-in' },
+    { title: 'Login', name: 'LoginPage', component: LoginPage, icon: 'log-in' },
     { title: 'Support', name: 'SupportPage', component: SupportPage, icon: 'help' },
-    // { title: 'Signup', name: 'SignupPage', component: SignupPage, icon: 'person-add' }
+    { title: 'Signup', name: 'SignupPage', component: SignupPage, icon: 'person-add' }
   ];
   rootPage: any;
 
@@ -65,7 +66,9 @@ export class ConferenceApp {
     public platform: Platform,
     public confData: ConferenceData,
     public storage: Storage,
-    public splashScreen: SplashScreen
+    public splashScreen: SplashScreen,
+    user: User,
+    public config: Config
   ) {
 
     // Check if the user has already seen the tutorial
@@ -76,7 +79,7 @@ export class ConferenceApp {
         } else {
           this.rootPage = TutorialPage;
         }
-        this.platformReady()
+        this.platformReady(user)
       });
 
     // load the conference data
@@ -143,10 +146,19 @@ export class ConferenceApp {
     this.menu.enable(!loggedIn, 'loggedOutMenu');
   }
 
-  platformReady() {
+  platformReady(user) {
     // Call any initial plugins when ready
     this.platform.ready().then(() => {
-      this.splashScreen.hide();
+      user.isAuthenticated().then(() => {
+        console.log('you are authenticated!');
+        this.rootPage = TabsPage;
+        this.splashScreen.hide();
+      }).catch(() => {
+        console.log('you are not authenticated..'); 
+        this.rootPage = LoginPage;
+        this.splashScreen.hide();
+      });
+      
     });
   }
 

@@ -12,7 +12,8 @@ export class DynamoDB {
   }
 
   getDocumentClient() {
-    return this.documentClient;
+    // return this.documentClient;
+    return new AWS.DynamoDB.DocumentClient();
   }
 
 }

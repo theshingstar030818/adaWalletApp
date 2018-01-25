@@ -12,7 +12,6 @@ import { PopoverPage } from '../pages/about-popover/about-popover';
 import { AccountPage } from '../pages/account/account';
 import { LoginPage } from '../pages/login/login';
 import { MapPage } from '../pages/map/map';
-// import { SchedulePage } from '../pages/schedule/schedule';
 import { ScheduleFilterPage } from '../pages/schedule-filter/schedule-filter';
 import { SessionDetailPage } from '../pages/session-detail/session-detail';
 import { SignupPage } from '../pages/signup/signup';
@@ -51,6 +50,7 @@ import { LocalStoreProvider } from '../providers/local-store/local-store';
 import { User } from '../providers/user';
 import { Cognito } from '../providers/aws.cognito';
 import { DynamoDB } from '../providers/aws.dynamodb';
+import { ConfirmPage } from '../pages/confirm/confirm';
 
 @NgModule({
   declarations: [
@@ -59,8 +59,8 @@ import { DynamoDB } from '../providers/aws.dynamodb';
     AccountPage,
     LoginPage,
     MapPage,
+    ConfirmPage,
     PopoverPage,
-    // SchedulePage,
     ScheduleFilterPage,
     SessionDetailPage,
     SignupPage,
@@ -90,7 +90,6 @@ import { DynamoDB } from '../providers/aws.dynamodb';
     IonicModule.forRoot(ConferenceApp, {}, {
       links: [
         { component: TabsPage, name: 'TabsPage', segment: 'tabs-page' },
-        // { component: SchedulePage, name: 'Schedule', segment: 'schedule' },
         { component: SessionDetailPage, name: 'SessionDetail', segment: 'sessionDetail/:sessionId' },
         { component: ScheduleFilterPage, name: 'ScheduleFilter', segment: 'scheduleFilter' },
         { component: SpeakerListPage, name: 'SpeakerList', segment: 'speakerList' },
@@ -100,6 +99,7 @@ import { DynamoDB } from '../providers/aws.dynamodb';
         { component: TutorialPage, name: 'Tutorial', segment: 'tutorial' },
         { component: SupportPage, name: 'SupportPage', segment: 'support' },
         { component: LoginPage, name: 'LoginPage', segment: 'login' },
+        { component: ConfirmPage, name: 'ConfirmPage', segment: 'confirm-page' },
         { component: AccountPage, name: 'AccountPage', segment: 'account' },
         { component: SignupPage, name: 'SignupPage', segment: 'signup' },
         { component: PortfolioPage, name: 'PortfolioPage', segment: 'portfolio-page' },
@@ -124,8 +124,8 @@ import { DynamoDB } from '../providers/aws.dynamodb';
     AccountPage,
     LoginPage,
     MapPage,
+    ConfirmPage,
     PopoverPage,
-    // SchedulePage,
     ScheduleFilterPage,
     SessionDetailPage,
     SignupPage,
@@ -166,4 +166,7 @@ import { DynamoDB } from '../providers/aws.dynamodb';
     DynamoDB
   ]
 })
-export class AppModule { }
+export class AppModule {}
+
+declare var AWS;
+AWS.config.customUserAgent = AWS.config.customUserAgent + ' Ionic';

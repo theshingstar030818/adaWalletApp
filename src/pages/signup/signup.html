@@ -10,14 +10,14 @@
 <ion-content class="login-page">
 
 	<div class="logo">
-		<img src="assets/img/appicon.svg" alt="Ionic Logo">
+		<img src="assets/img/daedalus-logo-loading-grey.inline.svg" alt="Ionic Logo">
 	</div>
 
 	<form #signupForm="ngForm" novalidate>
 		<ion-list no-lines>
 			<ion-item>
 				<ion-label stacked color="primary">Username</ion-label>
-				<ion-input [(ngModel)]="signup.username" name="username" type="text" #username="ngModel" required>
+				<ion-input [(ngModel)]="userDetails.username" name="username" type="text" #username="ngModel" required>
 				</ion-input>
 			</ion-item>
 			<p ion-text [hidden]="username.valid || submitted == false" color="danger" padding-left>
@@ -25,8 +25,17 @@
 			</p>
 
 			<ion-item>
+				<ion-label stacked color="primary">Email</ion-label>
+				<ion-input [(ngModel)]="userDetails.email" name="email" type="email" #email="ngModel" required>
+				</ion-input>
+			</ion-item>
+			<p ion-text [hidden]="email.valid || submitted == false" color="danger" padding-left>
+				Email is required
+			</p>
+
+			<ion-item>
 				<ion-label stacked color="primary">Password</ion-label>
-				<ion-input [(ngModel)]="signup.password" name="password" type="password" #password="ngModel" required>
+				<ion-input [(ngModel)]="userDetails.password" name="password" type="password" #password="ngModel" required>
 				</ion-input>
 			</ion-item>
 			<p ion-text [hidden]="password.valid || submitted == false" color="danger" padding-left>

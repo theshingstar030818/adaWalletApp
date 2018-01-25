@@ -21,6 +21,13 @@ import { Wallet } from './domain/Wallet';
 import { ToastController } from 'ionic-angular';
 import { LocalStoreProvider } from '../local-store/local-store';
 
+import { DynamoDB } from '../../providers/aws.dynamodb';
+import { Config } from 'ionic-angular';
+import { Cognito } from '../aws.cognito';
+import { User } from '../../providers/user';
+
+declare var AWS: any;
+
 /*
   Generated class for the AdaProvider provider.
 
@@ -43,15 +50,21 @@ export class AdaProvider {
     }
   };
 
-  loader: any;
-  wallets: any = [];
+  public loader: any;
+  public wallets: any = [];
+  public refresher: any;
+  private taskTable: string = 'ionic-mobile-hub-ada';
 
   constructor(
     public http: Http,
     private toastCtrl: ToastController,
     public loadingCtrl: LoadingController,
-    public localStorageApi: LocalStoreProvider
+    public localStorageApi: LocalStoreProvider,
+    public user: User,
+    public db: DynamoDB,
+    public cognito: Cognito, public config: Config
   ) {
+    this.getWalletWithMnemonic();
     localStorageApi.getWallets().then((wallets)=>{
       this.wallets = wallets;
     })
@@ -70,6 +83,31 @@ export class AdaProvider {
 
   closeLoader(){
       this.loader.dismiss();
+  }
+
+  getWalletWithMnemonic() {
+
+    let x = {
+      'TableName': this.taskTable,
+      'IndexName': 'DateSorted',
+      'KeyConditionExpression': "#userId = :userId",
+      'ExpressionAttributeNames': {
+        '#userId': 'userId',
+      },
+      'ExpressionAttributeValues': {
+        ':userId': AWS.config.credentials.identityId
+      },
+      'ScanIndexForward': false
+    };
+    console.log(x);
+    this.db.getDocumentClient().query(x).promise().then((data) => {
+      console.log(data);
+      if (this.refresher) {
+        this.refresher.complete();
+      }
+    }).catch((err) => {
+      console.log(err);
+    });
   }
 
   getAllWallets() {
@@ -99,10 +137,10 @@ export class AdaProvider {
     let sample = { 
       "cwInitMeta": { 
         "cwName": "yo yo", 
-        "cwAssurance": "CWAStrict", 
+        "cwAssurance": "CWAStrict",
         "cwUnit": 0
-      }, 
-      "cwBackupPhrase": { 
+      },
+      "cwBackupPhrase": {
         // "bpToList": [ "library", "inspire", "post", "retreat", "crumble", "fish", "profit", "balance", "category", "catalog", "suggest", "web"]
         // "bpToList": [ "wash", "session", "bullet", "pink", "chef", "hazard",  "pull", "swamp", "ceiling", "try", "joy", "toddler"]
         // "bpToList": [ "region", "place", "mandate", "employ", "invite", "celery", "ripple", "cigar", "feature", "melody", "soul", "village"]
