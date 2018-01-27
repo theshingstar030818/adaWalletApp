@@ -7,7 +7,7 @@ declare var AWS: any;
 declare const aws_cognito_region;
 declare const aws_cognito_identity_pool_id;
 declare const aws_user_pools_id;
-declare const aws_user_pools_web_client_id;
+// declare const aws_user_pools_web_client_id;
 
 @Injectable()
 export class User {
@@ -55,6 +55,7 @@ export class User {
             this.isAuthenticated().then(() => {
               resolve();
             }).catch((err) => {
+              console.log(err);
               console.log('auth session failed');
             });
           });
@@ -113,6 +114,7 @@ export class User {
     return new Promise((resolve, reject) => {
       let user = this.cognito.makeUser(username);
       user.resendConfirmationCode((err, result) => {
+        console.log(result);
         if (err) {
           console.log('could not resend code..', err);
           reject(err);

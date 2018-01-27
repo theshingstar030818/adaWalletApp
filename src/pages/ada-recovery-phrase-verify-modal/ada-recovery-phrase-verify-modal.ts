@@ -17,31 +17,73 @@ import { AdaProvider } from '../../providers/ada/ada';
 })
 export class AdaRecoveryPhraseVerifyModalPage {
 
-  phrase;
-  
+  phrase = '';
+  reEnteredPhrase = '';
+  disabledPhraseWords = [0,0,0,0,0,0,0,0,0,0,0,0];
+  orignalPhrase = '';
+  reEnteredPhraseIsValid: boolean = false;
+  reEnteredPhraseCounter = 0;
+
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
     public viewCtrl: ViewController,
     public ada: AdaProvider
   ) {
-    this.phrase = ada.walletInitData.cwBackupPhrase.bpToList;
+    this.orignalPhrase = this.ada.walletInitData.cwBackupPhrase.bpToList[0];
+    console.log(ada.walletInitData.cwBackupPhrase.bpToList);
+    this.phrase = this.shuffle((<string>ada.walletInitData.cwBackupPhrase.bpToList[0]).split(' '));
+    console.log(this.phrase);
+  }
+
+  phraseSelected(phrase, disableSwitchIndex){
+    this.disabledPhraseWords[disableSwitchIndex] = 1;
+    this.reEnteredPhrase += phrase + ' ';
+    this.reEnteredPhraseCounter ++;
+    // this.reEnteredPhraseIsValid = (this.reEnteredPhraseCounter == 12 && this.orignalPhrase == this.reEnteredPhrase.slice(0, -1));
+    this.reEnteredPhraseIsValid = true;
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad AdaRecoveryPhraseVerifyModalPage');
   }
 
+  clearReEnteredPhrase(){
+    this.reEnteredPhrase = '';
+    this.disabledPhraseWords = [0,0,0,0,0,0,0,0,0,0,0,0];
+    this.reEnteredPhraseCounter = 0;
+    this.reEnteredPhraseIsValid = false;
+    console.log("clearReEnteredPhrase");
+  }
+  
   dismiss() {
     this.viewCtrl.dismiss();
   }
 
   verifyPhraseAndCreateWallet(){
-    this.ada.createWallet().then((data)=>{
-      console.log(data);
-    }).catch((error)=>{
-      console.log(error);
-    })
-    this.dismiss();
+    if(this.reEnteredPhraseIsValid){
+      this.ada.createWallet().then((data)=>{
+        console.log(data);
+        this.dismiss();
+      }).catch((error)=>{
+        console.log(error);
+        this.dismiss();
+      });      
+    }else{
+      this.ada.presentToast('Phrase  ');
+    }
+    
+  }
+
+  /**
+   * Shuffles array in place. ES6 version
+   * @param {Array} a items An array containing the items.
+   */
+  shuffle(a) {
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
   }
 }

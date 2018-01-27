@@ -1,2 +1,2 @@
 // @flow
-export const unixTimestampToDate = (timestamp: number) => new Date(timestamp * 1000);
+export const unixTimestampToDate = (timestamp: any) => new Date(timestamp * 1000);

@@ -158,7 +158,6 @@ export class ConferenceApp {
         this.rootPage = LoginPage;
         this.splashScreen.hide();
       });
-      
     });
   }
 

@@ -14,7 +14,12 @@ import { LOVELACES_PER_ADA } from './config/numbersConfig';
 import BigNumber from 'bignumber.js';
 import { unixTimestampToDate } from './lib/utils';
 import { isValidMnemonic } from './lib/decrypt';
-import { RestoreAdaWalletParams, AdaWallet } from './types';
+
+import { WalletAddress } from './domain/WalletAddress';
+import { WalletTransaction, transactionTypes } from './domain/WalletTransaction';
+
+
+import { RestoreAdaWalletParams, AdaWallet, AdaAccounts, AdaTransactions, AdaTransactionFee, AdaAddress, AdaTransaction } from './types';
 import { CreateWalletResponse, WalletAlreadyRestoredError, GenericApiError } from './common';
 import { generateMnemonic } from './utils/crypto';
 import { Wallet } from './domain/Wallet';
@@ -47,11 +52,18 @@ export class AdaProvider {
     },
     cwBackupPhrase: {
       bpToList: [], // array of mnemonic words
-    }
+    },
+    password: '',
   };
+
+  accountIndex = '@2147483648';
 
   public loader: any;
   public wallets: any = [];
+  public accounts: any = [];
+  public transactions: AdaTransactions;
+  public skip: number = 0;
+  private limit: number = 10;
   public refresher: any;
   private taskTable: string = 'ionic-mobile-hub-ada';
 
@@ -64,11 +76,17 @@ export class AdaProvider {
     public db: DynamoDB,
     public cognito: Cognito, public config: Config
   ) {
-    this.getWalletWithMnemonic();
-    localStorageApi.getWallets().then((wallets)=>{
+    this.loadDataFromLocalStore();
+    this.initLoader();
+  }
+
+  loadDataFromLocalStore(){
+    this.localStorageApi.getWallets().then((wallets)=>{
       this.wallets = wallets;
     })
-    this.initLoader();
+    this.localStorageApi.getAccounts().then((accounts)=>{
+      this.accounts = accounts;
+    })
   }
 
   initLoader(){
@@ -86,7 +104,6 @@ export class AdaProvider {
   }
 
   getWalletWithMnemonic() {
-
     let x = {
       'TableName': this.taskTable,
       'IndexName': 'DateSorted',
@@ -123,17 +140,14 @@ export class AdaProvider {
   }
 
   restoreAdaWallet(restoreAdaWalletParams: RestoreAdaWalletParams): Promise<AdaWallet>{
-    
     console.log(restoreAdaWalletParams);
     this.presentLoader();
     let path = '/api/wallets/restore'; 
     let url = this.baseUrl+path;
-
     let headers = new Headers({
       'Content-Type' : 'application/json'
     });
     let requestOptionsArgs: RequestOptionsArgs = {"headers":headers};
-
     let sample = { 
       "cwInitMeta": { 
         "cwName": "yo yo", 
@@ -212,6 +226,63 @@ export class AdaProvider {
     });
   }
 
+  getTransactions(walletId, skip, limit) {
+    console.log(walletId);
+    try {
+      this.getAdaHistoryByWallet(walletId, skip, limit ).then((history: AdaTransactions)=>{
+        console.log(history);
+        this.transactions = <AdaTransactions>JSON.parse(history['_body'])["Right"];
+        return this.transactions;
+      })
+    } catch (error) {
+      throw new GenericApiError();
+    }
+  }
+
+  getAdaHistoryByWallet(walletId, skip, limit): Promise<AdaTransactions> {
+    console.log(walletId);
+    return new Promise((resolve, reject) => {
+      this.presentLoader();
+      let path = '/api/txs/histories?walletId='+walletId+'&skip='+skip+'&limit='+limit; 
+      let url = this.baseUrl+path;
+      let data = {
+        walletId: walletId,
+        skip: skip,
+        limit: limit,
+      }
+      let stringData = JSON.stringify(data);
+      this.http.get(url, stringData ).subscribe(res => {
+        console.log(res);
+        resolve(<any>res);
+      }, err => {
+        console.log(err);
+        reject(err);
+      });
+    });
+  }
+
+
+  getAccount(accountId): Promise<AdaAccounts> {
+    return new Promise((resolve, reject) => {
+      this.presentLoader();
+      let path = '/api/accounts?accountId='+accountId; 
+      let url = this.baseUrl+path;
+      this.http.get(url).subscribe(res => {
+        this.accounts = JSON.parse(res['_body'])["Right"];
+        this.localStorageApi.setAccounts(this.accounts).then(()=>{
+          console.log('accounts stored to local storage');
+          resolve(this.accounts);
+        }).catch((error)=>{
+          this.presentToast(error.message);
+          reject(new Error(error));
+        });
+      }, err => {
+        console.log(err);
+        reject(err);
+      });
+    });
+  }
+
   createWallet(): Promise<CreateWalletResponse> {
 
     this.presentLoader();
@@ -222,7 +293,7 @@ export class AdaProvider {
     });
     let requestOptionsArgs: RequestOptionsArgs = {"headers":headers};
     // let password = 'abc';
-    const assurance = 'CWANormal';
+    const assurance = 'CWAStrict';
     const unit = 0;
     try {
       this.walletInitData.cwInitMeta.cwAssurance = assurance;
@@ -236,37 +307,49 @@ export class AdaProvider {
         .timeout(100000000)
         .subscribe(res => {
           let responseBody = JSON.parse(res['_body']);
-          this.closeLoader();
           if (has(responseBody, 'Right')) {
             // "Right" means 200 ok (success) -> also handle if Right: false (boolean response)
-            let wallet = this._createWalletFromServerData(responseBody['Right']);
-            this.wallets.push(wallet);
-            this.localStorageApi.setWallets(this.wallets).then((wallets)=>{
-              console.log('wallet stored to local storage');
-              console.log(wallets);
-              resolve(responseBody['Right']);
+            
+            this.getTransactions(responseBody['Right'].cwId, this.skip, this.limit);
+
+            this.getAccount(responseBody['Right'].cwId).then(()=>{
+              let wallet = this._createWalletFromServerData(responseBody['Right'] );
+              this.wallets.push(wallet);
+              this.localStorageApi.setWallets(this.wallets).then((wallets)=>{
+                console.log('wallet stored to local storage');
+                console.log(wallets);
+                this.closeLoader();
+                resolve(responseBody['Right']);
+              }).catch((error)=>{
+                this.presentToast(error.message);
+                reject(new Error(error));
+              });
             }).catch((error)=>{
+              this.closeLoader();
               this.presentToast(error.message);
               reject(new Error(error));
             });
-            
           } else if (has(responseBody, 'Left')) {
             // "Left" means error case -> return error with contents (exception on nextUpdate)
             if (responseBody) {
               let err = new Error(responseBody['Left'].contents);
+              this.closeLoader();
               this.presentToast(err.message);
               reject(new Error(responseBody['Left'].contents));
             } else {
+              this.closeLoader();
               this.presentToast('Unknown response from backend.');
               reject(new Error('Unknown response from backend.'));
             }
           } else {
+            this.closeLoader();
             this.presentToast('Unknown response from backend.');
             reject(new Error('Unknown response from backend.'));
           }
         })
       });
     } catch (error) {
+      this.closeLoader();
       this.presentToast('Response from backend : ' + error.message);
     }
   }
@@ -307,5 +390,45 @@ export class AdaProvider {
       hasPassword: data.cwHasPassphrase,
       passwordUpdateDate: unixTimestampToDate(data.cwPassphraseLU),
     });
+  };
+  
+  _createAddressFromServerData (data: AdaAddress) {
+      new WalletAddress({
+        id: data.cadId,
+        amount: new BigNumber(data.cadAmount.getCCoin).dividedBy(LOVELACES_PER_ADA),
+        isUsed: data.cadIsUsed,
+      })
+    };
+  
+  _conditionToTxState = (condition: string) => {
+    switch (condition) {
+      case 'CPtxApplying': return 'pending';
+      case 'CPtxWontApply': return 'failed';
+      default: return 'ok'; // CPtxInBlocks && CPtxNotTracked
+    }
+  };
+  
+  _createTransactionFromServerData = (data: AdaTransaction) => {
+      const coins = data.ctAmount.getCCoin;
+      const { ctmTitle, ctmDescription, ctmDate } = data.ctMeta;
+      return new WalletTransaction({
+        id: data.ctId,
+        title: ctmTitle || data.ctIsOutgoing ? 'Ada sent' : 'Ada received',
+        type: data.ctIsOutgoing ? transactionTypes.EXPEND : transactionTypes.INCOME,
+        amount: new BigNumber(data.ctIsOutgoing ? -1 * coins : coins).dividedBy(LOVELACES_PER_ADA),
+        date: unixTimestampToDate(ctmDate),
+        description: ctmDescription || '',
+        numberOfConfirmations: data.ctConfirmations,
+        addresses: {
+          from: data.ctInputs.map(address => address[0]),
+          to: data.ctOutputs.map(address => address[0]),
+        },
+        state: this._conditionToTxState(data.ctCondition),
+      });
+    };
+  
+  _createTransactionFeeFromServerData = (data: AdaTransactionFee) => {
+      const coins = data.getCCoin;
+      return new BigNumber(coins).dividedBy(LOVELACES_PER_ADA);
   };
 }

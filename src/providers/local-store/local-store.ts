@@ -1,8 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+// import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import environment from '../ada/environment';
-import { AdaWallet } from '../ada/types';
+import { AdaWallet, AdaAccounts, AdaTransactions } from '../ada/types';
 
 /*
   Generated class for the LocalStoreProvider provider.
@@ -17,13 +17,67 @@ const storageKeys = {
   TERMS_OF_USE_ACCEPTANCE: networkForLocalStorage + '-TERMS-OF-USE-ACCEPTANCE',
   SEND_LOGS_CHOICE: networkForLocalStorage + '-SEND-LOGS-CHOICE',
   THEME: networkForLocalStorage + '-THEME',
-  WALLETS: 'WALLETS'
+  WALLETS: 'WALLETS',
+  ACCOUNTS: 'ACCOUNTS',
+  TRANSACTIONS: 'TRANSACTIONS',
 };
 
 @Injectable()
 export class LocalStoreProvider {
 
   constructor(private storage: Storage) { }
+
+  getTransactions = () => new Promise((resolve, reject) => {
+    try {
+      this.storage.get(storageKeys.TRANSACTIONS).then((transactions)=>{
+        if (!transactions) return resolve([]);
+        resolve(transactions);
+      }).catch((error)=>{
+        return reject(error);
+      })
+    } catch (error) {
+      return reject(error);
+    }
+  });
+
+  setTransactions = (accounts: Array<AdaTransactions>) => new Promise((resolve, reject) => {
+    try {
+      this.storage.set(storageKeys.TRANSACTIONS, accounts).then((transactions)=>{
+        if (!transactions) return resolve([]);
+        resolve();
+      }).catch((error)=>{
+        return reject(error);
+      })
+    } catch (error) {
+      return reject(error);
+    }
+  });
+
+  getAccounts = () => new Promise((resolve, reject) => {
+    try {
+      this.storage.get(storageKeys.ACCOUNTS).then((accounts)=>{
+        if (!accounts) return resolve([]);
+        resolve(accounts);
+      }).catch((error)=>{
+        return reject(error);
+      })
+    } catch (error) {
+      return reject(error);
+    }
+  });
+
+  setAccounts = (accounts: Array<AdaAccounts>) => new Promise((resolve, reject) => {
+    try {
+      this.storage.set(storageKeys.ACCOUNTS, accounts).then((accounts)=>{
+        if (!accounts) return resolve([]);
+        resolve();
+      }).catch((error)=>{
+        return reject(error);
+      })
+    } catch (error) {
+      return reject(error);
+    }
+  });
 
   getWallets = () => new Promise((resolve, reject) => {
     try {

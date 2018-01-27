@@ -14,7 +14,7 @@ const hexChar = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c'
 
 const hexToBytes = (s) => {
   const arr = [];
-  if (s.length & 1 === 1) { // eslint-disable-line
+  if (s.length && 1 === 1) { // eslint-disable-line
     throw new Error(`Wrong hex: ${s}`);
   }
   for (let i = 0; i < s.length / 2; ++i) {
@@ -43,4 +43,4 @@ const hashData = (data) => {
 };
 
 export const decryptRegularVend = (key, data) => decryptWithAES(blake2b(fromMnemonic(key)), data);
-export const decryptForceVend = (key, data) => decryptWithAES(blake2b(key[0].trim().toLowerCase() + hashData(key[1].trim()).hexSlice() + key[2].trim()), data);
+export const decryptForceVend = (key, data) => decryptWithAES(blake2b(key[0].trim().toLowerCase() + (<any>hashData(key[1].trim())).hexSlice() + key[2].trim()), data);

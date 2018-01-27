@@ -43,6 +43,7 @@ export class SignupPage {
       this.error = null;
       console.log('register');
       this.userData.register(details.username, details.password, {'email': details.email}).then((user) => {
+        console.log(user);
         loading.dismiss();
         this.navCtrl.push(ConfirmPage, { username: details.username });
       }).catch((err) => {

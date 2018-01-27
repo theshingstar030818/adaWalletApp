@@ -44,11 +44,9 @@ export class AdaRecoverWalletModalPage {
   }
 
   restoreWallet(){
-    
     console.log(this.slideOneForm.value);
     this.submitAttempt = true;
     if(this.slideOneForm.valid){
-      
       const walletName = '';
       const walletPassword = '';
       const assurance = 'CWANormal';

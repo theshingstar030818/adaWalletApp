@@ -18,9 +18,15 @@ export const formattedWalletAmount = (
   } else if (amount.lessThan(0.000001)) {
     formattedAmount = '< 0.000001';
   } else if (amount.lessThan(1)) {
-    formattedAmount = amount.round(6, BigNumber.ROUND_DOWN);
+
+    formattedAmount = `${amount.round(6, BigNumber.ROUND_DOWN)}`;
+    // formattedAmount = amount.round(6, BigNumber.ROUND_DOWN);
+
   } else if (amount.lessThan(1000)) {
-    formattedAmount = amount.round(1, BigNumber.ROUND_DOWN);
+
+    formattedAmount = `${amount.round(1, BigNumber.ROUND_DOWN)}`;
+    // formattedAmount = amount.round(1, BigNumber.ROUND_DOWN);
+
   } else if (amount.lessThan(1000000)) {
     formattedAmount = `${amount.dividedBy(1000).round(1, BigNumber.ROUND_DOWN)}K`;
   } else if (amount.lessThan(1000000000)) {

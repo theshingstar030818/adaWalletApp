@@ -31,16 +31,55 @@
                 <ion-card-content justify-content-center align-items-center>
                   Coming Soon
                 </ion-card-content>
-                <button ion-button (click)="ada.getWalletWithMnemonic()">getAllWallets</button>
+                <!-- <button ion-button (click)="ada.getWalletWithMnemonic()">getAllWallets</button> -->
               </ion-card>
         </ion-list>      
         
         
         <ion-list *ngSwitchCase="'sendReceive'">
   
-          <ng-template #hasWallet padding>
+          <ng-template #hasWallet >
             
-            <ion-card justify-content-center align-items-center text-center text-wrap>
+            <ion-card text-wrap>
+              <ion-card-header>
+                <h2 text-left>{{ada?.wallets[0]?.name}}</h2>
+                <ion-item>
+                  <h1 item-start>{{ada?.wallets[0]?.amount}}</h1>
+                  <ion-avatar small item-start>
+                    <img small class="symbol" src="../assets/img/ada-symbol-smallest-dark.inline.svg" >
+                  </ion-avatar>
+                </ion-item>
+              </ion-card-header>
+              <ion-card-content>
+                  <ion-item>
+                    <ion-icon name="ios-list-box-outline" item-start></ion-icon>
+                    Transactions
+                    <ion-badge item-end>26</ion-badge>
+                  </ion-item>
+
+                  <ion-item>
+                    <ion-icon name="ios-copy-outline" item-end></ion-icon>
+                    <p text-wrap>{{ada?.accounts[0]?.caAddresses[ada?.accounts[0]?.caAddresses.length-1]?.cadId}}</p>
+                  </ion-item>
+
+                </ion-card-content>
+                <ion-row>
+                  <ion-col>
+                    <button ion-button icon-start small (click)="sendADA()">
+                      <ion-icon name="ios-share-outline"></ion-icon>
+                      Send
+                    </button>
+                  </ion-col>
+                  <ion-col>
+                    <button ion-button icon-end small (click)="receiveADA()">
+                      Receive
+                      <ion-icon name="ios-download-outline"></ion-icon>
+                    </button>
+                  </ion-col>
+                </ion-row>
+            </ion-card>
+
+            <!-- <ion-card justify-content-center align-items-center text-center text-wrap>
               
               <ion-card-header>
                 <h1>{{ada.wallets[0].amount}} Ⓐ</h1>
@@ -55,7 +94,9 @@
                 <b>Current Address:</b><br>
                 DdzFFzCqrhtCznips7RNMjhUg1sz7Dt8Yw8anHAfrvaLSSWojQFfsM42D9ca1HGPX2T8PkDhu15FgBvQNjaDJSyWUuh8yacaWk1dBZKF
               </ion-card-content>
-            </ion-card>
+            </ion-card> -->
+
+
             <ion-list no-border>
               <ion-list-header>
                 Yesterday
@@ -127,7 +168,7 @@
               <ion-col col-6>
                 <ion-card>
                   <ion-card-header>
-                    <ion-row justify-content-center align-items-center (click)="restoreWallet()">
+                    <ion-row justify-content-center align-items-center (click)="presentActionSheet()">
                       <button ion-button outline >
                         <ion-icon name="ios-sync-outline"></ion-icon>
                       </button>            
@@ -147,20 +188,17 @@
         </ion-list>
       </div>
   </ion-content>
-  
-  
-  
-  
-  <ion-footer justify-content-center align-items-center text-center text-wrap>
-    <ion-toolbar justify-content-center align-items-center text-wrap>
-        <button ion-button icon-start small (click)="sendADA()">
-          <ion-icon name="ios-share-outline"></ion-icon>
-          Send
-        </button>
-        
-        <button ion-button icon-end small (click)="receiveADA()">
-          Receive
-          <ion-icon name="ios-download-outline"></ion-icon>
-        </button>
-    </ion-toolbar>
-  </ion-footer>
+    
+<!-- <ion-footer *ngIf="trade == 'sendReceive'" justify-content-center align-items-center text-center text-wrap>
+  <ion-toolbar justify-content-center align-items-center text-wrap>
+      <button ion-button icon-start small (click)="sendADA()">
+        <ion-icon name="ios-share-outline"></ion-icon>
+        Send
+      </button>
+      
+      <button ion-button icon-end small (click)="receiveADA()">
+        Receive
+        <ion-icon name="ios-download-outline"></ion-icon>
+      </button>
+  </ion-toolbar>
+</ion-footer> -->

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, ModalController, ActionSheetController } from 'ionic-angular';
 import { AdaProvider } from '../../providers/ada/ada';
 
 /**
@@ -24,9 +24,43 @@ export class AdaTradePage {
     public navParams: NavParams,
     public ada: AdaProvider,
     public alertCtrl: AlertController,
-    public modalCtrl: ModalController
+    public modalCtrl: ModalController,
+    public actionSheetCtrl: ActionSheetController
     ) {
       console.log(ada.wallets);
+  }
+
+  presentActionSheet() {
+    let actionSheet = this.actionSheetCtrl.create({
+      title: 'Recover Wallet by',
+      buttons: [
+        {
+          text: 'Recovery Phrase',
+          handler: () => {
+            console.log('Recovery Phrase clicked');
+            this.restoreWallet();
+          }
+        },{
+          text: 'Private Key',
+          handler: () => {
+            console.log('Private Key clicked');
+            this.showAdaWalletRecoverUsingIdPage();
+          }
+        },{
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        }
+      ]
+    });
+    actionSheet.present();
+  }
+
+  showAdaWalletRecoverUsingIdPage(){
+    let modal = this.modalCtrl.create('AdaWalletRecoverUsingIdPage', {});
+    modal.present();
   }
 
   showBtcRecoveryPhraseVerifyModal(){
@@ -35,6 +69,11 @@ export class AdaTradePage {
   }
 
   addWallet(){
+    let modal = this.modalCtrl.create('AdaCreateNewWalletPage', {});
+    modal.present();
+  }
+
+  addWalletAlert(){
     let prompt = this.alertCtrl.create({
       title: 'CREATE WALLET',
       message: "Enter a name for this new wallet",
@@ -42,6 +81,10 @@ export class AdaTradePage {
         {
           name: 'walletName',
           placeholder: 'e.g Shopping Wallet'
+        },
+        {
+          name: 'walletPass',
+          placeholder: 'Wallet Password'
         },
       ],
       buttons: [
@@ -54,12 +97,13 @@ export class AdaTradePage {
         {
           text: 'Create Wallet',
           handler: data => {
-            if(data.walletName.length > 0){
+            if(data.walletName.length > 0 && data.walletPass.length > 8){
               this.ada.walletInitData.cwInitMeta.cwName = data.walletName;
+              this.ada.walletInitData.password = data.walletPass;
               this.ada.getRandomMemonic();
               this.showConfirm();
             }else{
-              this.ada.presentToast("Enter Wallet Name");
+              this.ada.presentToast("Enter Wallet Name & Password");
               return false;
             }
           }
@@ -109,11 +153,10 @@ export class AdaTradePage {
 
   showPhraseWrittenDownConfirm() {
     let alert = this.alertCtrl.create({
-      title: `RECOVERY PHRASE`,
-      message: `
-        <p > The phrase is case sensitive. Please make sure you write down and save your recovery phrase. You will need this phrase to use and restore your wallet.</p>
-        <p style="color:red;" >Charming Victoria Title Mission Parking Loft Amazing Mordern View Sensitive Included Great</p>
-      `,
+      title: `<h1>RECOVERY PHRASE</h1> 
+      <br> 
+      <p> The phrase is case sensitive. Please make sure you write down and save your recovery phrase. You will need this phrase to use and restore your wallet.</p>`,
+      message: '',
       buttons: [{
         text: 'Yes, I have written it down.',
         handler: () => {

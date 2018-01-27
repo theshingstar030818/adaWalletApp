@@ -2,7 +2,7 @@
 import { observable } from 'mobx';
 import BigNumber from 'bignumber.js';
 
-export default class WalletAddress {
+export class WalletAddress {
 
   @observable id: string = '';
   @observable amount: BigNumber;
