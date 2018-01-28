@@ -73,13 +73,13 @@ export class AdaProvider {
     public loadingCtrl: LoadingController,
     public localStorageApi: LocalStoreProvider,
     public user: User,
-    public db: DynamoDB,
     public cognito: Cognito, 
     public config: Config,
-    private clipboard: Clipboard
+    private clipboard: Clipboard,
+    public db: DynamoDB,
   ) {
-    this.loadDataFromLocalStore();
     this.initLoader();
+    this.loadDataFromLocalStore();
   }
 
   loadDataFromLocalStore(){
@@ -118,8 +118,9 @@ export class AdaProvider {
       this.loader.dismiss();
   }
 
-  getWalletWithMnemonic() {
-    let x = {
+  getWallets() {
+    console.log(AWS.config.credentials.identityId);
+    this.db.getDocumentClient().query({
       'TableName': this.taskTable,
       'IndexName': 'DateSorted',
       'KeyConditionExpression': "#userId = :userId",
@@ -130,15 +131,33 @@ export class AdaProvider {
         ':userId': AWS.config.credentials.identityId
       },
       'ScanIndexForward': false
-    };
-    console.log(x);
-    this.db.getDocumentClient().query(x).promise().then((data) => {
+    }).promise().then((data) => {
       console.log(data);
       if (this.refresher) {
         this.refresher.complete();
       }
     }).catch((err) => {
       console.log(err);
+    });
+  }
+
+  connectWalletToUser(id) {
+    let item = {
+      'taskId': id,
+      'category': 'Wallet',
+      'userId': AWS.config.credentials.identityId,
+      'created': (new Date().getTime() / 1000)
+    };    
+    this.db.getDocumentClient().put({
+      'TableName': this.taskTable,
+      'Item': item,
+      'ConditionExpression': 'attribute_not_exists(id)'
+    }, (err, data) => {
+      console.log(data);
+      if (err) { 
+        console.log(err); 
+      }
+      this.getWallets();
     });
   }
 
@@ -185,9 +204,9 @@ export class AdaProvider {
         // "bpToList": [ "wash", "session", "bullet", "pink", "chef", "hazard", "pull", "swamp", "ceiling", "try", "joy", "toddler"]
       }
     }
-
+    
     let data = JSON.stringify(sample);
-
+    
     return new Promise((resolve, reject) => {
 
       try {
@@ -324,11 +343,10 @@ export class AdaProvider {
           let responseBody = JSON.parse(res['_body']);
           if (has(responseBody, 'Right')) {
             // "Right" means 200 ok (success) -> also handle if Right: false (boolean response)
-            
             this.getTransactions(responseBody['Right'].cwId, this.skip, this.limit);
-
             this.getAccount(responseBody['Right'].cwId).then(()=>{
               let wallet = this._createWalletFromServerData(responseBody['Right'] );
+              this.connectWalletToUser(wallet.id);
               this.wallets.push(wallet);
               this.localStorageApi.setWallets(this.wallets).then((wallets)=>{
                 console.log('wallet stored to local storage');

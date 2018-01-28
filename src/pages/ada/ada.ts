@@ -4,6 +4,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { AdaTradePage } from '../ada-trade/ada-trade';
 import { AdaTransactionsPage } from '../ada-transactions/ada-transactions';
 import { AdaSettingsPage } from '../ada-settings/ada-settings';
+import { AdaProvider } from '../../providers/ada/ada';
 
 /**
  * Generated class for the AdaPage page.
@@ -26,13 +27,15 @@ export class AdaPage {
 
   constructor(
     public navCtrl: NavController, 
-    public navParams: NavParams
+    public navParams: NavParams,
+    public ada: AdaProvider
   ) {
     this.mySelectedIndex = navParams.data.tabIndex || 0;
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad AdaPage');
+    this.ada.getWallets();
   }
 
 }

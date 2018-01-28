@@ -32,6 +32,7 @@ export class AdaTradePage {
     public toastCtrl: ToastController
     ) {
       console.log(ada.wallets);
+      // this.ada.getWallets();
   }
 
   ionViewDidLoad(){
