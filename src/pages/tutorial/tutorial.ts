@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { MenuController, NavController, Slides } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
-import { TabsPage } from '../tabs-page/tabs-page';
+import { AdaPage } from '../ada/ada';
 
 @Component({
   selector: 'page-tutorial',
@@ -20,7 +20,7 @@ export class TutorialPage {
   ) { }
 
   startApp() {
-    this.navCtrl.push(TabsPage).then(() => {
+    this.navCtrl.push(AdaPage).then(() => {
       this.storage.set('hasSeenTutorial', 'true');
     })
   }

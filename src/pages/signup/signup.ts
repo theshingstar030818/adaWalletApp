@@ -4,7 +4,7 @@ import { NavController, LoadingController } from 'ionic-angular';
 import { UserData } from '../../providers/user-data';
 import { LoginPage } from '../login/login';
 import { ConfirmPage } from '../confirm/confirm';
-import { TabsPage } from '../tabs-page/tabs-page';
+import { AdaPage } from '../ada/ada';
 
 export class UserDetails {
   username: string;
@@ -50,7 +50,7 @@ export class SignupPage {
         loading.dismiss();
         this.error = err;
       });
-      this.navCtrl.push(TabsPage);
+      this.navCtrl.push(AdaPage);
     }
   }
 

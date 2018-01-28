@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { LoadingController } from 'ionic-angular';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
-
+import { Clipboard } from '@ionic-native/clipboard';
 import {Http, Headers, RequestOptionsArgs} from '@angular/http';
 import 'rxjs/add/operator/retry';
 import 'rxjs/add/operator/timeout';
@@ -74,7 +74,9 @@ export class AdaProvider {
     public localStorageApi: LocalStoreProvider,
     public user: User,
     public db: DynamoDB,
-    public cognito: Cognito, public config: Config
+    public cognito: Cognito, 
+    public config: Config,
+    private clipboard: Clipboard
   ) {
     this.loadDataFromLocalStore();
     this.initLoader();
@@ -87,6 +89,19 @@ export class AdaProvider {
     this.localStorageApi.getAccounts().then((accounts)=>{
       this.accounts = accounts;
     })
+  }
+
+  copyToClipboard(data){
+    this.clipboard.copy('Hello world');
+  }
+
+  pasteFromClipboard(){
+    this.clipboard.paste().then((resolve: string) => {
+        alert(resolve);
+    },(reject: string) => {
+        alert('Error: ' + reject);
+      }
+    );
   }
 
   initLoader(){

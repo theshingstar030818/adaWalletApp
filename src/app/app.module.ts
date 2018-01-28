@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
 import { NgModule, ErrorHandler } from '@angular/core';
+import { Clipboard } from '@ionic-native/clipboard';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { HttpClientModule } from '@angular/common/http';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
@@ -17,7 +18,6 @@ import { SessionDetailPage } from '../pages/session-detail/session-detail';
 import { SignupPage } from '../pages/signup/signup';
 import { SpeakerDetailPage } from '../pages/speaker-detail/speaker-detail';
 import { SpeakerListPage } from '../pages/speaker-list/speaker-list';
-import { TabsPage } from '../pages/tabs-page/tabs-page';
 import { TutorialPage } from '../pages/tutorial/tutorial';
 import { SupportPage } from '../pages/support/support';
 import { AdaRecoveryPhraseVerifyModalPage } from '../pages/ada-recovery-phrase-verify-modal/ada-recovery-phrase-verify-modal';
@@ -68,7 +68,6 @@ import { ConfirmPage } from '../pages/confirm/confirm';
     SignupPage,
     SpeakerDetailPage,
     SpeakerListPage,
-    TabsPage,
     TutorialPage,
     SupportPage,
     AdaPage,
@@ -93,7 +92,6 @@ import { ConfirmPage } from '../pages/confirm/confirm';
     IonicStorageModule.forRoot(),
     IonicModule.forRoot(ConferenceApp, {}, {
       links: [
-        { component: TabsPage, name: 'TabsPage', segment: 'tabs-page' },
         { component: SessionDetailPage, name: 'SessionDetail', segment: 'sessionDetail/:sessionId' },
         { component: ScheduleFilterPage, name: 'ScheduleFilter', segment: 'scheduleFilter' },
         { component: SpeakerListPage, name: 'SpeakerList', segment: 'speakerList' },
@@ -137,7 +135,6 @@ import { ConfirmPage } from '../pages/confirm/confirm';
     SignupPage,
     SpeakerDetailPage,
     SpeakerListPage,
-    TabsPage,
     TutorialPage,
     SupportPage,
     AdaPage,
@@ -171,7 +168,8 @@ import { ConfirmPage } from '../pages/confirm/confirm';
     LocalStoreProvider,
     User,
     Cognito,
-    DynamoDB
+    DynamoDB,
+    Clipboard
   ]
 })
 export class AppModule {}

@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, ModalController, ActionSheetController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController, AlertController, ModalController, ActionSheetController } from 'ionic-angular';
 import { AdaProvider } from '../../providers/ada/ada';
+
+import * as ClipboardJS from '../../assets/clipboard/clipboard';
 
 /**
  * Generated class for the AdaTradePage page.
@@ -18,6 +20,7 @@ export class AdaTradePage {
 
   tabComponent: string = 'AdaPage';
   trade: string = "sendReceive";
+  clipboard;
 
   constructor(
     public navCtrl: NavController,
@@ -25,9 +28,24 @@ export class AdaTradePage {
     public ada: AdaProvider,
     public alertCtrl: AlertController,
     public modalCtrl: ModalController,
-    public actionSheetCtrl: ActionSheetController
+    public actionSheetCtrl: ActionSheetController,
+    public toastCtrl: ToastController
     ) {
       console.log(ada.wallets);
+  }
+
+  ionViewDidLoad(){
+    if(this.ada.wallets.length){
+      this.clipboard = new ClipboardJS('#cpyBtn');
+      this.clipboard.on('success', () => {
+        let toast = this.toastCtrl.create({
+          message: 'Address copied to clipboard',
+          duration: 3000,
+          position: 'top'
+        });
+        toast.present();
+      });
+    }
   }
 
   presentActionSheet() {
@@ -166,10 +184,6 @@ export class AdaTradePage {
       }]
     });
     alert.present();
-  }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad BtcTradePage');
   }
 
   restoreWallet() {

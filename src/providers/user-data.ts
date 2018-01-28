@@ -45,12 +45,6 @@ export class UserData {
     }
   };
 
-  // login(username: string): void {
-  //   this.storage.set(this.HAS_LOGGED_IN, true);
-  //   this.setUsername(username);
-  //   this.events.publish('user:login');
-  // };
-
   login(username, password) {
     return new Promise((resolve, reject) => {
       let user = this.cognito.makeUser(username);
@@ -143,9 +137,7 @@ export class UserData {
 
   getUsername(): Promise<string> {
     return this.storage.get('username').then((value) => {
-      console.log(value);
-      return this.getUser().getUsername();
-      // return value;
+      return value;
     });
   };
 

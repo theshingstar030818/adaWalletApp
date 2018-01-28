@@ -5,7 +5,7 @@ import { NavController, LoadingController } from 'ionic-angular';
 
 import { UserData } from '../../providers/user-data';
 import { UserOptions } from '../../interfaces/user-options';
-import { TabsPage } from '../tabs-page/tabs-page';
+import { AdaPage } from '../ada/ada';
 import { SignupPage } from '../signup/signup';
 import { ConfirmPage } from '../confirm/confirm';
 
@@ -39,7 +39,7 @@ export class LoginPage {
       this.userData.login(details.username, details.password).then((result) => {
         console.log('result:', result);
         loading.dismiss();
-        this.navCtrl.setRoot(TabsPage);
+        this.navCtrl.setRoot(AdaPage);
       }).catch((err) => { 
         if (err.message === "User is not confirmed.") {
           loading.dismiss();
