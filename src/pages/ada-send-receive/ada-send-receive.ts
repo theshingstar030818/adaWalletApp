@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController, AlertController, ModalController, ActionSheetController } from 'ionic-angular';
 import { AdaProvider } from '../../providers/ada/ada';
 
-// import * as ClipboardJS from '../../assets/clipboard/clipboard';
+import * as ClipboardJS from '../../assets/clipboard/clipboard';
 
 /**
- * Generated class for the AdaTradePage page.
+ * Generated class for the AdaSendReceivePage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
@@ -13,13 +13,11 @@ import { AdaProvider } from '../../providers/ada/ada';
 
 @IonicPage()
 @Component({
-  selector: 'page-ada-trade',
-  templateUrl: 'ada-trade.html',
+  selector: 'page-ada-send-receive',
+  templateUrl: 'ada-send-receive.html',
 })
-export class AdaTradePage {
+export class AdaSendReceivePage {
 
-  tabComponent: string = 'AdaPage';
-  trade: string = "sendReceive";
   clipboard;
 
   constructor(
@@ -30,23 +28,24 @@ export class AdaTradePage {
     public modalCtrl: ModalController,
     public actionSheetCtrl: ActionSheetController,
     public toastCtrl: ToastController
-    ) {
-      console.log(ada.wallets);
-      // this.ada.getWallets();
-  }
+    ) {}
+
+  walletSelected(wallet){
+    console.log(wallet);
+    this.navCtrl.push('AdaTradePage', {wallet: wallet});
+  }  
 
   ionViewDidLoad(){
     if(this.ada.wallets.length){
-      // this.clipboard = new ClipboardJS('#cpyBtn');
-      // this.clipboard.on('success', () => {
-      //   let toast = this.toastCtrl.create({
-      //     message: 'Address copied to clipboard',
-      //     duration: 3000,
-      //     position: 'top'
-      //   });
-      //   toast.present();
-      // });
+      this.clipboard = new ClipboardJS('#cpyBtn');
+      this.clipboard.on('success', () => {
+        let toast = this.toastCtrl.create({
+          message: 'Address copied to clipboard',
+          duration: 3000,
+          position: 'top'
+        });
+        toast.present();
+      });
     }
   }
-  
 }

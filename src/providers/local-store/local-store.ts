@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import environment from '../ada/environment';
-import { AdaWallet, AdaAccounts, AdaTransactions } from '../ada/types';
+import { AdaWallet, AdaWallets, AdaAccounts, AdaTransactions } from '../ada/types';
 
 /*
   Generated class for the LocalStoreProvider provider.
@@ -79,11 +79,11 @@ export class LocalStoreProvider {
     }
   });
 
-  getWallets = () => new Promise((resolve, reject) => {
+  getWallets = () => new Promise<AdaWallets>((resolve, reject) => {
     try {
       this.storage.get(storageKeys.WALLETS).then((wallets)=>{
-        if (!wallets) return resolve([]);
-        resolve(wallets);
+        if (!wallets) return resolve(<AdaWallets>[]);
+        resolve(JSON.parse(wallets));
       }).catch((error)=>{
         return reject(error);
       })
@@ -92,9 +92,10 @@ export class LocalStoreProvider {
     }
   });
 
-  setWallets = (wallets: Array<AdaWallet>) => new Promise((resolve, reject) => {
+  setWallets = (wallets: AdaWallets) => new Promise((resolve, reject) => {
     try {
-      this.storage.set(storageKeys.WALLETS, wallets).then((wallets)=>{
+      
+      this.storage.set(storageKeys.WALLETS, JSON.stringify(wallets)).then((wallets)=>{
         if (!wallets) return resolve([]);
         resolve();
       }).catch((error)=>{

@@ -41,7 +41,7 @@ export class AdaCreateNewWalletPage {
 
   ionViewDidEnter() {
     console.log('ionViewWillEnter AdaCreateNewWalletPage');
-    if(this.ada.wallets.length){
+    if(!this.navParams.get('overriderDismiss') && this.ada.wallets.length){
       this.dismiss();
     }
   }

@@ -1,5 +1,12 @@
 import { Injectable } from '@angular/core';
-import { LoadingController } from 'ionic-angular';
+
+import { 
+  LoadingController,
+  ActionSheetController,
+  ModalController,
+  AlertController
+} from 'ionic-angular';
+
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
 import { Clipboard } from '@ionic-native/clipboard';
@@ -19,8 +26,23 @@ import { WalletAddress } from './domain/WalletAddress';
 import { WalletTransaction, transactionTypes } from './domain/WalletTransaction';
 
 
-import { RestoreAdaWalletParams, AdaWallet, AdaAccounts, AdaTransactions, AdaTransactionFee, AdaAddress, AdaTransaction } from './types';
-import { CreateWalletResponse, WalletAlreadyRestoredError, GenericApiError } from './common';
+import { 
+  RestoreAdaWalletParams, 
+  AdaWallet,
+  AdaWallets,
+  AdaAccounts, 
+  AdaTransactions, 
+  AdaTransactionFee, 
+  AdaAddress, 
+  AdaTransaction 
+} from './types';
+
+import { 
+  CreateWalletResponse, 
+  WalletAlreadyRestoredError, 
+  GenericApiError 
+} from './common';
+
 import { generateMnemonic } from './utils/crypto';
 import { Wallet } from './domain/Wallet';
 import { ToastController } from 'ionic-angular';
@@ -59,7 +81,7 @@ export class AdaProvider {
   accountIndex = '@2147483648';
 
   public loader: any;
-  public wallets: any = [];
+  public wallets: AdaWallets = [];
   public accounts: any = [];
   public transactions: AdaTransactions;
   public skip: number = 0;
@@ -77,6 +99,9 @@ export class AdaProvider {
     public config: Config,
     private clipboard: Clipboard,
     public db: DynamoDB,
+    public actionSheetCtrl: ActionSheetController,
+    public modalCtrl: ModalController,
+    public alertCtrl: AlertController,
   ) {
     this.initLoader();
     this.loadDataFromLocalStore();
@@ -85,9 +110,11 @@ export class AdaProvider {
   loadDataFromLocalStore(){
     this.localStorageApi.getWallets().then((wallets)=>{
       this.wallets = wallets;
+      console.log(wallets);
     })
     this.localStorageApi.getAccounts().then((accounts)=>{
       this.accounts = accounts;
+      console.log(accounts);
     })
   }
 
@@ -116,6 +143,187 @@ export class AdaProvider {
 
   closeLoader(){
       this.loader.dismiss();
+  }
+
+  presentActionSheet() {
+    let actionSheet = this.actionSheetCtrl.create({
+      title: 'Recover Wallet by',
+      buttons: [
+        {
+          text: 'Recovery Phrase',
+          handler: () => {
+            console.log('Recovery Phrase clicked');
+            this.restoreWallet();
+          }
+        },{
+          text: 'Private Key',
+          handler: () => {
+            console.log('Private Key clicked');
+            this.showAdaWalletRecoverUsingIdPage();
+          }
+        },{
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        }
+      ]
+    });
+    actionSheet.present();
+  }
+
+  showAdaWalletRecoverUsingIdPage(){
+    let modal = this.modalCtrl.create('AdaWalletRecoverUsingIdPage', {});
+    modal.present();
+  }
+
+  showBtcRecoveryPhraseVerifyModal(){
+    let modal = this.modalCtrl.create('AdaRecoveryPhraseVerifyModalPage', {});
+    modal.present();
+  }
+
+  addWallet(){
+    let modal = this.modalCtrl.create('AdaCreateNewWalletPage', {overriderDismiss: true});
+    modal.present();
+  }
+
+  addWalletAlert(){
+    let prompt = this.alertCtrl.create({
+      title: 'CREATE WALLET',
+      message: "Enter a name for this new wallet",
+      inputs: [
+        {
+          name: 'walletName',
+          placeholder: 'e.g Shopping Wallet'
+        },
+        {
+          name: 'walletPass',
+          placeholder: 'Wallet Password'
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          handler: data => {
+            console.log('Cancel clicked : ' + data);
+          }
+        },
+        {
+          text: 'Create Wallet',
+          handler: data => {
+            if(data.walletName.length > 0 && data.walletPass.length > 8){
+              this.walletInitData.cwInitMeta.cwName = data.walletName;
+              this.walletInitData.password = data.walletPass;
+              this.getRandomMemonic();
+              this.showConfirm();
+            }else{
+              this.presentToast("Enter Wallet Name & Password");
+              return false;
+            }
+          }
+        }
+      ]
+    });
+    prompt.present();
+  }
+
+  showConfirm() {
+    let confirm = this.alertCtrl.create({
+      title: 'RECOVERY PHRASE',
+      message: `
+      <p >  On the following screen, you will see a 12-word phrase. This is your wallet backup phrase. It can be entered in any version of Daedalus in order to restore your wallet.</p>
+      <p style="color: red;" > <b>  Please make sure nobody looks into your screen unless you want them to have access to your funds. </b> </p>`,
+      buttons: [
+        {
+          text: 'Disagree',
+          handler: () => {
+            console.log('Disagree clicked');
+          }
+        },
+        {
+          text: 'Agree',
+          handler: (data) => {
+            console.log('Agree clicked: ' + data);
+            if(data){
+              this.showPhraseWrittenDownConfirm();
+            }else{
+              this.presentToast("Please Agree and then ");
+              return false;
+            }
+          }
+        }
+      ]
+    });
+
+    confirm.addInput({
+      type: 'radio',
+      label: 'I agree',
+      value: 'accept',
+      checked: false
+    });
+    
+    confirm.present();
+  }
+
+  showPhraseWrittenDownConfirm() {
+    let alert = this.alertCtrl.create({
+      title: `<h1>RECOVERY PHRASE</h1> 
+      <br> 
+      <p> The phrase is case sensitive. Please make sure you write down and save your recovery phrase. You will need this phrase to use and restore your wallet.</p>`,
+      message: '',
+      buttons: [{
+        text: 'Yes, I have written it down.',
+        handler: () => {
+          console.log('Yes, I have written it down. clicked');
+          this.showBtcRecoveryPhraseVerifyModal();
+        }
+      }]
+    });
+    alert.present();
+  }
+
+  restoreWallet() {
+    let modal = this.modalCtrl.create('AdaRecoverWalletModalPage', {});
+    modal.present();
+  }
+
+  sendADA(){
+    let modal = this.modalCtrl.create('AdaSendPage', {});
+    modal.present();
+  }
+
+  receiveADA(){
+    let modal = this.modalCtrl.create('AdaReceivePage', {});
+    modal.present();
+  }
+
+  addRestoreAdaWallet(){
+    let actionSheet = this.actionSheetCtrl.create({
+      title: '+ ADD WALLET',
+      buttons: [
+        {
+          text: 'Create new wallet',
+          handler: () => {
+            console.log('Create New Wallet clicked');
+            this.addWallet();
+          }
+        },{
+          text: 'Restore wallet from backup',
+          handler: () => {
+            console.log('Restore wallet from backup clicked');
+            this.presentActionSheet();
+          }
+        },{
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        }
+      ]
+    });
+    actionSheet.present();
   }
 
   getWallets() {
@@ -302,7 +510,7 @@ export class AdaProvider {
       let path = '/api/accounts?accountId='+accountId; 
       let url = this.baseUrl+path;
       this.http.get(url).subscribe(res => {
-        this.accounts = JSON.parse(res['_body'])["Right"];
+        this.accounts.push(JSON.parse(res['_body'])["Right"]);
         this.localStorageApi.setAccounts(this.accounts).then(()=>{
           console.log('accounts stored to local storage');
           resolve(this.accounts);
@@ -414,10 +622,12 @@ export class AdaProvider {
   // ========== TRANSFORM SERVER DATA INTO FRONTEND MODELS =========
 
   _createWalletFromServerData(data) {
-
+    let amount = new BigNumber(data.cwAmount.getCCoin)
+    console.log(amount);
+    console.log(amount.toPrecision(6));
     return new Wallet({
       id: data.cwId,
-      amount: new BigNumber(data.cwAmount.getCCoin).dividedBy(LOVELACES_PER_ADA),
+      amount: amount,
       name: data.cwMeta.cwName,
       assurance: data.cwMeta.cwAssurance,
       hasPassword: data.cwHasPassphrase,
