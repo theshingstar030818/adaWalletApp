@@ -5,201 +5,278 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-
-    <ion-navbar>
-      <ion-title>{{ada?.wallets[0]?.name}}</ion-title>
-    </ion-navbar>
-  
-  </ion-header>
+  <ion-navbar>
+    <!-- <ion-title>{{ada?.wallets[0]?.name}}</ion-title> -->
+  </ion-navbar>
+</ion-header>
   
   
-  <ion-content padding>
+<ion-content padding>  
+  <ion-segment [(ngModel)]="Stab">
+    <ion-segment-button *ngFor="let tab of tabs" [value]="tab.name">
+      <img class="svgicon" [src]="tab.iconsvg" [alt]="tab.name">
+    </ion-segment-button>
+  </ion-segment>
+  <div [ngSwitch]="Stab">
+      <div *ngSwitchCase="'Summary'">
   
-    <ion-segment [(ngModel)]="trade">
-        <ion-segment-button value="buySell">
-          Buy/Sell
-        </ion-segment-button>
-        <ion-segment-button value="sendReceive" center text-center>
-          Send/Receive
-        </ion-segment-button>
-      </ion-segment>
-  
-      <div [ngSwitch]="trade" justify-content-center align-items-center center text-center>
-        <ion-list *ngSwitchCase="'buySell'" justify-content-center align-items-center>
-            <ion-card justify-content-center align-items-center>
-              
-                <ion-card-content justify-content-center align-items-center>
-                  Coming Soon
-                </ion-card-content>
-                <!-- <button ion-button (click)="ada.getWalletWithMnemonic()">getAllWallets</button> -->
-              </ion-card>
-        </ion-list>      
-        
-        
-        <ion-list *ngSwitchCase="'sendReceive'">
-  
-          <ng-template #hasWallet >            
-            <ion-card text-wrap>
-              <ion-card-header>
-                <h2 text-left>{{ada?.wallets[0]?.name}}</h2>
-                <ion-item>
-                  <h1 item-start>{{ada?.wallets[0]?.amount | amount: []}}</h1>
-                  <ion-avatar small item-start>
-                    <img small class="symbol" src="../assets/img/ada-symbol-smallest-dark.inline.svg" >
-                  </ion-avatar>
-                </ion-item>
-              </ion-card-header>
-              <ion-card-content>
-                  <ion-item>
-                    <ion-icon name="ios-list-box-outline" item-start></ion-icon>
-                    Transactions
-                    <ion-badge item-end>26</ion-badge>
-                  </ion-item>
-
-                  <ion-item>
-                    <button clear icon-only item-end id="cpyBtn" ion-button data-clipboard-target="#copyTarget">
-                      <ion-icon name="ios-copy-outline" item-end></ion-icon>
-                    </button>
-                    <!-- <p  text-wrap>{{ada?.accounts[0]?.caAddresses[ada?.accounts[0]?.caAddresses.length-1]?.cadId}}</p> -->
-                  </ion-item>
-                  <!-- <textarea hidden id="copyTarget" [value]="ada?.accounts[0]?.caAddresses[ada?.accounts[0]?.caAddresses.length-1]?.cadId"></textarea> -->
-                </ion-card-content>
-                <ion-row>
-                  <ion-col>
-                    <button ion-button icon-start small (click)="sendADA()">
-                      <ion-icon name="ios-share-outline"></ion-icon>
-                      Send
-                    </button>
-                  </ion-col>
-                  <ion-col>
-                    <button ion-button icon-end small (click)="receiveADA()">
-                      Receive
-                      <ion-icon name="ios-download-outline"></ion-icon>
-                    </button>
-                  </ion-col>
-                </ion-row>
-            </ion-card>
-
-            <!-- <ion-card justify-content-center align-items-center text-center text-wrap>
-              
-              <ion-card-header>
-                <h1>{{ada.wallets[0].amount}} Ⓐ</h1>
-                <p>US $495.58</p>
-                <p>Number of transactions: 2</p>
-              </ion-card-header>
-
-              <ion-card-content justify-content-center align-items-center text-center text-wrap>
-                <ion-thumbnail style="width: 30%;" justify-content-center align-items-center text-center text-wrap>
-                  <img src="assets/img/qr.png">
-                </ion-thumbnail><br>
-                <b>Current Address:</b><br>
-                DdzFFzCqrhtCznips7RNMjhUg1sz7Dt8Yw8anHAfrvaLSSWojQFfsM42D9ca1HGPX2T8PkDhu15FgBvQNjaDJSyWUuh8yacaWk1dBZKF
-              </ion-card-content>
-            </ion-card> -->
-
-
-            <ion-list no-border>
-              <ion-list-header>
-                Yesterday
-              </ion-list-header>
-              
+        <ion-card>
+          <ion-card-header>
+            <h2 text-left>{{ada?.wallets[accountIndex]?.name}}</h2>
+          </ion-card-header>
+          <ion-card-content>
               <ion-item>
-                <ion-icon name='ios-share-outline' item-start></ion-icon>
-                <h3><b>Ada Sent</b></h3>
-                <h3>Ada transaction 12:24:51 AM</h3>
-                <ion-note item-end align-items-right justify-content-right>
-                  <ion-badge item-end color="danger">Low</ion-badge>
-                  <br>
-                  <small>-100.000000 A</small>
-                </ion-note>
+                <h1 item-start>0.00000</h1>
+                <ion-avatar item-start>
+                  <img class="symbol" src="../assets/img/ada-symbol-smallest-dark.inline.svg" >
+                </ion-avatar>
               </ion-item>
-            </ion-list>
-          
-          
-            <ion-list>
-          
-              <ion-list-header>
-                12/29/2017
-              </ion-list-header>
-              <ion-item>
-                <ion-icon name='ios-download-outline' item-start color="secondary"></ion-icon>
-                <h3><b>Ada Received</b></h3>
-                <h3>Ada transaction 12:24:51 AM</h3>
-                <ion-note item-end align-items-right justify-content-right>
-                  <ion-badge item-end color="secondary">High</ion-badge>
-                  <br>
-                  <small>-100.000000 A</small>
-                </ion-note>
-              </ion-item>
-              <ion-item>
-                <ion-icon name='ios-share-outline' item-start></ion-icon>
-                <h3><b>Ada Sent</b></h3>
-                <h3>Ada transaction 12:24:51 AM</h3>
-                <ion-note item-end align-items-right justify-content-right>
-                  <ion-badge item-end color="secondary">High</ion-badge>
-                  <br>
-                  <small>-100.000000 A</small>
-                </ion-note>
-              </ion-item>
-            </ion-list>
-            
+          </ion-card-content>
+          <ion-card-header>
+              <h2 text-left>Transactions: <span>0</span></h2>
+          </ion-card-header>
+        </ion-card>
   
-          </ng-template>
-  
-          <ion-grid *ngIf="!ada?.wallets?.length else hasWallet" justify-content-center align-items-center text-center text-wrap>
-            <ion-row>
-              <ion-col col-6>
-                <ion-card>
-                  <ion-card-header>
-                    <ion-row justify-content-center align-items-center (click)="addWallet()">
-                      <button ion-button outline>
-                        <ion-icon name="ios-add-outline"></ion-icon>
-                      </button>            
+        <ion-list>
+          <ion-item-group>
+            <ion-item-divider color="light">01-01-2018</ion-item-divider>
+            <button ion-item>
+                <ion-grid>
+                    <ion-row>
+                      <ion-col col-2>
+                          <img src="../assets/img/wallet-nav/send-ic.inline.svg" >
+                      </ion-col>
+                      <ion-col>
+                          <p text-left>ADA Sent</p>
+                      </ion-col>
+                      <ion-col>
+                        <p text-right>0.000000 ADA</p>
+                      </ion-col>
                     </ion-row>
-                    <ion-row justify-content-center align-items-center>
-                      Create
-                    </ion-row>
-                    <ion-row justify-content-center align-items-center text-wrap small>
-                      <small>Create new wallet</small>
-                    </ion-row>
-                  </ion-card-header>          
-                </ion-card>
-              </ion-col>
-  
-              <ion-col col-6>
-                <ion-card>
-                  <ion-card-header>
-                    <ion-row justify-content-center align-items-center (click)="presentActionSheet()">
-                      <button ion-button outline >
-                        <ion-icon name="ios-sync-outline"></ion-icon>
-                      </button>            
-                    </ion-row>
-                    <ion-row justify-content-center align-items-center>
-                      Restore
-                    </ion-row>
-                    <ion-row justify-content-center align-items-center text-wrap small>
-                      <small>Restore wallet from backup</small>
-                    </ion-row>
-                  </ion-card-header>          
-                </ion-card>
-              </ion-col>
-  
-            </ion-row>
-          </ion-grid>
+                  </ion-grid>
+            </button>
+          </ion-item-group>
         </ion-list>
+        
       </div>
-  </ion-content>
-    
-<!-- <ion-footer *ngIf="trade == 'sendReceive'" justify-content-center align-items-center text-center text-wrap>
-  <ion-toolbar justify-content-center align-items-center text-wrap>
-      <button ion-button icon-start small (click)="sendADA()">
-        <ion-icon name="ios-share-outline"></ion-icon>
-        Send
-      </button>
+  
+      <div *ngSwitchCase="'Send'">
+          <ion-item>
+              <ion-label stacked>Receiver</ion-label>
+              <ion-input type="number" value="" placeholder="Wallet Address"></ion-input>
+          </ion-item>
+          <ion-item>
+              <ion-label stacked>Amount</ion-label>
+              <ion-input type="number" value="" placeholder="0.000000"></ion-input>
+          </ion-item>
+          <ion-item>
+              <button ion-button full>Next</button>
+          </ion-item>
+      </div>
+  
+      <div *ngSwitchCase="'Receive'">
+        <ion-card>
+          <ion-card-content>
+              <ion-item>
+                <ion-avatar item-start>
+                  <img  src="../assets/img/qr.png" >
+                </ion-avatar>
+                <h2 item-start>Wallet Address</h2>
+              </ion-item>
+          </ion-card-content>
+        </ion-card>
+      </div>
+  
+      <div *ngSwitchCase="'Transactions'">
+          <ion-list>
+              <ion-item-group>
+                <ion-item-divider color="light">01-01-2018</ion-item-divider>
+                <button ion-item>
+                    <ion-grid>
+                        <ion-row>
+                          <ion-col col-2>
+                              <img src="../assets/img/wallet-nav/send-ic.inline.svg" >
+                          </ion-col>
+                          <ion-col>
+                              <p text-left>ADA Sent</p>
+                          </ion-col>
+                          <ion-col>
+                            <p text-right>0.000000 ADA</p>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                </button>
+              </ion-item-group>
+              <ion-item-group>
+                  <ion-item-divider color="light">01-01-2018</ion-item-divider>
+                  <button ion-item>
+                      <ion-grid>
+                          <ion-row>
+                            <ion-col col-2>
+                                <img src="../assets/img/wallet-nav/receive-ic.inline.svg" >
+                            </ion-col>
+                            <ion-col>
+                                <p text-left>ADA Received</p>
+                            </ion-col>
+                            <ion-col>
+                              <p text-right>0.000000 ADA</p>
+                            </ion-col>
+                          </ion-row>
+                        </ion-grid>
+                  </button>
+                </ion-item-group>
+          </ion-list>
+      </div>
+  
+      <div *ngSwitchCase="'Settings'">
+          <ion-item>
+              <ion-label stacked>Name</ion-label>
+              <ion-input type="text" value="" ></ion-input>
+          </ion-item>
+          <ion-item>
+              <ion-label stacked>Transaction Assurence Security Level</ion-label>
+              <ion-select [(ngModel)]="security">
+                  <ion-option value="n">Normal</ion-option>
+                  <ion-option value="s">Strict</ion-option>
+              </ion-select>
+          </ion-item>
+  
+          <ion-item>
+              <ion-label stacked>Password</ion-label>
+              <ion-input type="text" value="Last Updated A Day Ago" placeholder="" aria-readonly="readonly"></ion-input>
+          </ion-item>
+          <ion-item>
+              <button ion-button full style="color:red; background-color:aliceblue;">Delete Wallet</button>
+          </ion-item>
+      </div>
+    </div>
+  <!-- <ion-list>
+    <ng-template #hasWallet >            
+      <ion-card text-wrap>
+        <ion-card-header>
+          <h1 text-left>{{ada?.wallets[0]?.name}}</h1>
+          <ion-item>
+            <h1 item-start>{{ada?.wallets[0]?.amount | amount: []}}</h1>
+            <ion-avatar small item-start>
+              <img small class="symbol" src="../assets/img/ada-symbol-smallest-dark.inline.svg" >
+            </ion-avatar>
+          </ion-item>
+        </ion-card-header>
+        <ion-card-content>
+            <ion-item>
+              <ion-icon name="ios-list-box-outline" item-start></ion-icon>
+              Transactions
+              <ion-badge item-end>26</ion-badge>
+            </ion-item>
+
+            <ion-item>
+              <button clear icon-only item-end id="cpyBtn" ion-button data-clipboard-target="#copyTarget">
+                <ion-icon name="ios-copy-outline" item-end></ion-icon>
+              </button>
+              <p  text-wrap>{{ada?.accounts[0]?.caAddresses[ada?.accounts[0]?.caAddresses.length-1]?.cadId}}</p>
+            </ion-item>
+            <textarea hidden id="copyTarget" [value]="ada?.accounts[0]?.caAddresses[ada?.accounts[0]?.caAddresses.length-1]?.cadId"></textarea>
+          </ion-card-content>
+          <ion-row>
+            <ion-col>
+              <button ion-button icon-start small (click)="sendADA()">
+                <ion-icon name="ios-share-outline"></ion-icon>
+                Send
+              </button>
+            </ion-col>
+            <ion-col>
+              <button ion-button icon-end small (click)="receiveADA()">
+                Receive
+                <ion-icon name="ios-download-outline"></ion-icon>
+              </button>
+            </ion-col>
+          </ion-row>
+      </ion-card>
+      <ion-list no-border>
+        <ion-list-header>
+          Yesterday
+        </ion-list-header>
+        
+        <ion-item>
+          <ion-icon name='ios-share-outline' item-start></ion-icon>
+          <h3><b>Ada Sent</b></h3>
+          <h3>Ada transaction 12:24:51 AM</h3>
+          <ion-note item-end align-items-right justify-content-right>
+            <ion-badge item-end color="danger">Low</ion-badge>
+            <br>
+            <small>-100.000000 A</small>
+          </ion-note>
+        </ion-item>
+      </ion-list>    
+      <ion-list>
+        <ion-list-header>
+          12/29/2017
+        </ion-list-header>
+        <ion-item>
+          <ion-icon name='ios-download-outline' item-start color="secondary"></ion-icon>
+          <h3><b>Ada Received</b></h3>
+          <h3>Ada transaction 12:24:51 AM</h3>
+          <ion-note item-end align-items-right justify-content-right>
+            <ion-badge item-end color="secondary">High</ion-badge>
+            <br>
+            <small>-100.000000 A</small>
+          </ion-note>
+        </ion-item>
+        <ion-item>
+          <ion-icon name='ios-share-outline' item-start></ion-icon>
+          <h3><b>Ada Sent</b></h3>
+          <h3>Ada transaction 12:24:51 AM</h3>
+          <ion-note item-end align-items-right justify-content-right>
+            <ion-badge item-end color="secondary">High</ion-badge>
+            <br>
+            <small>-100.000000 A</small>
+          </ion-note>
+        </ion-item>
+      </ion-list>
       
-      <button ion-button icon-end small (click)="receiveADA()">
-        Receive
-        <ion-icon name="ios-download-outline"></ion-icon>
-      </button>
-  </ion-toolbar>
-</ion-footer> -->
+
+    </ng-template>
+
+    <ion-grid *ngIf="!ada?.wallets?.length else hasWallet" justify-content-center align-items-center text-center text-wrap>
+      <ion-row>
+        <ion-col col-6>
+          <ion-card>
+            <ion-card-header>
+              <ion-row justify-content-center align-items-center (click)="addWallet()">
+                <button ion-button outline>
+                  <ion-icon name="ios-add-outline"></ion-icon>
+                </button>            
+              </ion-row>
+              <ion-row justify-content-center align-items-center>
+                Create
+              </ion-row>
+              <ion-row justify-content-center align-items-center text-wrap small>
+                <small>Create new wallet</small>
+              </ion-row>
+            </ion-card-header>          
+          </ion-card>
+        </ion-col>
+
+        <ion-col col-6>
+          <ion-card>
+            <ion-card-header>
+              <ion-row justify-content-center align-items-center (click)="presentActionSheet()">
+                <button ion-button outline >
+                  <ion-icon name="ios-sync-outline"></ion-icon>
+                </button>            
+              </ion-row>
+              <ion-row justify-content-center align-items-center>
+                Restore
+              </ion-row>
+              <ion-row justify-content-center align-items-center text-wrap small>
+                <small>Restore wallet from backup</small>
+              </ion-row>
+            </ion-card-header>          
+          </ion-card>
+        </ion-col>
+
+      </ion-row>
+    </ion-grid>
+  </ion-list> -->
+</ion-content>
+    

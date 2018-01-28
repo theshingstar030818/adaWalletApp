@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import environment from '../ada/environment';
-import { AdaWallet, AdaWallets, AdaAccounts, AdaTransactions } from '../ada/types';
+import { AdaWallets, AdaAccounts, AdaTransactions } from '../ada/types';
 
 /*
   Generated class for the LocalStoreProvider provider.

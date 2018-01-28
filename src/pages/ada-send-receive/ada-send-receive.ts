@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController, AlertController, ModalController, ActionSheetController } from 'ionic-angular';
 import { AdaProvider } from '../../providers/ada/ada';
 
-import * as ClipboardJS from '../../assets/clipboard/clipboard';
+// import * as ClipboardJS from '../../assets/clipboard/clipboard';
 
 /**
  * Generated class for the AdaSendReceivePage page.
@@ -30,22 +30,22 @@ export class AdaSendReceivePage {
     public toastCtrl: ToastController
     ) {}
 
-  walletSelected(wallet){
+  walletSelected(wallet, index){
     console.log(wallet);
-    this.navCtrl.push('AdaTradePage', {wallet: wallet});
+    this.navCtrl.push('AdaTradePage', {wallet: wallet, accountIdex: index});
   }  
 
   ionViewDidLoad(){
     if(this.ada.wallets.length){
-      this.clipboard = new ClipboardJS('#cpyBtn');
-      this.clipboard.on('success', () => {
-        let toast = this.toastCtrl.create({
-          message: 'Address copied to clipboard',
-          duration: 3000,
-          position: 'top'
-        });
-        toast.present();
-      });
+      // this.clipboard = new ClipboardJS('#cpyBtn');
+      // this.clipboard.on('success', () => {
+      //   let toast = this.toastCtrl.create({
+      //     message: 'Address copied to clipboard',
+      //     duration: 3000,
+      //     position: 'top'
+      //   });
+      //   toast.present();
+      // });
     }
   }
 }

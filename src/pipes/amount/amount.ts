@@ -11,6 +11,7 @@ import { BigNumber } from 'bignumber.js';
 })
 export class AmountPipe implements PipeTransform {
   transform(value: BigNumber, args) {
+    console.log(args);
     console.log(value);
     if(value){
       let x: BigNumber = new BigNumber (value);

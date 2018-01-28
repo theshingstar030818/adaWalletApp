@@ -21,6 +21,9 @@ export class AdaTradePage {
   tabComponent: string = 'AdaPage';
   trade: string = "sendReceive";
   clipboard;
+  accountIndex;
+  public tabs: any ;
+  Stab: string = "Summary";
 
   constructor(
     public navCtrl: NavController,
@@ -31,8 +34,31 @@ export class AdaTradePage {
     public actionSheetCtrl: ActionSheetController,
     public toastCtrl: ToastController
     ) {
-      console.log(ada.wallets);
-      // this.ada.getWallets();
+      this.accountIndex = (navParams.data.accountIdex) ? navParams.data.accountIdex : 0;
+
+      console.log(this.accountIndex);
+      this.tabs = [
+        {
+          'name'  : 'Summary',
+          'iconsvg'  : '../assets/img/wallet-nav/summary-ic.inline.svg'
+        },
+        {
+          'name': 'Send',
+          'iconsvg'  : '../assets/img/wallet-nav/send-ic.inline.svg'
+        },
+        {
+          'name'  : 'Receive',
+          'iconsvg'  : '../assets/img/wallet-nav/receive-ic.inline.svg'
+        },
+        {
+          'name': 'Transactions',
+          'iconsvg'  : '../assets/img/wallet-nav/transactions-ic.inline.svg'
+        },
+        {
+          'name': 'Settings',
+          'iconsvg'  : '../assets/img/wallet-nav/wallet-settings-2-ic.inline.svg'
+        }
+      ]
   }
 
   ionViewDidLoad(){

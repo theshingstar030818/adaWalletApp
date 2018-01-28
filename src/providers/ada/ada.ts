@@ -119,7 +119,7 @@ export class AdaProvider {
   }
 
   copyToClipboard(data){
-    this.clipboard.copy('Hello world');
+    this.clipboard.copy(data);
   }
 
   pasteFromClipboard(){
@@ -427,7 +427,7 @@ export class AdaProvider {
           if (has(responseBody, 'Right')) {
             // "Right" means 200 ok (success) -> also handle if Right: false (boolean response)
             let wallet = this._createWalletFromServerData(responseBody['Right'] );
-            this.wallets.push(wallet);
+            this.wallets.push(<any>wallet);
             this.localStorageApi.setWallets(this.wallets).then((wallets)=>{
               console.log('wallet stored to local storage');
               console.log(wallets);
@@ -510,7 +510,7 @@ export class AdaProvider {
       let path = '/api/accounts?accountId='+accountId; 
       let url = this.baseUrl+path;
       this.http.get(url).subscribe(res => {
-        this.accounts.push(JSON.parse(res['_body'])["Right"]);
+        this.accounts.push(JSON.parse(res['_body'])["Right"][0]);
         this.localStorageApi.setAccounts(this.accounts).then(()=>{
           console.log('accounts stored to local storage');
           resolve(this.accounts);
@@ -555,7 +555,7 @@ export class AdaProvider {
             this.getAccount(responseBody['Right'].cwId).then(()=>{
               let wallet = this._createWalletFromServerData(responseBody['Right'] );
               this.connectWalletToUser(wallet.id);
-              this.wallets.push(wallet);
+              this.wallets.push(<any>wallet);
               this.localStorageApi.setWallets(this.wallets).then((wallets)=>{
                 console.log('wallet stored to local storage');
                 console.log(wallets);

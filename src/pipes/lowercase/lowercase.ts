@@ -12,7 +12,8 @@ export class LowercasePipe implements PipeTransform {
   /**
    * Takes a value and makes it lowercase.
    */
-  transform(value: string, ...args) {
+  transform(value: string, args) {
+    console.log(args);
     return value.toLowerCase();
   }
 }

@@ -20,4 +20,16 @@ page-ada-trade {
   //   justify-content: center;
   //   align-items: center;
   // }
+  .custom{
+    ion-segment-button{
+        height: 3.0rem !important;
+    }
+}
+.svgicon{
+    height: 20px;
+    margin-top: 4px;
+}
+.symbol{
+        height: 25px !important;
+}
 }

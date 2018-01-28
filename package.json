@@ -47,7 +47,6 @@
     "cli-table2": "^0.2.0",
     "cordova-android": "^6.2.3",
     "cordova-clipboard": "^1.1.1",
-    "cordova-ios": "^4.5.4",
     "cordova-plugin-advanced-http": "^1.9.1",
     "cordova-plugin-crosswalk-webview": "^2.3.0",
     "cordova-plugin-device": "^1.1.7",
@@ -93,8 +92,7 @@
   },
   "cordova": {
     "platforms": [
-      "android",
-      "ios"
+      "android"
     ],
     "plugins": {
       "cordova-plugin-crosswalk-webview": {
