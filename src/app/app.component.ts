@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Config, Events, MenuController, Nav, Platform } from 'ionic-angular';
+import { Config, Events, MenuController, Nav, Platform, ModalController } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Storage } from '@ionic/storage';
 import { AccountPage } from '../pages/account/account';
@@ -11,6 +11,10 @@ import { AdaPage } from '../pages/ada/ada';
 import { ConferenceData } from '../providers/conference-data';
 import { UserData } from '../providers/user-data';
 import { User } from '../providers/user';
+
+import { StatusBar } from '@ionic-native/status-bar';
+import { SplashPage } from '../pages/splash/splash';
+
 
 export interface PageInterface {
   title: string;
@@ -49,7 +53,7 @@ export class ConferenceApp {
     { title: 'Support', name: 'SupportPage', component: SupportPage, icon: 'help' },
     { title: 'Signup', name: 'SignupPage', component: SignupPage, icon: 'person-add' }
   ];
-  rootPage: any;
+  rootPage: any = SplashPage;
 
   constructor(
     public events: Events,
@@ -59,15 +63,16 @@ export class ConferenceApp {
     public confData: ConferenceData,
     public storage: Storage,
     public splashScreen: SplashScreen,
+    public statusBar: StatusBar,
+    public modalCtrl: ModalController,
     user: User,
     public config: Config
   ) {
-
     // Check if the user has already seen the tutorial
     this.storage.get('hasSeenTutorial')
       .then((hasSeenTutorial) => {
         if (hasSeenTutorial) {
-          this.rootPage = AdaPage;
+          this.rootPage = SplashPage;
         } else {
           this.rootPage = TutorialPage;
         }
@@ -144,11 +149,10 @@ export class ConferenceApp {
       user.isAuthenticated().then(() => {
         console.log('you are authenticated!');
         this.rootPage = AdaPage;
-        this.splashScreen.hide();
+        this.statusBar.styleDefault();        
       }).catch(() => {
         console.log('you are not authenticated..'); 
         this.rootPage = LoginPage;
-        this.splashScreen.hide();
       });
     });
   }

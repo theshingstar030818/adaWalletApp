@@ -1,0 +1,15 @@
+page-splash {
+    .center {
+        margin: auto;
+        width: 80%; 
+        position: relative;
+    }
+    .center img{
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        transform: translate(-50%, 50%);
+    }
+}

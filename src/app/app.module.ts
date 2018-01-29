@@ -23,6 +23,8 @@ import { SupportPage } from '../pages/support/support';
 import { AdaRecoveryPhraseVerifyModalPage } from '../pages/ada-recovery-phrase-verify-modal/ada-recovery-phrase-verify-modal';
 import { ConferenceData } from '../providers/conference-data';
 import { UserData } from '../providers/user-data';
+import { StatusBar } from '@ionic-native/status-bar';
+import { SplashPage } from '../pages/splash/splash';
 
 // crypto pages
 import { AdaPage } from '../pages/ada/ada';
@@ -85,7 +87,8 @@ import { ConfirmPage } from '../pages/confirm/confirm';
     AdaWalletRecoverUsingIdPage,
     AdaCreateNewWalletPage,
     AdaBuySellPage,
-    AdaSendReceivePage
+    AdaSendReceivePage,
+    SplashPage
   ],
   imports: [
     BrowserModule,
@@ -122,7 +125,9 @@ import { ConfirmPage } from '../pages/confirm/confirm';
         { component: AdaWalletRecoverUsingIdPage, name: 'AdaWalletRecoverUsingIdPage', segment: 'ada-wallet-recover-using-id-page' },
         { component: AdaCreateNewWalletPage, name: 'AdaCreateNewWalletPage', segment: 'ada-create-new-wallet-page' },
         { component: AdaBuySellPage, name: 'AdaBuySellPage', segment: 'ada-buy-sell-page' },
-        { component: AdaSendReceivePage, name: 'AdaSendReceivePage', segment: 'ada-send-receive-page' }
+        { component: AdaSendReceivePage, name: 'AdaSendReceivePage', segment: 'ada-send-receive-page' },
+        { component: SplashPage, name: 'SplashPage', segment: 'splash-page' },
+        
         
       ]
     })
@@ -157,7 +162,8 @@ import { ConfirmPage } from '../pages/confirm/confirm';
     AdaWalletRecoverUsingIdPage,
     AdaCreateNewWalletPage,
     AdaBuySellPage,
-    AdaSendReceivePage
+    AdaSendReceivePage,
+    SplashPage
   ],
   providers: [
     { provide: ErrorHandler, useClass: IonicErrorHandler },
@@ -177,7 +183,8 @@ import { ConfirmPage } from '../pages/confirm/confirm';
     User,
     Cognito,
     DynamoDB,
-    Clipboard
+    Clipboard,
+    StatusBar
   ]
 })
 export class AppModule {}
