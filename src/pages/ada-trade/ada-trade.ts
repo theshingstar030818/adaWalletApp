@@ -20,10 +20,18 @@ export class AdaTradePage {
 
   tabComponent: string = 'AdaPage';
   trade: string = "sendReceive";
-  clipboard;
+  wallet;
   accountIndex;
   public tabs: any ;
   Stab: string = "Summary";
+  
+  public send = {
+    
+  }
+
+  public dummyTransaction = {
+    time: '2018-01-28T18:48:03.962Z'
+  }
 
   constructor(
     public navCtrl: NavController,
@@ -32,47 +40,53 @@ export class AdaTradePage {
     public alertCtrl: AlertController,
     public modalCtrl: ModalController,
     public actionSheetCtrl: ActionSheetController,
-    public toastCtrl: ToastController
+    public toastCtrl: ToastController,
     ) {
-      this.accountIndex = (navParams.data.accountIdex) ? navParams.data.accountIdex : 0;
+      if(!navParams.data){this.navCtrl.setRoot('AdaPage')}
+      this.accountIndex = navParams.data.accountIndex;
+      this.wallet = navParams.data.wallet;
+
+      if(!this.wallet){
+        this.navCtrl.setRoot('AdaPage');
+      }
 
       console.log(this.accountIndex);
       this.tabs = [
         {
           'name'  : 'Summary',
-          'iconsvg'  : '../assets/img/wallet-nav/summary-ic.inline.svg'
+          'iconsvg'  : 'assets/img/wallet-nav/summary-ic.inline.svg'
         },
         {
           'name': 'Send',
-          'iconsvg'  : '../assets/img/wallet-nav/send-ic.inline.svg'
+          'iconsvg'  : 'assets/img/wallet-nav/send-ic.inline.svg'
         },
         {
           'name'  : 'Receive',
-          'iconsvg'  : '../assets/img/wallet-nav/receive-ic.inline.svg'
+          'iconsvg'  : 'assets/img/wallet-nav/receive-ic.inline.svg'
         },
         {
           'name': 'Transactions',
-          'iconsvg'  : '../assets/img/wallet-nav/transactions-ic.inline.svg'
+          'iconsvg'  : 'assets/img/wallet-nav/transactions-ic.inline.svg'
         },
         {
           'name': 'Settings',
-          'iconsvg'  : '../assets/img/wallet-nav/wallet-settings-2-ic.inline.svg'
+          'iconsvg'  : 'assets/img/wallet-nav/wallet-settings-2-ic.inline.svg'
         }
       ]
   }
 
+  copyAddressToClipboard(address){
+    console.log(address.innerText);
+    this.ada.copyToClipboard(address.innerText);
+  }
+
+  next() {
+    let modal = this.modalCtrl.create('AdaConfirmTransactionPage', {});
+    modal.present();
+  }
+
   ionViewDidLoad(){
-    if(this.ada.wallets.length){
-      // this.clipboard = new ClipboardJS('#cpyBtn');
-      // this.clipboard.on('success', () => {
-      //   let toast = this.toastCtrl.create({
-      //     message: 'Address copied to clipboard',
-      //     duration: 3000,
-      //     position: 'top'
-      //   });
-      //   toast.present();
-      // });
-    }
+    
   }
   
 }

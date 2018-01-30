@@ -10,12 +10,9 @@ import { BigNumber } from 'bignumber.js';
   name: 'amount',
 })
 export class AmountPipe implements PipeTransform {
-  transform(value: BigNumber, args) {
-    console.log(args);
-    console.log(value);
+  transform(value: BigNumber) {
     if(value){
       let x: BigNumber = new BigNumber (value);
-      console.log(x);
       return x.toPrecision(6);
     }
     return value;    

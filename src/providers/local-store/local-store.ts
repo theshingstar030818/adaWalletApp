@@ -2,7 +2,8 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import environment from '../ada/environment';
-import { AdaWallets, AdaAccounts, AdaTransactions } from '../ada/types';
+import { AdaTransactions } from '../ada/types';
+import { Wallet } from '../ada/domain/Wallet';
 
 /*
   Generated class for the LocalStoreProvider provider.
@@ -30,7 +31,7 @@ export class LocalStoreProvider {
   getTransactions = () => new Promise((resolve, reject) => {
     try {
       this.storage.get(storageKeys.TRANSACTIONS).then((transactions)=>{
-        if (!transactions) return resolve([]);
+        if (!transactions) return resolve({});
         resolve(transactions);
       }).catch((error)=>{
         return reject(error);
@@ -43,7 +44,7 @@ export class LocalStoreProvider {
   setTransactions = (accounts: Array<AdaTransactions>) => new Promise((resolve, reject) => {
     try {
       this.storage.set(storageKeys.TRANSACTIONS, accounts).then((transactions)=>{
-        if (!transactions) return resolve([]);
+        if (!transactions) return resolve({});
         resolve();
       }).catch((error)=>{
         return reject(error);
@@ -56,7 +57,7 @@ export class LocalStoreProvider {
   getAccounts = () => new Promise((resolve, reject) => {
     try {
       this.storage.get(storageKeys.ACCOUNTS).then((accounts)=>{
-        if (!accounts) return resolve([]);
+        if (!accounts) return resolve({});
         resolve(accounts);
       }).catch((error)=>{
         return reject(error);
@@ -66,10 +67,10 @@ export class LocalStoreProvider {
     }
   });
 
-  setAccounts = (accounts: Array<AdaAccounts>) => new Promise((resolve, reject) => {
+  setAccounts = (accounts: any) => new Promise((resolve, reject) => {
     try {
       this.storage.set(storageKeys.ACCOUNTS, accounts).then((accounts)=>{
-        if (!accounts) return resolve([]);
+        if (!accounts) return resolve({});
         resolve();
       }).catch((error)=>{
         return reject(error);
@@ -79,10 +80,10 @@ export class LocalStoreProvider {
     }
   });
 
-  getWallets = () => new Promise<AdaWallets>((resolve, reject) => {
+  getWallets = () => new Promise<Wallet[]>((resolve, reject) => {
     try {
       this.storage.get(storageKeys.WALLETS).then((wallets)=>{
-        if (!wallets) return resolve(<AdaWallets>[]);
+        if (!wallets) return resolve(<Wallet[]>[]);
         resolve(JSON.parse(wallets));
       }).catch((error)=>{
         return reject(error);
@@ -92,7 +93,7 @@ export class LocalStoreProvider {
     }
   });
 
-  setWallets = (wallets: AdaWallets) => new Promise((resolve, reject) => {
+  setWallets = (wallets: Wallet[]) => new Promise((resolve, reject) => {
     try {
       
       this.storage.set(storageKeys.WALLETS, JSON.stringify(wallets)).then((wallets)=>{

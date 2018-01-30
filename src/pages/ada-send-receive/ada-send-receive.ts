@@ -32,7 +32,7 @@ export class AdaSendReceivePage {
 
   walletSelected(wallet, index){
     console.log(wallet);
-    this.navCtrl.push('AdaTradePage', {wallet: wallet, accountIdex: index});
+    this.navCtrl.push('AdaTradePage', {wallet: wallet, accountIndex: index});
   }  
 
   ionViewDidLoad(){

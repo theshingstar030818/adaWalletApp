@@ -29,9 +29,7 @@ import { WalletTransaction, transactionTypes } from './domain/WalletTransaction'
 import { 
   RestoreAdaWalletParams, 
   AdaWallet,
-  AdaWallets,
   AdaAccounts, 
-  AdaTransactions, 
   AdaTransactionFee, 
   AdaAddress, 
   AdaTransaction 
@@ -81,9 +79,9 @@ export class AdaProvider {
   accountIndex = '@2147483648';
 
   public loader: any;
-  public wallets: AdaWallets = [];
-  public accounts: any = [];
-  public transactions: AdaTransactions;
+  public wallets: Wallet[] = [];
+  public accounts: any = {};
+  public transactions: any = {};
   public skip: number = 0;
   private limit: number = 10;
   public refresher: any;
@@ -107,6 +105,33 @@ export class AdaProvider {
     this.loadDataFromLocalStore();
   }
 
+  handleApiRequest(res){
+    return new Promise((resolve, reject) => {
+      let responseBody = JSON.parse(res['_body']);
+      if (has(responseBody, 'Right')) {
+        // "Right" means 200 ok (success) -> also handle if Right: false (boolean response)
+        resolve (responseBody['Right']);
+      } else if (has(responseBody, 'Left')) {
+        // "Left" means error case -> return error with contents (exception on nextUpdate)
+        if (responseBody) {
+          let err = new Error(responseBody['Left'].contents);
+          this.presentToast(err.message);
+          reject (new Error(responseBody['Left'].contents));
+        } else {
+          this.presentToast('Unknown response from backend.');
+          reject (new Error('Unknown response from backend.'));
+        }
+      } else {
+        this.presentToast('Unknown response from backend.');
+        reject (new Error('Unknown response from backend.'));
+      }
+    });
+  }
+
+  generateNewAddress(){
+    this.presentToast('Coming soon!');
+  }
+
   loadDataFromLocalStore(){
     this.localStorageApi.getWallets().then((wallets)=>{
       this.wallets = wallets;
@@ -116,10 +141,21 @@ export class AdaProvider {
       this.accounts = accounts;
       console.log(accounts);
     })
+    this.localStorageApi.getTransactions().then((transactions)=>{
+      this.transactions = transactions;
+      console.log(transactions);
+    })
   }
 
   copyToClipboard(data){
-    this.clipboard.copy(data);
+    let toastData = (<string>data).substring(0,15) + '....';
+    this.clipboard.copy(data).then(()=>{
+      this.presentToast('Address: ' + toastData + ' copied.');
+    }).catch((error)=>{
+      console.log(error);
+      window.prompt("Copy to clipboard: Ctrl+C, Enter", data);
+      this.presentToast('Address: ' + toastData + ' copied.');
+    });
   }
 
   pasteFromClipboard(){
@@ -133,9 +169,9 @@ export class AdaProvider {
 
   initLoader(){
     this.loader = this.loadingCtrl.create({
-        content: "Please wait ...",
+      content: "Please wait ...",
     });
-  };
+  }
 
   presentLoader() {
     this.loader.present()
@@ -468,20 +504,25 @@ export class AdaProvider {
     });
   }
 
-  getTransactions(walletId, skip, limit) {
-    console.log(walletId);
-    try {
-      this.getAdaHistoryByWallet(walletId, skip, limit ).then((history: AdaTransactions)=>{
-        console.log(history);
-        this.transactions = <AdaTransactions>JSON.parse(history['_body'])["Right"];
-        return this.transactions;
-      })
-    } catch (error) {
-      throw new GenericApiError();
-    }
+  getTransactions(walletId, skip, limit) : Promise<WalletTransaction> {
+    return new Promise((resolve, reject) => {
+      try {
+        this.getAdaHistoryByWallet(walletId, skip, limit ).then((history: WalletTransaction)=>{
+          console.log(history);
+          this.transactions[walletId] = history;
+          this.localStorageApi.setTransactions(this.transactions).then(()=>{
+            resolve(history);
+          }).catch((error)=>{
+            reject(error);
+          });
+        })
+      } catch (error) {
+        throw new GenericApiError();
+      }
+    });
   }
 
-  getAdaHistoryByWallet(walletId, skip, limit): Promise<AdaTransactions> {
+  getAdaHistoryByWallet(walletId, skip, limit): Promise<WalletTransaction> {
     console.log(walletId);
     return new Promise((resolve, reject) => {
       this.presentLoader();
@@ -494,8 +535,14 @@ export class AdaProvider {
       }
       let stringData = JSON.stringify(data);
       this.http.get(url, stringData ).subscribe(res => {
-        console.log(res);
-        resolve(<any>res);
+        
+        let history = JSON.parse(res['_body'])["Right"];
+        let adaHistory = {
+          transactions: history[0].map(d => this._createTransactionFromServerData(d)),
+          total: history[1]
+        }
+        console.log(adaHistory);
+        resolve(<any>adaHistory); 
       }, err => {
         console.log(err);
         reject(err);
@@ -503,6 +550,27 @@ export class AdaProvider {
     });
   }
 
+  syncAdaWallet(walletIndex){
+    let walletId = this.wallets[walletIndex]['id'];
+    return new Promise((resolve, reject) => {
+      let path = '/api/wallets/'+walletId; 
+      let url = this.baseUrl+path;
+      this.http.get(url).subscribe(res => {
+        this.handleApiRequest(res).then((responseBody)=>{
+          let wallet = this._createWalletFromServerData(responseBody);
+          console.log(walletIndex);
+          console.log(wallet);
+          this.wallets[walletIndex] = wallet;
+          resolve();
+        }).catch((error)=>{
+          console.log(error);
+        });
+      }, err => {
+        console.log(err);
+        reject(err);
+      });
+    });
+  }
 
   getAccount(accountId): Promise<AdaAccounts> {
     return new Promise((resolve, reject) => {
@@ -510,7 +578,7 @@ export class AdaProvider {
       let path = '/api/accounts?accountId='+accountId; 
       let url = this.baseUrl+path;
       this.http.get(url).subscribe(res => {
-        this.accounts.push(JSON.parse(res['_body'])["Right"][0]);
+        this.accounts[accountId] = JSON.parse(res['_body'])["Right"][0];
         this.localStorageApi.setAccounts(this.accounts).then(()=>{
           console.log('accounts stored to local storage');
           resolve(this.accounts);
@@ -526,7 +594,7 @@ export class AdaProvider {
   }
 
   createWallet(): Promise<CreateWalletResponse> {
-
+    
     this.presentLoader();
     let path = '/api/wallets/new'; 
     let url = this.baseUrl+path;
@@ -551,17 +619,23 @@ export class AdaProvider {
           let responseBody = JSON.parse(res['_body']);
           if (has(responseBody, 'Right')) {
             // "Right" means 200 ok (success) -> also handle if Right: false (boolean response)
-            this.getTransactions(responseBody['Right'].cwId, this.skip, this.limit);
-            this.getAccount(responseBody['Right'].cwId).then(()=>{
-              let wallet = this._createWalletFromServerData(responseBody['Right'] );
-              this.connectWalletToUser(wallet.id);
-              this.wallets.push(<any>wallet);
-              this.localStorageApi.setWallets(this.wallets).then((wallets)=>{
-                console.log('wallet stored to local storage');
-                console.log(wallets);
-                this.closeLoader();
-                resolve(responseBody['Right']);
+            this.getTransactions(responseBody['Right'].cwId, this.skip, this.limit).then((transactions)=>{
+              console.log(transactions);
+              this.getAccount(responseBody['Right'].cwId).then(()=>{
+                let wallet = this._createWalletFromServerData(responseBody['Right'] );
+                this.connectWalletToUser(wallet.id);
+                this.wallets.push(<any>wallet);
+                this.localStorageApi.setWallets(this.wallets).then((wallets)=>{
+                  console.log('wallet stored to local storage');
+                  console.log(wallets);
+                  this.closeLoader();
+                  resolve(responseBody['Right']);
+                }).catch((error)=>{
+                  this.presentToast(error.message);
+                  reject(new Error(error));
+                });
               }).catch((error)=>{
+                this.closeLoader();
                 this.presentToast(error.message);
                 reject(new Error(error));
               });
@@ -570,6 +644,7 @@ export class AdaProvider {
               this.presentToast(error.message);
               reject(new Error(error));
             });
+            
           } else if (has(responseBody, 'Left')) {
             // "Left" means error case -> return error with contents (exception on nextUpdate)
             if (responseBody) {

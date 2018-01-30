@@ -40,8 +40,7 @@ export class AdaRecoveryPhraseVerifyModalPage {
     this.disabledPhraseWords[disableSwitchIndex] = 1;
     this.reEnteredPhrase += phrase + ' ';
     this.reEnteredPhraseCounter ++;
-    // this.reEnteredPhraseIsValid = (this.reEnteredPhraseCounter == 12 && this.orignalPhrase == this.reEnteredPhrase.slice(0, -1));
-    this.reEnteredPhraseIsValid = true;
+    this.reEnteredPhraseIsValid = (this.reEnteredPhraseCounter == 12 && this.orignalPhrase == this.reEnteredPhrase.slice(0, -1));
   }
 
   ionViewDidLoad() {
