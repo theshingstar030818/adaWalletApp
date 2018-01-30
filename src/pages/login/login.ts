@@ -9,6 +9,8 @@ import { AdaPage } from '../ada/ada';
 import { SignupPage } from '../signup/signup';
 import { ConfirmPage } from '../confirm/confirm';
 
+import { ToastController } from 'ionic-angular';
+
 @Component({
   selector: 'page-user',
   templateUrl: 'login.html'
@@ -20,7 +22,8 @@ export class LoginPage {
   constructor(
     public navCtrl: NavController,
     public userData: UserData,
-    public loadingCtrl: LoadingController
+    public loadingCtrl: LoadingController,
+    public toastCtrl: ToastController
   ){
     this.loginDetails = { username: '', password: '' };
   }
@@ -45,10 +48,19 @@ export class LoginPage {
           loading.dismiss();
           this.navCtrl.push(ConfirmPage, { 'username': details.username });
         }
-        console.log('errrror', err);
+        this.presentToast('Error : '+ err.message);
+        console.log('Error :', err);
         loading.dismiss();
       });
     }
+  }
+
+  presentToast(message) {
+    let toast = this.toastCtrl.create({
+      message: message,
+      duration: 5000
+    });
+    toast.present();
   }
 
   onSignup() {

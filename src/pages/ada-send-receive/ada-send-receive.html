@@ -25,9 +25,9 @@
     <ng-template #hasWallet >            
       <ion-list>
         <button ion-item *ngFor="let wallet of ada.wallets; let i = index" (click)="walletSelected(wallet,i)">
-          <ion-avatar item-start>
-            <img src="../assets/img/ada-symbol-smallest-dark.inline.svg">
-          </ion-avatar>
+          <ion-thumbnail item-start>
+            <img src="assets/img/sidebar/wallet-ic.inline.svg">
+          </ion-thumbnail>
           <h2>{{wallet?.name}}</h2>
           <h3>{{wallet?.amount | amount : []}} ADA </h3>
         </button>      

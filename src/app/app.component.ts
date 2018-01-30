@@ -135,7 +135,8 @@ export class ConferenceApp {
 
   enableMenu(loggedIn: boolean) {
     this.menu.enable(loggedIn, 'loggedInMenu');
-    this.menu.enable(!loggedIn, 'loggedOutMenu');
+    // this.menu.enable(!loggedIn, 'loggedOutMenu');
+    this.menu.enable(false, 'loggedOutMenu');
   }
 
   platformReady(user) {

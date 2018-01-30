@@ -4,7 +4,8 @@ import { NavController, LoadingController } from 'ionic-angular';
 import { UserData } from '../../providers/user-data';
 import { LoginPage } from '../login/login';
 import { ConfirmPage } from '../confirm/confirm';
-import { AdaPage } from '../ada/ada';
+
+import { ToastController } from 'ionic-angular';
 
 export class UserDetails {
   username: string;
@@ -25,7 +26,8 @@ export class SignupPage {
   constructor(
     public navCtrl: NavController,
     public userData: UserData,
-    public loadingCtrl: LoadingController
+    public loadingCtrl: LoadingController,
+    public toastCtrl: ToastController
   ) {
       this.userDetails = new UserDetails();
   }
@@ -49,9 +51,17 @@ export class SignupPage {
       }).catch((err) => {
         loading.dismiss();
         this.error = err;
+        this.presentToast(err);
       });
-      this.navCtrl.push(AdaPage);
     }
+  }
+
+  presentToast(message) {
+    let toast = this.toastCtrl.create({
+      message: message,
+      duration: 5000
+    });
+    toast.present();
   }
 
   login() {

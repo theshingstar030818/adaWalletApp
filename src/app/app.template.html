@@ -63,7 +63,10 @@
           Navigate
         </ion-list-header>
         <button ion-item menuClose *ngFor="let p of appPages" (click)="openPage(p)">
-          <ion-icon item-start [name]="p.icon" [color]="isActive(p)"></ion-icon>
+          <ion-icon *ngIf="!p.customIcon" item-start [name]="p.icon" [color]="isActive(p)"></ion-icon>
+          <ion-avatar *ngIf="p.customIcon" item-start >
+            <img [src]="p.icon">
+          </ion-avatar>
           {{p.title}}
         </button>
       </ion-list>

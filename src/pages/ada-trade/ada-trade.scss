@@ -11,15 +11,20 @@ page-ada-trade {
   //   padding: 10px 0 0 10px !important;
   //   margin: 0;
   // }
+
   // ion-grid {
   //   height: 100%;
   //   justify-content: center;
   // }
-  // .flex-col {
-  //   display: flex;
-  //   justify-content: center;
-  //   align-items: center;
-  // }
+
+  .tabbar {
+    justify-content: center;
+  }
+  .flex-col {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   .custom{
     ion-segment-button{
         height: 3.0rem !important;
