@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
-<<<<<<< HEAD
-import { IonicPage, ViewController } from 'ionic-angular';
+import { IonicPage, ViewController, NavController } from 'ionic-angular';
+import { AdaPage } from '../ada/ada'; 
+import { LoginPage } from '../login/login';
+import { User } from '../../providers/user';
 //import { SplashScreen } from '@ionic-native/splash-screen';
-=======
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
->>>>>>> e391c59b71b8f1638d22c44437c140a0a7f966fb
 
 /**
  * Generated class for the SplashPage page.
@@ -20,21 +19,34 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class SplashPage {
 
-<<<<<<< HEAD
-  constructor(public viewCtrl: ViewController, ) {
-  }
+  constructor(
+    public viewCtrl: ViewController, 
+    public navCtrl: NavController,
+    user: User
+  ) {
 
-  ionViewDidEnter() {
-  
-    
- 
-=======
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
->>>>>>> e391c59b71b8f1638d22c44437c140a0a7f966fb
+    user.isAuthenticated().then(() => {
+      console.log('you are authenticated!');
+      setTimeout( () => {
+        
+        this.navCtrl.setRoot(AdaPage);
+
+      }, 5000);
+    }).catch(() => {
+      console.log('you are not authenticated..');
+      setTimeout( () => {
+        
+        this.navCtrl.setRoot(LoginPage);
+
+      }, 5000);
+    });
+
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad SplashPage');
   }
+
+
 
 }

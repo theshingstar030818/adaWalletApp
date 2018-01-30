@@ -145,6 +145,7 @@ export class ConferenceApp {
   }
 
   platformReady(user) {
+    //this.rootPage = SplashPage;
     // Call any initial plugins when ready
     this.platform.ready().then(() => {
       user.isAuthenticated().then(() => {

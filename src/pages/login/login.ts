@@ -5,9 +5,10 @@ import { NavController, LoadingController } from 'ionic-angular';
 
 import { UserData } from '../../providers/user-data';
 import { UserOptions } from '../../interfaces/user-options';
-import { AdaPage } from '../ada/ada';
+//import { AdaPage } from '../ada/ada'; this.navCtrl.setRoot(AdaPage);
 import { SignupPage } from '../signup/signup';
 import { ConfirmPage } from '../confirm/confirm';
+import { SplashPage } from '../splash/splash';
 
 import { ToastController } from 'ionic-angular';
 
@@ -29,7 +30,7 @@ export class LoginPage {
   }
 
   onLogin(form: NgForm) {
-    this.submitted = true;
+    this.submitted = true;    
     
     let loading = this.loadingCtrl.create({
       content: 'Please wait...'
@@ -42,7 +43,7 @@ export class LoginPage {
       this.userData.login(details.username, details.password).then((result) => {
         console.log('result:', result);
         loading.dismiss();
-        this.navCtrl.setRoot(AdaPage);
+        this.navCtrl.setRoot(SplashPage);
       }).catch((err) => { 
         if (err.message === "User is not confirmed.") {
           loading.dismiss();
