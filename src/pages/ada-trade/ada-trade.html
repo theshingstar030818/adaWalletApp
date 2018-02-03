@@ -44,7 +44,7 @@
           </ion-card-content>
         </ion-card>
         
-        <ion-card>
+        <!-- <ion-card>
           <ion-item>
             <ion-thumbnail item-start>
               <img src="assets/img/qr.png">
@@ -57,21 +57,22 @@
               </ion-icon>
             </button>
           </ion-item>
-        </ion-card>
+        </ion-card> -->
 
         <ion-list>          
-          <ion-item-group>
-            <ion-datetime disabled displayFormat="MM/DD/YYYY" pickerFormat="h mm A" [(ngModel)]="dummyTransaction.time"></ion-datetime>
+          <ion-item-group *ngFor="let transaction of ada.transactions[wallet.id].transactions">
+            <ion-datetime disabled displayFormat="MM/DD/YYYY" pickerFormat="h mm A" [(ngModel)]="transaction.date"></ion-datetime>
             <ion-item>
               <ion-avatar item-start>
-                <img item-start src="assets/img/send-ic.svg" >
+                <img item-start src="assets/img/{{transaction.type}}-ic.svg" >
               </ion-avatar>
               
-              <h3><b>Ada Sent</b></h3>
-              <h3>Ada transaction 12:24:51 AM</h3>
+              <h3><b>{{transaction.title}}</b></h3>
+              <p>{{transaction.numberOfConfirmations}} confirmations</p>
               <ion-note item-end>
-                <small>-100.000000 A</small><br>
-                <ion-badge item-end color="danger">Low</ion-badge>                
+                <small>{{transaction.amount}} A</small><br>
+                <ion-badge *ngIf="transaction.numberOfConfirmations<10" item-end color="danger">Low</ion-badge>
+                <ion-badge *ngIf="transaction.numberOfConfirmations>9" item-end color="secondary">High</ion-badge>                
               </ion-note>
             </ion-item>
 
@@ -129,49 +130,47 @@
               </ion-icon>
             </button>
           </ion-item>
-          <ion-row>
+          <ion-item>
+              <button ion-button block  (click)="ada.newAdaWalletAddress(wallet.id)" color="light">Generate new address</button>
+          </ion-item>
+          
+          <!-- <ion-row>
             <ion-col justify-content-center align-items-center text-wrap>
-              <ion-input placeholder="    Enter Password  " type="text" value=""></ion-input>
+              <ion-input placeholder="    Enter Password  " type="text" value="" [(ngModel)]="walletPass"></ion-input>
             </ion-col>
             <ion-col>
-              <button ion-button small  (click)="ada.generateNewAddress()" color="light">Generate new address</button>
+              <button ion-button small  (click)="ada.newAdaWalletAddress(wallet.id,walletPass)" color="light">Generate new address</button>
             </ion-col>
-          </ion-row>
+          </ion-row> -->
         </ion-card>
+        <ion-list>
+          <ion-item *ngFor="let address of ada.accounts[wallet.id].caAddresses">
+            <p text-wrap>{{address.cadId}}</p>
+            <ion-note (click)="copyAddress(address.cadId)" item-end>
+              <img class="svgicon" src="assets/img/clipboard-ic.inline.svg">
+            </ion-note>
+          </ion-item> 
+        </ion-list>
       </div>
   
       <div *ngSwitchCase="'Transactions'">
         <ion-list>          
-          <ion-item-group>
-            <ion-datetime disabled displayFormat="MM/DD/YYYY" pickerFormat="h mm A" [(ngModel)]="dummyTransaction.time"></ion-datetime>
+          <ion-item-group *ngFor="let transaction of ada.transactions[wallet.id].transactions">
+            <ion-datetime disabled displayFormat="MM/DD/YYYY" pickerFormat="h mm A" [(ngModel)]="transaction.date"></ion-datetime>
             <ion-item>
               <ion-avatar item-start>
-                <img item-start src="assets/img/receive-ic.svg" >
+                <img item-start src="assets/img/{{transaction.type}}-ic.svg" >
               </ion-avatar>
               
-              <h3><b>Ada Received</b></h3>
-              <h3>Ada transaction 2:22:31 PM</h3>
+              <h3><b>{{transaction.title}}</b></h3>
+              <p>{{transaction.numberOfConfirmations}} confirmations</p>
               <ion-note item-end>
-                <small>-1000.023421 A</small><br>
-                <ion-badge item-end color="secondary">Low</ion-badge>                
+                <small>{{transaction.amount}} A</small><br>
+                <ion-badge *ngIf="transaction.numberOfConfirmations<10" item-end color="danger">Low</ion-badge>
+                <ion-badge *ngIf="transaction.numberOfConfirmations>9" item-end color="secondary">High</ion-badge>                
               </ion-note>
             </ion-item>
-          </ion-item-group>
 
-          <ion-item-group>
-            <ion-datetime disabled displayFormat="MM/DD/YYYY" pickerFormat="h mm A" [(ngModel)]="dummyTransaction.time"></ion-datetime>
-            <ion-item>
-              <ion-avatar item-start>
-                <img item-start src="assets/img/send-ic.svg" >
-              </ion-avatar>
-              
-              <h3><b>Ada Sent</b></h3>
-              <h3>Ada transaction 12:24:51 AM</h3>
-              <ion-note item-end>
-                <small>-100.000000 A</small><br>
-                <ion-badge item-end color="danger">Low</ion-badge>                
-              </ion-note>
-            </ion-item>
           </ion-item-group>
         </ion-list>
       </div>
@@ -195,7 +194,7 @@
               <button ion-button clear color="light" item-end>Change</button>
           </ion-item>
           <ion-item>
-            <button ion-button block color="danger">Delete</button>
+            <button (click)="ada?.deleteAdaWallet(wallet.id,accountIndex)" ion-button block color="danger">Delete</button>
           </ion-item>
       </div>
     </div>

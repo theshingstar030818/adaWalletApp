@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
+import { AdaProvider } from '../../providers/ada/ada';
 
 /**
  * Generated class for the AdaWalletRecoverUsingIdPage page.
@@ -15,11 +16,31 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class AdaWalletRecoverUsingIdPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  key='';
+
+  constructor(
+    public navCtrl: NavController, 
+    public navParams: NavParams,
+    public viewCtrl: ViewController,
+    public ada: AdaProvider
+  ) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad AdaWalletRecoverUsingIdPage');
+  }
+
+  dismiss() {
+    this.viewCtrl.dismiss();
+  }
+
+  pasteFromClipboard(){
+    this.ada.pasteFromClipboard().then((res)=>{
+      this.key = <string>res;
+    }).catch((error)=>{
+      console.log(error);
+      this.ada.presentToast(error);
+    })
   }
 
 }

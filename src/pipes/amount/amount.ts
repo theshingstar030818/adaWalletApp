@@ -13,7 +13,7 @@ export class AmountPipe implements PipeTransform {
   transform(value: BigNumber) {
     if(value){
       let x: BigNumber = new BigNumber (value);
-      return x.toPrecision(6);
+      return x.dividedBy(1000000);
     }
     return value;    
   }

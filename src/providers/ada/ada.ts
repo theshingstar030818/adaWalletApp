@@ -1,4 +1,7 @@
 import { Injectable } from '@angular/core';
+import async from 'async';
+
+import { encryptPassphrase } from './lib/encryptPassphrase';
 
 import { 
   LoadingController,
@@ -38,7 +41,7 @@ import {
 import { 
   CreateWalletResponse, 
   WalletAlreadyRestoredError, 
-  GenericApiError 
+  GenericApiError
 } from './common';
 
 import { generateMnemonic } from './utils/crypto';
@@ -63,7 +66,6 @@ declare var AWS: any;
 export class AdaProvider {
 
   private baseUrl: string = 'https://pacecouriers.com:8099';
-  private getWalletsUrl: string = '/api/wallets';
   public walletInitData = {
     cwInitMeta: {
       cwName: '',
@@ -75,7 +77,6 @@ export class AdaProvider {
     },
     password: '',
   };
-
   accountIndex = '@2147483648';
 
   public loader: any;
@@ -83,7 +84,6 @@ export class AdaProvider {
   public accounts: any = {};
   public transactions: any = {};
   public skip: number = 0;
-  private limit: number = 10;
   public refresher: any;
   private taskTable: string = 'ionic-mobile-hub-ada';
 
@@ -128,10 +128,6 @@ export class AdaProvider {
     });
   }
 
-  generateNewAddress(){
-    this.presentToast('Coming soon!');
-  }
-
   loadDataFromLocalStore(){
     this.localStorageApi.getWallets().then((wallets)=>{
       this.wallets = wallets;
@@ -159,12 +155,15 @@ export class AdaProvider {
   }
 
   pasteFromClipboard(){
-    this.clipboard.paste().then((resolve: string) => {
-        alert(resolve);
-    },(reject: string) => {
-        alert('Error: ' + reject);
-      }
-    );
+    return new Promise((resolve) => {
+      this.clipboard.paste().then((res: string) => {
+        console.log(res);
+        resolve(res);
+      },(err: string) => {
+        console.log(window.getSelection().toString());
+        console.log(err);
+      });
+    });
   }
 
   initLoader(){
@@ -173,8 +172,13 @@ export class AdaProvider {
     });
   }
 
+
+
   presentLoader() {
-    this.loader.present()
+    this.loader = this.loadingCtrl.create({
+      content: "Please wait ...",
+    });
+    this.loader.present();
   };
 
   closeLoader(){
@@ -207,6 +211,14 @@ export class AdaProvider {
       ]
     });
     actionSheet.present();
+  }
+
+
+
+  encryptPassphrase(passphrase){
+    let encryptedPassphrase = encryptPassphrase(passphrase);
+    console.log(encryptedPassphrase);
+    return encryptedPassphrase;
   }
 
   showAdaWalletRecoverUsingIdPage(){
@@ -377,8 +389,19 @@ export class AdaProvider {
       'ScanIndexForward': false
     }).promise().then((data) => {
       console.log(data);
-      if (this.refresher) {
-        this.refresher.complete();
+      if(data.Items.length!=this.wallets.length){
+        async.forEachOf(data.Items, (wallet, index, callback) => {
+          console.log(wallet);
+          console.log(index);
+          this.restoreAdaWalletUsingId(wallet.taskId).then(()=>{
+            callback();
+          }).catch((error)=>{
+            return callback(error);
+          });
+        }, err => {
+            if (err) console.error(err.message);
+            console.log(err);
+        });
       }
     }).catch((err) => {
       console.log(err);
@@ -401,19 +424,6 @@ export class AdaProvider {
       if (err) { 
         console.log(err); 
       }
-      this.getWallets();
-    });
-  }
-
-  getAllWallets() {
-    return new Promise(resolve => {
-      let url = this.baseUrl+this.getWalletsUrl;
-      this.http.get(url).subscribe(data => {
-        console.log(data);
-        resolve(data);
-      }, err => {
-        console.log(err);
-      });
     });
   }
 
@@ -525,7 +535,6 @@ export class AdaProvider {
   getAdaHistoryByWallet(walletId, skip, limit): Promise<WalletTransaction> {
     console.log(walletId);
     return new Promise((resolve, reject) => {
-      this.presentLoader();
       let path = '/api/txs/histories?walletId='+walletId+'&skip='+skip+'&limit='+limit; 
       let url = this.baseUrl+path;
       let data = {
@@ -542,7 +551,10 @@ export class AdaProvider {
           total: history[1]
         }
         console.log(adaHistory);
-        resolve(<any>adaHistory); 
+        this.transactions[walletId] = adaHistory;
+        this.localStorageApi.setTransactions(this.transactions).then(()=>{
+          resolve(<any>adaHistory); 
+        });
       }, err => {
         console.log(err);
         reject(err);
@@ -560,8 +572,12 @@ export class AdaProvider {
           let wallet = this._createWalletFromServerData(responseBody);
           console.log(walletIndex);
           console.log(wallet);
+          this.getAccount(wallet.id);
+          this.getAdaHistoryByWallet(wallet.id,this.skip,1000);
           this.wallets[walletIndex] = wallet;
-          resolve();
+          this.localStorageApi.setWallets(this.wallets).then(()=>{
+            resolve(wallet);
+          });
         }).catch((error)=>{
           console.log(error);
         });
@@ -574,7 +590,6 @@ export class AdaProvider {
 
   getAccount(accountId): Promise<AdaAccounts> {
     return new Promise((resolve, reject) => {
-      this.presentLoader();
       let path = '/api/accounts?accountId='+accountId; 
       let url = this.baseUrl+path;
       this.http.get(url).subscribe(res => {
@@ -591,6 +606,123 @@ export class AdaProvider {
         reject(err);
       });
     });
+  }
+
+  restoreAdaWalletUsingId(walletId): Promise<CreateWalletResponse>{
+    if(walletId.length==0){
+      this.presentToast('Invalid Wallet Key');
+    }else if(this.accounts[walletId]){
+      this.presentToast('Wallet already restored');
+    }else{
+      let path = '/api/wallets/'+walletId;
+      let url = this.baseUrl+path;
+      return new Promise((resolve, reject) => {
+        this.http.get(url).subscribe(res => {
+          this.handleApiRequest(res).then((responseBody)=>{
+            let wallet = this._createWalletFromServerData(responseBody);
+            console.log(wallet);
+            this.getTransactions(wallet.id,0,1000).then(()=>{
+              this.getAccount(wallet.id).then(()=>{
+                this.connectWalletToUser(wallet.id);
+                this.wallets.push(wallet);
+                this.localStorageApi.setWallets(this.wallets).then((wallets)=>{
+                  console.log(wallets);
+                  this.presentToast('Wallet succesfully restored');
+                  resolve(wallet);
+                });
+              }).catch((error)=>{
+                this.presentToast(error.message);
+              });
+            }).catch((error)=>{
+              this.presentToast(error.message);
+            });
+          }).catch((error)=>{
+            this.presentToast(error.message);
+            console.log(error);
+          });
+        }, err => {
+          this.presentToast('Wallet restored unsuccessful : ' + err.message);
+          console.log(err);
+          reject(err);
+        });
+      });
+    }
+  }
+
+  newAdaWalletAddress(accountId: string): Promise<WalletAddress> {
+    let path = '/api/addresses';
+    let url = this.baseUrl+path;
+    let headers = new Headers({
+      'Content-Type' : 'application/json'
+    });
+    let requestOptionsArgs: RequestOptionsArgs = {"headers":headers};
+
+    return new Promise((resolve, reject) => {
+      let data = JSON.stringify(accountId+this.accountIndex);
+      this.http.post(url, data, requestOptionsArgs).subscribe(res => {
+        this.syncAdaWallet(accountId);
+        console.log(res);
+        resolve(<any>res);
+      }, err => {
+        console.log(err);
+        reject(err);
+      });
+    });
+  }
+
+  deleteAdaWalletLocal(walletId, walletIndex){
+    return new Promise((resolve) => {
+      delete this.transactions[walletId];
+      delete this.accounts[walletId];
+      this.wallets.splice(walletIndex,1);
+      this.localStorageApi.setWallets(this.wallets).then(()=>{
+        this.localStorageApi.setAccounts(this.accounts).then(()=>{
+          this.localStorageApi.setTransactions(this.transactions).then(()=>{
+            resolve();
+          });
+        });
+      });
+    });
+  }
+
+  deleteAdaWallet(walletId, walletIndex){
+    console.log('walletId : ' + walletId);
+    console.log('walletIndex : ' + walletIndex);
+    // return new Promise((resolve, reject) => {
+    //   let path = '/api/wallets/'+walletId; 
+    //   let url = this.baseUrl+path;
+    //   let headers = new Headers({
+    //     'Content-Type' : 'application/json'
+    //   });
+    //   let requestOptionsArgs: RequestOptionsArgs = {"headers":headers};
+    //   try{
+    //     this.http.delete(url,requestOptionsArgs).subscribe(res => {
+    //       console.log(res);
+    //       resolve();
+    //     });
+    //   }catch (error) {
+    //     console.log(error);
+    //     reject(error);
+    //   }
+    // });
+  }
+
+  proxyRestoreWallet(){
+    // let walletInitData = {
+    //   cwInitMeta: {
+    //     cwName: 'test wallet',
+    //     cwAssurance: 'CWAStrict',
+    //     cwUnit: 0,
+    //   },
+    //   cwBackupPhrase: {
+    //     bpToList: [], // array of mnemonic words
+    //   },
+    //   password: '',
+    // };
+
+    // return new Promise((resolve, reject) => {
+      
+    // });
   }
 
   createWallet(): Promise<CreateWalletResponse> {
@@ -619,12 +751,12 @@ export class AdaProvider {
           let responseBody = JSON.parse(res['_body']);
           if (has(responseBody, 'Right')) {
             // "Right" means 200 ok (success) -> also handle if Right: false (boolean response)
-            this.getTransactions(responseBody['Right'].cwId, this.skip, this.limit).then((transactions)=>{
+            this.getTransactions(responseBody['Right'].cwId, 0, 100).then((transactions)=>{
               console.log(transactions);
               this.getAccount(responseBody['Right'].cwId).then(()=>{
                 let wallet = this._createWalletFromServerData(responseBody['Right'] );
                 this.connectWalletToUser(wallet.id);
-                this.wallets.push(<any>wallet);
+                this.wallets.push(wallet);
                 this.localStorageApi.setWallets(this.wallets).then((wallets)=>{
                   console.log('wallet stored to local storage');
                   console.log(wallets);
@@ -684,7 +816,8 @@ export class AdaProvider {
     let toast = this.toastCtrl.create({
       message: message,
       duration: 5000,
-      position: 'top'
+      position: 'top',
+      showCloseButton: true
     });
   
     toast.onDidDismiss(() => {
