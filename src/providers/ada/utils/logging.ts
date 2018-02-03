@@ -27,6 +27,7 @@ export const Logger = {
     // [datestamp] [log-type]: log-data
     // e.g: [2017-08-22 11:25:20:0811] [debug] CardanoClientApi::getLocale called
     const logEntry = `${moment().format('YYYY-MM-DD HH:mm:ss:0SSS')} [${type}]: ${data}`;
+    console.log(logEntry);
     // ipcRenderer.send('log-to-remote', logEntry);
   },
 

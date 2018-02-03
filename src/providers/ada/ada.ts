@@ -408,6 +408,25 @@ export class AdaProvider {
     });
   }
 
+  disconnectWalletToUser(id){
+    return new Promise((resolve, reject) => {
+      this.db.getDocumentClient().delete({
+        'TableName': this.taskTable,
+        'Key': {
+          'userId': AWS.config.credentials.identityId,
+          'taskId': id
+        }
+      }).promise().then((data) => {
+        console.log(data);
+        console.log('wallet disconected sucessfully');
+        resolve(data);
+      }).catch((err) => {
+        console.log('there was an error', err);
+        reject(err);
+      });
+    });
+  }
+
   connectWalletToUser(id) {
     let item = {
       'taskId': id,
@@ -669,7 +688,7 @@ export class AdaProvider {
     });
   }
 
-  deleteAdaWalletLocal(walletId, walletIndex){
+  deleteAdaWalletLocal(walletId:string, walletIndex:number){
     return new Promise((resolve) => {
       delete this.transactions[walletId];
       delete this.accounts[walletId];
@@ -688,30 +707,34 @@ export class AdaProvider {
   }
 
   deleteAdaWallet(walletId, walletIndex){
-    console.log('walletId : ' + walletId);
-    console.log('walletIndex : ' + walletIndex);
-    this.deleteAdaWalletLocal(walletId,walletIndex).then(()=>{
-
-    })
-    // return new Promise((resolve, reject) => {
-    //   let path = '/api/wallets/'+walletId; 
-    //   let url = this.baseUrl+path;
-    //   let headers = new Headers({
-    //     'Content-Type' : 'application/json'
-    //   });
-    //   let requestOptionsArgs: RequestOptionsArgs = {"headers":headers};
-    //   try{
-    //     this.http.delete(url,requestOptionsArgs).subscribe(res => {
-    //       console.log(res);
-    //       resolve();
-    //     });
-    //   }catch (error) {
-    //     console.log(error);
-    //     reject(error);
-    //   }
-    // });
+    return new Promise((resolve, reject) => {
+      this.deleteAdaWalletLocal(walletId,walletIndex).then(()=>{
+        this.disconnectWalletToUser(walletId).then(()=>{
+          // delete wallet from node as well
+          let path = '/api/wallets/'+walletId; 
+          let url = this.baseUrl+path;
+          let headers = new Headers({
+            'Content-Type' : 'application/json'
+          });
+          let requestOptionsArgs: RequestOptionsArgs = {"headers":headers};
+          try {
+            this.http.delete(url, requestOptionsArgs).subscribe(res => {
+              console.log(res);
+              resolve();
+            });
+          }catch(error){
+            console.log(error);
+            reject(error);
+          }
+        }).catch((error)=>{
+          console.log(error);
+          reject(error);
+        });
+      })
+    });
   }
 
+  
   proxyRestoreWallet(){
     // let walletInitData = {
     //   cwInitMeta: {

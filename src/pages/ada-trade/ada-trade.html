@@ -43,21 +43,6 @@
               </ion-item>
           </ion-card-content>
         </ion-card>
-        
-        <!-- <ion-card>
-          <ion-item>
-            <ion-thumbnail item-start>
-              <img src="assets/img/qr.png">
-            </ion-thumbnail>
-            <h2>Your wallet address</h2>
-            <p text-wrap #currentAddressSummary >{{ada?.accounts[wallet?.id]?.caAddresses[ada?.accounts[wallet?.id]?.caAddresses.length-1]?.cadId}}</p>
-            <button ion-button icon-only clear item-end (click)="copyAddressToClipboard(currentAddressSummary)">
-              <ion-icon item-end>
-                <img class="svgicon" src="assets/img/clipboard-ic.inline.svg">
-              </ion-icon>
-            </button>
-          </ion-item>
-        </ion-card> -->
 
         <ion-list>          
           <ion-item-group *ngFor="let transaction of ada.transactions[wallet.id].transactions">

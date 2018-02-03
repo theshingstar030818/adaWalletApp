@@ -70,7 +70,7 @@ export class AdaTradePage {
         },
         {
           'name': 'Settings',
-          'iconsvg'  : 'assets/img/wallet-nav/wallet-settings-2-ic.inline.svg'
+          'iconsvg'  : 'assets/img/wallet-nav/wallet-settings-ic.svg'
         }
       ]
   }

@@ -1,9 +1,15 @@
 page-ada {
   .tabbar {
-      justify-content: center;
-    }
-    
-    .tab-button {
-      max-width: 200px;
-    }
+    justify-content: center;
+  }
+  .tab-button {
+    max-width: 200px;
+  }
+  .svgicon{
+    height: 20px;
+    margin-top: 4px;
+  }
+  .symbol{
+    height: 25px !important;
+  }
 }
