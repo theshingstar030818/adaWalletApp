@@ -1,7 +1,7 @@
 // import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
-import environment from '../ada/environment';
+//import environment from '../ada/environment';
 import { AdaTransactions } from '../ada/types';
 import { Wallet } from '../ada/domain/Wallet';
 
@@ -12,12 +12,8 @@ import { Wallet } from '../ada/domain/Wallet';
   and Angular DI.
 */
 
-const networkForLocalStorage = String(environment.NETWORK);
+//const networkForLocalStorage = String(environment.NETWORK);
 const storageKeys = {
-  USER_LOCALE: networkForLocalStorage + '-USER-LOCALE',
-  TERMS_OF_USE_ACCEPTANCE: networkForLocalStorage + '-TERMS-OF-USE-ACCEPTANCE',
-  SEND_LOGS_CHOICE: networkForLocalStorage + '-SEND-LOGS-CHOICE',
-  THEME: networkForLocalStorage + '-THEME',
   WALLETS: 'WALLETS',
   ACCOUNTS: 'ACCOUNTS',
   TRANSACTIONS: 'TRANSACTIONS',
