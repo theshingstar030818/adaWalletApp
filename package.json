@@ -62,7 +62,6 @@
     "cordova-sqlite-storage": "^2.2.0",
     "d-l-l": "0.0.7",
     "deep-diff": "^0.3.4",
-    "electron": "^1.7.10",
     "electron-log": "^2.2.14",
     "es6-error": "^4.1.1",
     "ionic-angular": "3.9.2",

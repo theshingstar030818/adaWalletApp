@@ -552,9 +552,7 @@ export class AdaProvider {
         }
         console.log(adaHistory);
         this.transactions[walletId] = adaHistory;
-        this.localStorageApi.setTransactions(this.transactions).then(()=>{
-          resolve(<any>adaHistory); 
-        });
+        resolve(<any>adaHistory);
       }, err => {
         console.log(err);
         reject(err);
@@ -609,6 +607,7 @@ export class AdaProvider {
   }
 
   restoreAdaWalletUsingId(walletId): Promise<CreateWalletResponse>{
+    console.log('restoreAdaWalletUsingId');
     if(walletId.length==0){
       this.presentToast('Invalid Wallet Key');
     }else if(this.accounts[walletId]){
@@ -678,6 +677,9 @@ export class AdaProvider {
       this.localStorageApi.setWallets(this.wallets).then(()=>{
         this.localStorageApi.setAccounts(this.accounts).then(()=>{
           this.localStorageApi.setTransactions(this.transactions).then(()=>{
+            console.log(this.wallets);
+            console.log(this.accounts);
+            console.log(this.transactions);
             resolve();
           });
         });
@@ -688,6 +690,9 @@ export class AdaProvider {
   deleteAdaWallet(walletId, walletIndex){
     console.log('walletId : ' + walletId);
     console.log('walletIndex : ' + walletIndex);
+    this.deleteAdaWalletLocal(walletId,walletIndex).then(()=>{
+
+    })
     // return new Promise((resolve, reject) => {
     //   let path = '/api/wallets/'+walletId; 
     //   let url = this.baseUrl+path;

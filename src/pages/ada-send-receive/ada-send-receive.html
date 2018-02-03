@@ -22,15 +22,25 @@
 
 <ion-content padding>
   <ion-list>
-    <ng-template #hasWallet >            
+    <ng-template #hasWallet>
       <ion-list>
-        <button ion-item *ngFor="let wallet of ada.wallets; let i = index" (click)="walletSelected(wallet,i)">
-          <ion-thumbnail item-start>
-            <img src="assets/img/sidebar/wallet-ic.inline.svg">
-          </ion-thumbnail>
-          <h2>{{wallet?.name}}</h2>
-          <h3>{{wallet?.amount | amount : []}} ADA </h3>
-        </button>      
+        <ion-item-sliding *ngFor="let wallet of ada.wallets; let i = index" (click)="walletSelected(wallet,i)">
+          <ion-item>
+            <ion-thumbnail item-start>
+              <img src="assets/img/sidebar/wallet-ic.inline.svg">
+            </ion-thumbnail>
+            <h2>{{wallet?.name}}</h2>
+            <h3>{{wallet?.amount | amount : []}} ADA </h3>
+            <button ion-button clear item-end icon-only>
+              <ion-icon name="ios-arrow-dropright-outline"></ion-icon>
+            </button>
+          </ion-item>
+          <ion-item-options side="right">
+            <button ion-button color="danger" (click)="ada.deleteAdaWalletLocal(wallet,i)">
+              Delete
+            </button>
+          </ion-item-options>
+        </ion-item-sliding>
       </ion-list>
     </ng-template>
 
