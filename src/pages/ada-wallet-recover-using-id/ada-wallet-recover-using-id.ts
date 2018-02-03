@@ -33,6 +33,14 @@ export class AdaWalletRecoverUsingIdPage {
   dismiss() {
     this.viewCtrl.dismiss();
   }
+  
+  restoreAdaWalletUsingId(key){
+    this.ada.restoreAdaWalletUsingId(key).then(()=>{
+      this.dismiss();
+    }).catch((error)=>{
+      console.log(error);
+    });
+  }
 
   pasteFromClipboard(){
     this.ada.pasteFromClipboard().then((res)=>{

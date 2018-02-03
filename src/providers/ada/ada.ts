@@ -626,46 +626,48 @@ export class AdaProvider {
   }
 
   restoreAdaWalletUsingId(walletId): Promise<CreateWalletResponse>{
-    console.log('restoreAdaWalletUsingId');
-    if(walletId.length==0){
-      this.presentToast('Invalid Wallet Key');
-    }else if(this.accounts[walletId]){
-      this.presentToast('Wallet already restored');
-    }else{
-      let path = '/api/wallets/'+walletId;
-      let url = this.baseUrl+path;
-      return new Promise((resolve, reject) => {
-        this.http.get(url).subscribe(res => {
-          this.handleApiRequest(res).then((responseBody)=>{
-            let wallet = this._createWalletFromServerData(responseBody);
-            console.log(wallet);
-            this.getTransactions(wallet.id,0,1000).then(()=>{
-              this.getAccount(wallet.id).then(()=>{
-                this.connectWalletToUser(wallet.id);
-                this.wallets.push(wallet);
-                this.localStorageApi.setWallets(this.wallets).then((wallets)=>{
-                  console.log(wallets);
-                  this.presentToast('Wallet succesfully restored');
-                  resolve(wallet);
+    return new Promise((resolve, reject) => {
+      console.log('restoreAdaWalletUsingId');
+      if(walletId.length==0){
+        this.presentToast('Invalid Wallet Key');
+        resolve();
+      }else if(this.accounts[walletId]){
+        this.presentToast('Wallet already restored');
+        resolve();
+      }else{
+        let path = '/api/wallets/'+walletId;
+        let url = this.baseUrl+path;
+          this.http.get(url).subscribe(res => {
+            this.handleApiRequest(res).then((responseBody)=>{
+              let wallet = this._createWalletFromServerData(responseBody);
+              console.log(wallet);
+              this.getTransactions(wallet.id,0,1000).then(()=>{
+                this.getAccount(wallet.id).then(()=>{
+                  this.connectWalletToUser(wallet.id);
+                  this.wallets.push(wallet);
+                  this.localStorageApi.setWallets(this.wallets).then((wallets)=>{
+                    console.log(wallets);
+                    this.presentToast('Wallet succesfully restored');
+                    resolve(wallet);
+                  });
+                }).catch((error)=>{
+                  this.presentToast(error.message);
                 });
               }).catch((error)=>{
                 this.presentToast(error.message);
               });
             }).catch((error)=>{
               this.presentToast(error.message);
+              console.log(error);
             });
-          }).catch((error)=>{
-            this.presentToast(error.message);
-            console.log(error);
+          }, err => {
+            this.presentToast('Wallet restored unsuccessful : ' + err.message);
+            console.log(err);
+            reject(err);
           });
-        }, err => {
-          this.presentToast('Wallet restored unsuccessful : ' + err.message);
-          console.log(err);
-          reject(err);
-        });
+        }
       });
     }
-  }
 
   newAdaWalletAddress(accountId: string): Promise<WalletAddress> {
     let path = '/api/addresses';
@@ -730,10 +732,9 @@ export class AdaProvider {
           console.log(error);
           reject(error);
         });
-      })
+      });
     });
   }
-
   
   proxyRestoreWallet(){
     // let walletInitData = {
@@ -747,9 +748,7 @@ export class AdaProvider {
     //   },
     //   password: '',
     // };
-
     // return new Promise((resolve, reject) => {
-      
     // });
   }
 
