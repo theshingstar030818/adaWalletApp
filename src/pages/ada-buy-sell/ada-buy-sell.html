@@ -18,8 +18,22 @@
   <ion-list justify-content-center align-items-center>
       <ion-card justify-content-center align-items-center>
           <ion-card-content justify-content-center align-items-center>
-            Coming Soon
+            Sell Coming Soon
           </ion-card-content>
         </ion-card>
   </ion-list> 
+  <form (submit)="GetInfo()">
+    <ion-list>
+
+      <ion-item>
+        <ion-label floating>Confirmation Code</ion-label>
+        <ion-input type="number" [(ngModel)]="mobileNo" name="mobileNo"></ion-input>
+      </ion-item>
+
+      <div padding>
+        <button ion-button color="primary" block>Get Info</button>
+      </div>
+
+    </ion-list>
+  </form>
 </ion-content>

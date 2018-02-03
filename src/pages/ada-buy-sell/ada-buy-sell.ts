@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
+import { AdaBuyProvider } from '../../providers/ada-buy/ada-buy'
 /**
  * Generated class for the AdaBuySellPage page.
  *
@@ -15,7 +16,18 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class AdaBuySellPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  public mobileNo: string;
+
+  constructor(
+    public navCtrl: NavController, 
+    public navParams: NavParams,
+    public adaBuy:AdaBuyProvider
+  ) {
+  }
+  
+
+  GetInfo(){
+    this.adaBuy.GetCustomerInfo(this.mobileNo);
   }
 
   ionViewDidLoad() {

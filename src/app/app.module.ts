@@ -56,6 +56,7 @@ import { User } from '../providers/user';
 import { Cognito } from '../providers/aws.cognito';
 import { DynamoDB } from '../providers/aws.dynamodb';
 import { ConfirmPage } from '../pages/confirm/confirm';
+import { AdaBuyProvider } from '../providers/ada-buy/ada-buy';
 
 @NgModule({
   declarations: [
@@ -184,7 +185,8 @@ import { ConfirmPage } from '../pages/confirm/confirm';
     Cognito,
     DynamoDB,
     Clipboard,
-    StatusBar
+    StatusBar,
+    AdaBuyProvider
   ]
 })
 export class AppModule {}
