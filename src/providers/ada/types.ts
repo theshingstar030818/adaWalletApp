@@ -1,6 +1,7 @@
 export type AdaAssurance = 'CWANormal' | 'CWAStrict';
 export type AdaTransactionCondition = 'CPtxApplying' | 'CPtxInBlocks' | 'CPtxWontApply' | 'CPtxNotTracked';
 export type AdaWalletRecoveryPhraseResponse = Array<string>;
+import BigNumber from 'bignumber.js';
 
 export type UpdateAdaWalletParams = {
   walletId: string,
@@ -21,6 +22,13 @@ export type AdaWalletInitData = {
     bpToList: [string],
   }
 };
+
+export type TransactionFeeRequest = {
+  sender: string,
+  receiver: string,
+  amount: string,
+};
+export type TransactionFeeResponse = BigNumber;
 
 export type AdaSyncProgressResponse = {
   _spLocalCD: {
@@ -74,6 +82,13 @@ export type AdaTransaction = {
   },
   ctOutputs: AdaTransactionInputOutput,
   ctCondition: AdaTransactionCondition,
+};
+
+export type CreateTransactionRequest = {
+  sender: string,
+  receiver: string,
+  amount: string,
+  password?: string,
 };
 
 export type AdaTransactions = [

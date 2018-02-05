@@ -48,6 +48,17 @@ export class WalletAlreadyRestoredError extends LocalizableError {
   }
 }
 
+export type NewAdaPaymentParams = {
+  ca: string,
+  sender: string,
+  receiver: string,
+  amount: string,
+  password?: string,
+  // "groupingPolicy" - Spend everything from the address
+  // "OptimizeForSize" for no grouping
+  groupingPolicy?: 'OptimizeForSecurity' | 'OptimizeForSize',
+};
+
 export type CreateTransactionResponse = WalletTransaction;
 export type CreateWalletResponse = Wallet;
 export type DeleteWalletResponse = boolean;

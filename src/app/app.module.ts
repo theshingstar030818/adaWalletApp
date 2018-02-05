@@ -1,5 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
+import { BarcodeScanner } from '@ionic-native/barcode-scanner';
+import { File } from '@ionic-native/file';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { Clipboard } from '@ionic-native/clipboard';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
@@ -21,6 +23,7 @@ import { SpeakerListPage } from '../pages/speaker-list/speaker-list';
 import { TutorialPage } from '../pages/tutorial/tutorial';
 import { SupportPage } from '../pages/support/support';
 import { AdaRecoveryPhraseVerifyModalPage } from '../pages/ada-recovery-phrase-verify-modal/ada-recovery-phrase-verify-modal';
+import { AdaChangeWalletPassphraseModalPage } from '../pages/ada-change-wallet-passphrase-modal/ada-change-wallet-passphrase-modal';
 import { ConferenceData } from '../providers/conference-data';
 import { UserData } from '../providers/user-data';
 
@@ -78,6 +81,7 @@ import { ConfirmPage } from '../pages/confirm/confirm';
     PortfolioPage,
     PricesPage,
     AdaRecoveryPhraseVerifyModalPage,
+    AdaChangeWalletPassphraseModalPage,
     AdaRecoverWalletModalPage,
     AdaSendPage,
     AdaReceivePage,
@@ -115,6 +119,7 @@ import { ConfirmPage } from '../pages/confirm/confirm';
         { component: PricesPage, name: 'PricesPage', segment: 'prices-page' },
         { component: MapPage, name: 'MapPage', segment: 'map-page' },
         { component: AdaRecoveryPhraseVerifyModalPage, name: 'AdaRecoveryPhraseVerifyModalPage', segment: 'ada-recovery-phrase-verify-modal-page' },
+        { component: AdaChangeWalletPassphraseModalPage, name: 'AdaChangeWalletPassphraseModalPage', segment: 'ada-change-wallet-passphrase-modal-page' },
         { component: AdaRecoverWalletModalPage, name: 'AdaRecoverWalletModalPage', segment: 'ada-recover-wallet-modal-page' },
         { component: AdaSendPage, name: 'AdaSendPage', segment: 'ada-send-page' },
         { component: AdaReceivePage, name: 'AdaReceivePage', segment: 'ada-receive-page' },
@@ -150,6 +155,7 @@ import { ConfirmPage } from '../pages/confirm/confirm';
     PortfolioPage,
     PricesPage,
     AdaRecoveryPhraseVerifyModalPage,
+    AdaChangeWalletPassphraseModalPage,
     AdaRecoverWalletModalPage,
     AdaSendPage,
     AdaReceivePage,
@@ -177,7 +183,9 @@ import { ConfirmPage } from '../pages/confirm/confirm';
     User,
     Cognito,
     DynamoDB,
-    Clipboard
+    Clipboard,
+    BarcodeScanner,
+    File
   ]
 })
 export class AppModule {}

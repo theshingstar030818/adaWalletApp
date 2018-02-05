@@ -61,7 +61,7 @@ export class AdaRecoveryPhraseVerifyModalPage {
 
   verifyPhraseAndCreateWallet(){
     if(this.reEnteredPhraseIsValid){
-      this.ada.createWallet().then((data)=>{
+      this.ada.createWallet_my().then((data)=>{
         console.log(data);
         this.dismiss();
       }).catch((error)=>{

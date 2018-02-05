@@ -18,6 +18,7 @@
   
   
 <ion-content padding>  
+
   <ion-segment [(ngModel)]="Stab">
     <ion-segment-button *ngFor="let tab of tabs" [value]="tab.name">
       <img class="svgicon" [src]="tab.iconsvg" [alt]="tab.name">
@@ -65,41 +66,51 @@
         </ion-list>
       </div>
   
-      <div *ngSwitchCase="'Send'">
+      
+      <form *ngSwitchCase="'Send'" [formGroup]="sendAdaFormGroup">
         <ion-card>
           <ion-item>
             <h2><b>Receiver</b></h2>
-            <button ion-button icon-only item-end clear align-items-left>
+            <button ion-button icon-only item-end clear align-items-left (click)="ada?.scanBarCode()" >
               <img align-items-left class="svgicon" item-end item-start src="assets/img/attach-ic.inline.svg" >
             </button>
           </ion-item>
         
           <ion-card-content no-padding>
             <ion-item>
-              <ion-textarea rows="4" type="text" placeholder="Wallet Address" value=""></ion-textarea>
+              <ion-textarea rows="4" formControlName="receiver" type="text" placeholder="Wallet Address" value=""></ion-textarea>
+            </ion-item>
+            <ion-item>
+              <ion-badge color="danger" *ngIf="!isReceiverValid" item-end>
+                Please enter a valid address.
+              </ion-badge>
             </ion-item>
           </ion-card-content>
         </ion-card>
       
         <ion-card>
-          <ion-card-header>
+          <ion-item>
             Amount
-            <ion-badge item-end>+ 0.000000 of fees</ion-badge>
-          </ion-card-header>
-        
+            <ion-badge item-end>+ {{adaTxFee}} of fees</ion-badge>
+          </ion-item>
           <ion-card-content>
             <ion-item>
-              <ion-input type="number" placeholder="0.000000 ADA" ></ion-input>
+              <ion-input formControlName="amount" type="number" placeholder="0.000000 ADA" ></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-badge text-wrap color="danger" *ngIf="!isAdaTxAllowed" item-end>
+                {{adaTxErrorMessage}}
+              </ion-badge>
             </ion-item>
           </ion-card-content>
         </ion-card>
       
         <ion-grid>
-          <ion-row justify-content-center align-items-center (click)="next()">
+          <ion-row justify-content-center align-items-center (click)="newAdaPayment()">
             <button ion-button color="primary">Next</button>         
           </ion-row>
         </ion-grid>
-      </div>
+      </form>
   
       <div *ngSwitchCase="'Receive'">
         <ion-card>
@@ -116,17 +127,8 @@
             </button>
           </ion-item>
           <ion-item>
-              <button ion-button block  (click)="ada.newAdaWalletAddress(wallet.id)" color="light">Generate new address</button>
+              <button ion-button block  (click)="ada.newAdaWalletAddress(wallet.id, accountIndex)" color="light">Generate new address</button>
           </ion-item>
-          
-          <!-- <ion-row>
-            <ion-col justify-content-center align-items-center text-wrap>
-              <ion-input placeholder="    Enter Password  " type="text" value="" [(ngModel)]="walletPass"></ion-input>
-            </ion-col>
-            <ion-col>
-              <button ion-button small  (click)="ada.newAdaWalletAddress(wallet.id,walletPass)" color="light">Generate new address</button>
-            </ion-col>
-          </ion-row> -->
         </ion-card>
         <ion-list>
           <ion-item *ngFor="let address of ada.accounts[wallet.id].caAddresses">
@@ -163,24 +165,21 @@
       <div *ngSwitchCase="'Settings'">
           <ion-item>
               <ion-label stacked>Name</ion-label>
-              <ion-input type="text" [value]="ada?.wallets[accountIndex].name" ></ion-input>
+              <ion-input type="text" [formControl]="textInput" [(ngModel)]="ada?.wallets[accountIndex].name" ></ion-input>
           </ion-item>
           <ion-item>
               <ion-label stacked>Transaction Assurence Security Level</ion-label>
-              <ion-select [(ngModel)]="ada?.wallets[accountIndex].assurance">
+              <ion-select [(ngModel)]="ada?.wallets[accountIndex].assurance" (ionChange)="updateAdaWallet()">
                   <ion-option value="CWANormal">Normal</ion-option>
                   <ion-option value="CWAStrict">Strict</ion-option>
               </ion-select>
           </ion-item>
   
-          <ion-item>
+          <ion-item (click)="changeAdaWalletPassphrase()">
               <ion-label stacked>Password Last Updated</ion-label>
               <ion-datetime disabled displayFormat="DD-MMMM-YYYY" [(ngModel)]="ada?.wallets[accountIndex].passwordUpdateDate"></ion-datetime>
-              <button ion-button clear color="light" item-end>Change</button>
+              <button ion-button clear color="dark" item-end>Change</button>
           </ion-item>
-          <!-- <ion-item>
-            <button (click)="ada?.deleteAdaWallet(wallet.id,accountIndex)" ion-button block color="danger">Delete</button>
-          </ion-item> -->
       </div>
     </div>
 </ion-content>

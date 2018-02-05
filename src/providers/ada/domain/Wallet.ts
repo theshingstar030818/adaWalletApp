@@ -13,6 +13,7 @@ export class Wallet {
   @observable assurance: AssuranceModeOption;
   @observable hasPassword: boolean;
   @observable passwordUpdateDate: Date;
+  @observable syncStatus: boolean = false;
 
   constructor(data: {
     id: string,

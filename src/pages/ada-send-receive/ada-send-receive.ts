@@ -32,20 +32,17 @@ export class AdaSendReceivePage {
 
   walletSelected(wallet, index){
     console.log(wallet);
-    this.navCtrl.push('AdaTradePage', {wallet: wallet, accountIndex: index});
-  }
-
-  ionViewDidLoad(){
-    if(this.ada.wallets.length){
-      // this.clipboard = new ClipboardJS('#cpyBtn');
-      // this.clipboard.on('success', () => {
-      //   let toast = this.toastCtrl.create({
-      //     message: 'Address copied to clipboard',
-      //     duration: 3000,
-      //     position: 'top'
-      //   });
-      //   toast.present();
-      // });
+    if(wallet.syncStatus){
+      this.ada.syncAdaWallet(index).then(()=>{
+        this.ada.presentToast('Wallet sync complete!');
+        this.ada.wallets[index].syncStatus = false;
+      }).catch(()=>{
+        this.ada.presentToast('Wallet sync in progress.');
+      })
+    }else{
+      this.navCtrl.push('AdaTradePage', {wallet: wallet, accountIndex: index});
     }
   }
+
+  ionViewDidLoad(){}
 }

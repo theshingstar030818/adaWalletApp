@@ -31,7 +31,7 @@
     
       <ion-card-content>
         <ion-item>
-          <ion-input formControlName="walletName" type="text" [class.invalid]="!slideOneForm.controls.walletName.valid && (slideOneForm.controls.walletName.dirty || submitAttempt)"></ion-input>
+          <ion-input formControlName="walletName" placeholder="Enter Wallet Name" type="text" [class.invalid]="!slideOneForm.controls.walletName.valid && (slideOneForm.controls.walletName.dirty || submitAttempt)"></ion-input>
         </ion-item>
       </ion-card-content>
     </ion-card>
@@ -39,7 +39,7 @@
     <ion-card>
       <ion-card-header>
         Recovery Phrase
-        <ion-badge color="danger" *ngIf="!slideOneForm.controls.walletPhrase.valid  && (slideOneForm.controls.walletPhrase.dirty || submitAttempt)" item-end>
+        <ion-badge color="danger" *ngIf="!isValidwalletPhrase" item-end>
           Invalid recovery phrase
         </ion-badge>
       </ion-card-header>
@@ -55,33 +55,27 @@
     <ion-card>
       <ion-card-header>
         Password
+        <ion-badge color="danger" *ngIf="!slideOneForm.controls.pass.valid  && (slideOneForm.controls.pass.dirty || submitAttempt)" item-end>
+          Please enter a valid password.
+        </ion-badge>
+        <ion-badge color="danger" *ngIf="slideOneForm.controls.pass.valid  && !passwordsMatch" item-end>
+          Passwords do not match.
+        </ion-badge>
       </ion-card-header>
     
       <ion-card-content>
         <ion-item>
-          <ion-toggle formControlName="activatePasswordChecked"></ion-toggle>
-          <ion-label>
-            Activate to create password
-          </ion-label>
+          <ion-label floating>Password</ion-label>
+          <ion-input formControlName="pass" type="password"></ion-input>
         </ion-item>
 
-        <div *ngIf="slideOneForm.controls.activatePasswordChecked.value">
-
-          <ion-item>
-            <ion-label floating>Password</ion-label>
-            <ion-input type="password"></ion-input>
-          </ion-item>
-    
-          <ion-item>
-            <ion-label floating>Password</ion-label>
-            <ion-input type="password"></ion-input>
-          </ion-item>
-
-          <br>
-          <p>Note that password needs to be at least 7 characters long, and have at least 1 uppercase, 1 lowercase letter and 1 number.</p>
-          <br>
-
-        </div>
+        <ion-item>
+          <ion-label floating>Re-Password</ion-label>
+          <ion-input formControlName="rePass" type="password"></ion-input>
+        </ion-item>
+        <br>
+        <p>Note that password needs to be at least 7 characters long, and have at least 1 uppercase, 1 lowercase letter and 1 number.</p>
+        <br>
         <button ion-button full (click)="restoreWallet()">Restore Wallet</button>
       </ion-card-content>
     </ion-card>
