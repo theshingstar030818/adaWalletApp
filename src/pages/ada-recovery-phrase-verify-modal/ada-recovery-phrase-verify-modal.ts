@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 
 import { AdaProvider } from '../../providers/ada/ada';
+import { CreateWalletRequest } from '../../providers/ada/common';
 
 /**
  * Generated class for the AdaRecoveryPhraseVerifyModalPage page.
@@ -61,13 +62,31 @@ export class AdaRecoveryPhraseVerifyModalPage {
 
   verifyPhraseAndCreateWallet(){
     if(this.reEnteredPhraseIsValid){
-      this.ada.createWallet_my().then((data)=>{
-        console.log(data);
-        this.dismiss();
-      }).catch((error)=>{
-        console.log(error);
-        this.dismiss();
-      });      
+
+      let createWalletRequest: CreateWalletRequest = {
+        name: this.ada.walletInitData.cwInitMeta.cwName,
+        mnemonic: this.ada.walletInitData.cwBackupPhrase.bpToList[0],
+        password: this.ada.walletInitData.password,
+      }
+
+      this.ada.createWallet(createWalletRequest).then((wallet) => {
+        this.ada.postRestoreAdaWallet(wallet).then(()=>{
+          this.ada.closeLoader();
+          this.dismiss();
+        }).catch((error)=>{
+          console.log(error);
+        });
+      })
+
+      // my own function that i made initially 
+
+      // this.ada.createWallet_my().then((data)=>{
+      //   console.log(data);
+      //   this.dismiss();
+      // }).catch((error)=>{
+      //   console.log(error);
+      //   this.dismiss();
+      // });      
     }else{
       this.ada.presentToast('Phrase  ');
     }

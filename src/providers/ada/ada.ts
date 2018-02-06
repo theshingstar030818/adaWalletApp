@@ -890,8 +890,8 @@ export class AdaProvider {
           text: 'Restore wallet from backup',
           handler: () => {
             console.log('Restore wallet from backup clicked');
-            // this.presentActionSheet();
-            this.openRestoreWalletModal();
+            this.presentActionSheet();
+            // this.openRestoreWalletModal();
           }
         },{
           text: 'Cancel',
@@ -984,8 +984,9 @@ export class AdaProvider {
 
   postRestoreAdaWallet(wallet: RestoreWalletResponse){
     return new Promise((resolve, reject) => {
+      this.connectWalletToUser(wallet.id);
       this.wallets.push(wallet);
-      this.localStorageApi.setWallets(this.wallets).then((wallets)=>{
+      this.localStorageApi.setWallets(this.wallets).then(()=>{
         this.syncAdaWallet(this.wallets.length-1).then(()=>{
           resolve();
         }).catch((error)=>{

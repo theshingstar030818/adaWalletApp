@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController, AlertController } from 'ionic-angular';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { AdaProvider } from '../../providers/ada/ada';
 
 /**
@@ -19,6 +19,10 @@ export class AdaCreateNewWalletPage {
 
   slideOneForm: FormGroup;
   submitAttempt: boolean = false;
+  
+  activatePasswordChecked = false;
+  passwordsMatch = true;
+  rePass = new FormControl('', Validators.compose([Validators.minLength(7),Validators.pattern("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).+$"), Validators.required]));
 
   constructor(
     public navCtrl: NavController, 
@@ -26,13 +30,21 @@ export class AdaCreateNewWalletPage {
     public viewCtrl: ViewController,
     public formBuilder: FormBuilder,
     public ada: AdaProvider,
-    public alertCtrl: AlertController
+    public alertCtrl: AlertController,
   ) {
     this.slideOneForm = formBuilder.group({
-      walletName: ['', Validators.compose([Validators.maxLength(30), Validators.pattern('[a-zA-Z ]*'), Validators.required])],
-      walletPhrase: ['', Validators.compose([Validators.maxLength(30), Validators.pattern('[a-zA-Z0-9 ]*'), Validators.required])],
-      activatePasswordChecked: false
+      walletName: ['', Validators.compose([Validators.minLength(3), Validators.pattern('[a-zA-Z0-9 ]*'), Validators.required])],
+      pass: ['', Validators.compose([Validators.minLength(7),Validators.pattern("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).+$"), Validators.required])],
+      rePass: this.rePass,
+      activatePasswordChecked: this.activatePasswordChecked
     });
+
+    this.rePass
+    .valueChanges.subscribe(() => this.isPasswordMatch());
+  }
+
+  isPasswordMatch(){
+    this.passwordsMatch = this.rePass.value == this.slideOneForm.controls.pass.value;
   }
 
   ionViewDidLoad() {
@@ -55,7 +67,7 @@ export class AdaCreateNewWalletPage {
     this.submitAttempt = true;
     if(this.slideOneForm.valid){
       this.ada.walletInitData.cwInitMeta.cwName = this.slideOneForm.value.walletName;
-      this.ada.walletInitData.password = this.slideOneForm.value.walletPass;
+      this.ada.walletInitData.password = this.slideOneForm.value.rePass;
       this.ada.getRandomMemonic();
       this.showConfirm();
 		} else {

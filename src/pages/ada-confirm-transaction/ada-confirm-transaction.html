@@ -24,7 +24,7 @@
     <ion-card-header text-wrap>
       <b>To</b>
       <br>
-      DdzFFzCqrhsnfQAr8iVwtsPB8TtjTBSuPCnJt8QL5XHMZSjKoB13WxSvhEBV2NH73uXSEJrpC8SYKEY2ZLPjup5vJkfFJ5gA9rnFUdCq
+      {{transactionRequest?.receiver}}
     </ion-card-header>
 
     <ion-card-content>
@@ -33,20 +33,20 @@
           <ion-col col-6>
             <b>Amount</b>
             <br>
-            22.000000 ADA
+            {{transactionRequest?.amount}} ADA
           </ion-col>
 
           <ion-col col-6>
             <b>Fees</b>
             <br>
-            +0.170894 ADA
+            +{{adaTxFee}} ADA
           </ion-col>
         </ion-row>
         <ion-row>
           <ion-col col-6>
             <b>Total</b>
             <br>
-            22.170894 ADA
+            {{totalAmount.toString()}} ADA
           </ion-col>
         </ion-row>
         <ion-row>
@@ -54,7 +54,7 @@
             <b>Spending password</b>
             <br>
             <ion-item>
-              <ion-input type="text" placeholder="Type your spending password" ></ion-input>
+              <ion-input [(ngModel)]="pass" type="text" placeholder="Type your spending password" ></ion-input>
             </ion-item>
           </ion-col>
         </ion-row>

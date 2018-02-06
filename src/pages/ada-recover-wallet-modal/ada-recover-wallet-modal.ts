@@ -78,9 +78,10 @@ export class AdaRecoverWalletModalPage {
       }).then((wallet)=>{
         this.ada.postRestoreAdaWallet(wallet).then(()=>{
           this.ada.closeLoader();
+          this.dismiss();
         }).catch((error)=>{
           console.log(error);
-        })
+        });
       }).catch((error)=>{
         console.log(error);
       })

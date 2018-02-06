@@ -142,7 +142,13 @@ export class AdaTradePage {
 
   newAdaPayment(){
     if(this.sendAdaFormGroup.valid && this.isAdaTxAllowed && this.isReceiverValid){
-      let modal = this.modalCtrl.create('AdaConfirmTransactionPage', {});
+      let transactionRequest = {
+        sender: this.sendAdaFormGroup.controls.sender.value,
+        receiver: this.receiver.value,
+        amount: this.amount.value,
+        password: '',
+      };
+      let modal = this.modalCtrl.create('AdaConfirmTransactionPage', {transactionRequest: transactionRequest, adaTxFee: this.adaTxFee});
       modal.present();
     }else{
       this.calculateTransactionFee();
@@ -171,6 +177,7 @@ export class AdaTradePage {
 
   scanBarcode(){
     this.ada.scanBarCode().then((data)=>{
+      // this.receiver.value =
       console.log(data);
     }).catch((error)=>{
       console.log(error);

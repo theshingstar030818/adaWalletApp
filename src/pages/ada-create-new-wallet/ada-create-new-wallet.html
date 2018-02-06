@@ -35,21 +35,34 @@
         </ion-item>
       </ion-card-content>
     </ion-card>
+
     <ion-card>
       <ion-card-header>
         Password
-        <ion-badge color="danger" *ngIf="!slideOneForm.controls.walletPhrase.valid  && (slideOneForm.controls.walletPhrase.dirty || submitAttempt)" item-end>
-          Please Enter Password
+        <ion-badge color="danger" *ngIf="!slideOneForm.controls.pass.valid  && (slideOneForm.controls.pass.dirty || submitAttempt)" item-end>
+          Please enter a valid password.
+        </ion-badge>
+        <ion-badge color="danger" *ngIf="slideOneForm.controls.pass.valid  && !passwordsMatch" item-end>
+          Passwords do not match.
         </ion-badge>
       </ion-card-header>
+    
       <ion-card-content>
         <ion-item>
-          <!-- <ion-textarea type="text" placeholder="Enter Recovery Phrase" rows="3"></ion-textarea> -->
-          <ion-input formControlName="walletPhrase" placeholder="Enter Password" type="password" [class.invalid]="!slideOneForm.controls.walletPhrase.valid && (slideOneForm.controls.walletPhrase.dirty || submitAttempt)"></ion-input>
+          <ion-label floating>Password</ion-label>
+          <ion-input formControlName="pass" type="password"></ion-input>
         </ion-item>
+
+        <ion-item>
+          <ion-label floating>Re-Password</ion-label>
+          <ion-input formControlName="rePass" type="password"></ion-input>
+        </ion-item>
+        <br>
+        <p>Note that password needs to be at least 7 characters long, and have at least 1 uppercase, 1 lowercase letter and 1 number.</p>
+        <br>
       </ion-card-content>
-      <p padding>Note that password needs to be at least 7 characters long, and have at least 1 uppercase, 1 lowercase letter and 1 number.</p>
     </ion-card>
+
     <ion-card>
       <ion-card-content>
         <button ion-button full (click)="createWallet()">Create Personal Wallet</button>
