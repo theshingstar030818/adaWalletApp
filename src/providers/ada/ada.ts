@@ -675,6 +675,7 @@ export class AdaProvider {
     this.localStorageApi.getWallets().then((wallets)=>{
       this.wallets = wallets;
       console.log(wallets);
+      this.getWallets();
     })
     this.localStorageApi.getAccounts().then((accounts)=>{
       this.accounts = accounts;
