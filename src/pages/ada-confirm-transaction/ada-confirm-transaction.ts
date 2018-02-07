@@ -52,14 +52,21 @@ export class AdaConfirmTransactionPage {
   }
 
   send(){
-      this.transactionRequest.password = this.pass;
-      this.ada.createTransaction(this.transactionRequest).then((createTransactionResponse: CreateTransactionResponse)=>{
-        console.log(createTransactionResponse);
-        this.ada.presentToast('Transaction Successful');
-        this.dismiss();
-      }).catch((error)=>{
-        console.log(error);
-        this.ada.presentToast(error.defaultMessage);
-      });
+    let tmpTransaction = {
+      sender: this.transactionRequest.sender,
+      receiver: this.transactionRequest.receiver,
+      amount: ((parseFloat(this.transactionRequest.amount)*1000000).toFixed(0)).toString(),
+      password: this.pass,
+    }
+    console.log(tmpTransaction);
+    this.transactionRequest.password = this.pass;
+    this.ada.createTransaction(tmpTransaction).then((createTransactionResponse: CreateTransactionResponse)=>{
+      console.log(createTransactionResponse);
+      this.ada.presentToast('Transaction Successful');
+      this.dismiss();
+    }).catch((error)=>{
+      console.log(error);
+      this.ada.presentToast(error.defaultMessage);
+    });
   }
 }

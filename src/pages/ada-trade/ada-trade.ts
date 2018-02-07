@@ -5,6 +5,7 @@ import { Wallet } from '../../providers/ada/domain/Wallet';
 import 'rxjs/add/operator/debounceTime';
 import {Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { BigNumber } from 'bignumber.js';
+import { DECIMAL_PLACES_IN_ADA } from '../../providers/ada/config/numbersConfig';
 
 /**
  * Generated class for the AdaTradePage page.
@@ -27,13 +28,14 @@ export class AdaTradePage {
   public tabs: any ;
   Stab: string = "Summary";
   textInput = new FormControl('');
+  genAddPass = ""
   
-  adaTxFee: BigNumber = new BigNumber(0);
+  adaTxFee: BigNumber = new BigNumber(0.000000);
   adaTxErrorMessage = '';
   isAdaTxAllowed = true;
 
   receiver = new FormControl('', Validators.required);
-  amount = new FormControl('', Validators.required);
+  amount = new FormControl('0.000000', Validators.required);
 
   isReceiverValid = true;
 
@@ -55,6 +57,7 @@ export class AdaTradePage {
 
       this.sendAdaFormGroup = this.formBuilder.group({
         sender: [this.ada.accounts[this.wallet.id].caId, Validators.required],
+        // sender: [this.wallet.id, Validators.required],
         receiver: this.receiver,
         amount: this.amount,
       });
@@ -75,7 +78,7 @@ export class AdaTradePage {
 
       this.amount
       .valueChanges
-      .debounceTime(700)
+      .debounceTime(1100)
       .subscribe(() => this.calculateTransactionFee());
 
 
@@ -104,6 +107,24 @@ export class AdaTradePage {
       ]
   }
 
+  newAdaWalletAddress(){
+    this.ada.presentLoader();
+    this.ada.createAddress({
+      accountId: this.ada.accounts[this.wallet.id].caId,
+      password: this.genAddPass
+    }).then(()=>{
+      this.ada.syncAdaWallet(this.accountIndex).then(()=>{
+        this.ada.closeLoader();
+      }).catch((error)=>{
+        this.ada.closeLoader();
+        console.log(error);
+      });
+    }).catch((error)=>{
+      this.ada.closeLoader();
+      console.log(error);
+    });
+  }
+
   isValidAdaAddress(){
     console.log(this.receiver.value);
     if(this.receiver.value == ""){this.isReceiverValid = false;return;}
@@ -118,11 +139,20 @@ export class AdaTradePage {
   calculateTransactionFee(){
     console.log(this.amount.value);
     if(!this.receiver.valid || !this.isReceiverValid){this.isReceiverValid=false;return;}
-    if(this.amount.value == "0" || this.amount.value == ""){this.adaTxErrorMessage='Please enter an amount';this.isAdaTxAllowed = false;return;}
+    if(this.amount.value == "0.000000" || this.amount.value == "0" || this.amount.value == ""){
+      this.amount.setValue("0.000000");
+      this.adaTxErrorMessage='Please enter an amount';
+      this.isAdaTxAllowed = false;
+      return;
+    }
+    
+    let tmpAmount = (new BigNumber(this.amount.value).toFormat(DECIMAL_PLACES_IN_ADA)).toString();
+    this.amount.setValue(tmpAmount);
+    
     this.ada.calculateTransactionFee({
       sender: this.sendAdaFormGroup.controls.sender.value,
       receiver: this.receiver.value,
-      amount: this.amount.value
+      amount: ((parseFloat(tmpAmount)*1000000).toFixed(0)).toString()
     }).then((res: BigNumber)=>{
       console.log(res);
       this.adaTxFee = res;
@@ -132,6 +162,13 @@ export class AdaTradePage {
       this.adaTxErrorMessage = err.defaultMessage;
       console.log(err);
     })
+  }
+
+  convetToLoveLace(amount: string){
+    let tmpAmountNum :number = parseFloat(parseFloat(amount).toFixed(6));
+    this.amount.setValue(tmpAmountNum.toString());
+    tmpAmountNum *= 1000000;
+    return tmpAmountNum;
   }
 
   ionViewWillEnter(){
@@ -184,6 +221,10 @@ export class AdaTradePage {
     }).catch((error)=>{
       console.log(error);
     })
+  }
+
+  copyOlderAddress(address){
+    this.ada.copyToClipboard(address);
   }
 
   copyAddressToClipboard(address){
