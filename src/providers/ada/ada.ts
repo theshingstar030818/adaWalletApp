@@ -1099,7 +1099,11 @@ export class AdaProvider {
         }
         console.log(adaHistory);
         this.transactions[walletId] = adaHistory;
-        resolve(<any>adaHistory);
+        this.localStorageApi.setTransactions(this.transactions).then(()=>{
+          resolve(<any>adaHistory);
+        }).catch((error)=>{
+          console.log(error);
+        });        
       }, err => {
         console.log(err);
         reject(err);
