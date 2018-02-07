@@ -5,11 +5,11 @@ import { NavController, LoadingController } from 'ionic-angular';
 
 import { UserData } from '../../providers/user-data';
 import { UserOptions } from '../../interfaces/user-options';
-import { AdaPage } from '../ada/ada';
 import { SignupPage } from '../signup/signup';
 import { ConfirmPage } from '../confirm/confirm';
 
 import { ToastController } from 'ionic-angular';
+import { AdaPage } from '../ada/ada';
 
 @Component({
   selector: 'page-user',

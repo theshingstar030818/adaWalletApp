@@ -42,6 +42,5 @@ export class AdaPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad AdaPage');
-    this.ada.getWallets();
   }
 }

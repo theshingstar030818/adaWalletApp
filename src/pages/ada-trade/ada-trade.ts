@@ -125,6 +125,16 @@ export class AdaTradePage {
     });
   }
 
+  refreshWallet(){
+    this.ada.presentLoader();
+    this.ada.syncAdaWallet(()=>{
+      this.ada.closeLoader();
+    }).catch((error)=>{
+      this.ada.closeLoader();
+      this.ada.presentToast(error.defaultMessage);
+    })
+  }
+
   isValidAdaAddress(){
     console.log(this.receiver.value);
     if(this.receiver.value == ""){this.isReceiverValid = false;return;}

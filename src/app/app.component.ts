@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Config, Events, MenuController, Nav, Platform } from 'ionic-angular';
+import { Config, Events, MenuController, Nav, Platform, ModalController } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Storage } from '@ionic/storage';
 import { AccountPage } from '../pages/account/account';
@@ -36,7 +36,7 @@ export class ConferenceApp {
   // the left menu only works after login
   // the login page disables the left menu
   appPages: PageInterface[] = [
-    { title: 'Cardano', name: 'AdaPage', component: AdaPage, icon: 'assets/img/ada.png', customIcon: true },
+    { title: 'Daedalus', name: 'AdaPage', component: AdaPage, icon: 'assets/img/daedalus-logo-loading-grey.inline.svg', customIcon: true },
     // { title: 'Markets', name: 'PricesPage', component: PricesPage, icon: 'ios-trending-up' },
   ];
   loggedInPages: PageInterface[] = [
@@ -58,21 +58,22 @@ export class ConferenceApp {
     public platform: Platform,
     public confData: ConferenceData,
     public storage: Storage,
-    public splashScreen: SplashScreen,
     user: User,
-    public config: Config
+    public config: Config,
+    public modalCtrl: ModalController,
+    public splashScreen: SplashScreen
   ) {
-
+    
     // Check if the user has already seen the tutorial
-    this.storage.get('hasSeenTutorial')
-      .then((hasSeenTutorial) => {
-        if (hasSeenTutorial) {
-          this.rootPage = AdaPage;
-        } else {
-          this.rootPage = TutorialPage;
-        }
-        this.platformReady(user)
-      });
+    // this.storage.get('hasSeenTutorial')
+    //   .then((hasSeenTutorial) => {
+    //     if (hasSeenTutorial) {
+    //       this.rootPage = AdaPage;
+    //     } else {
+    //       this.rootPage = TutorialPage;
+    //     }
+    //     this.platformReady(user)
+    //   });
 
     // load the conference data
     confData.load();
@@ -82,8 +83,8 @@ export class ConferenceApp {
       this.enableMenu(hasLoggedIn === true);
     });
     this.enableMenu(true);
-
     this.listenToLoginEvents();
+    this.platformReady(user);
   }
 
   openPage(page: PageInterface) {
