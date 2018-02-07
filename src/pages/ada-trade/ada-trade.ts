@@ -159,7 +159,9 @@ export class AdaTradePage {
 
   changeAdaWalletPassphrase(){
     console.log('changeAdaWalletPassphrase');
-    let modal = this.modalCtrl.create('AdaChangeWalletPassphraseModalPage');
+    let modal = this.modalCtrl.create('AdaChangeWalletPassphraseModalPage',{
+      wallet: this.wallet
+    });
     modal.present();
   }
 
