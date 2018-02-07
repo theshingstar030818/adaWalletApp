@@ -5,7 +5,6 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-
   <ion-toolbar>
     <ion-title>
       CHANGE PASSWORD
@@ -17,10 +16,57 @@
       </button>
     </ion-buttons>
   </ion-toolbar>
-
 </ion-header>
 
 
-<ion-content padding>
-  
+<ion-content>
+  <form [formGroup]="slideOneForm">
+
+    <ion-card>
+      <ion-card-header>
+        Current Password
+        <ion-badge color="danger" *ngIf="!slideOneForm.controls.currentPassword.valid  && (slideOneForm.controls.currentPassword.dirty || submitAttempt)" item-end>
+          Invalid Password
+        </ion-badge>
+      </ion-card-header>
+    
+      <ion-card-content>
+        <ion-item>
+          <ion-input formControlName="currentPassword" placeholder="Enter Current Password" type="password" [class.invalid]="!slideOneForm.controls.currentPassword.valid && (slideOneForm.controls.currentPassword.dirty || submitAttempt)"></ion-input>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        Password
+        <ion-badge color="danger" *ngIf="!slideOneForm.controls.newPassword.valid  && (slideOneForm.controls.newPassword.dirty || submitAttempt)" item-end>
+          Please enter a valid password.
+        </ion-badge>
+        <ion-badge color="danger" *ngIf="slideOneForm.controls.newPassword.valid  && !passwordsMatch" item-end>
+          Passwords do not match.
+        </ion-badge>
+      </ion-card-header>
+    
+      <ion-card-content>
+        
+          <ion-item>
+            <ion-label floating>New Password</ion-label>
+            <ion-input type="password" formControlName="newPassword" [class.invalid]="!slideOneForm.controls.newPassword.valid && (slideOneForm.controls.newPassword.dirty || submitAttempt)"></ion-input>
+          </ion-item>
+    
+          <ion-item>
+            <ion-label floating>Repeat Password</ion-label>
+            <ion-input type="password" formControlName="repeatPassword" [class.invalid]="!slideOneForm.controls.repeatPassword.valid && (slideOneForm.controls.repeatPassword.dirty || submitAttempt)"></ion-input>
+          </ion-item>
+
+          <br>
+          <p>Note that password needs to be at least 7 characters long, and have at least 1 uppercase, 1 lowercase letter and 1 number.</p>
+          <br>
+          
+          <button ion-button full (click)="changeAdaWalletPassword()">Save</button>
+        
+      </ion-card-content>
+    </ion-card>
+  </form>
 </ion-content>

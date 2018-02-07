@@ -602,7 +602,11 @@ export class AdaProvider {
     request: UpdateWalletPasswordRequest
   ): Promise<UpdateWalletPasswordResponse> {
     Logger.debug('AdaApi::updateWalletPassword called');
+    
     const { walletId, oldPassword, newPassword } = request;
+    console.log("Walletid: "+walletId);
+    console.log("oldPassword: "+oldPassword);
+    console.log("newPassword: "+newPassword);
     try {
       await changeAdaWalletPassphrase({ ca, walletId, oldPassword, newPassword });
       Logger.debug('AdaApi::updateWalletPassword success');

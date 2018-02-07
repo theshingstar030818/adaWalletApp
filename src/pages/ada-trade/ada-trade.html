@@ -177,7 +177,7 @@
   
           <ion-item (click)="changeAdaWalletPassphrase()">
               <ion-label stacked>Password Last Updated</ion-label>
-              <ion-datetime disabled displayFormat="DD-MMMM-YYYY" [(ngModel)]="ada?.wallets[accountIndex].passwordUpdateDate"></ion-datetime>
+              <ion-datetime disabled  [(ngModel)]="ada?.wallets[accountIndex].passwordUpdateDate"></ion-datetime>
               <button ion-button clear color="dark" item-end>Change</button>
           </ion-item>
       </div>
