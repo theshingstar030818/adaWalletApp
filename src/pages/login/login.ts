@@ -10,6 +10,7 @@ import { ConfirmPage } from '../confirm/confirm';
 
 import { ToastController } from 'ionic-angular';
 import { AdaPage } from '../ada/ada';
+import { AdaProvider } from '../../providers/ada/ada';
 
 @Component({
   selector: 'page-user',
@@ -23,7 +24,8 @@ export class LoginPage {
     public navCtrl: NavController,
     public userData: UserData,
     public loadingCtrl: LoadingController,
-    public toastCtrl: ToastController
+    public toastCtrl: ToastController,
+    public ada: AdaProvider
   ){
     this.loginDetails = { username: '', password: '' };
   }
@@ -42,6 +44,7 @@ export class LoginPage {
       this.userData.login(details.username, details.password).then((result) => {
         console.log('result:', result);
         loading.dismiss();
+        this.ada.loadDataFromLocalStore();
         this.navCtrl.setRoot(AdaPage);
       }).catch((err) => { 
         if (err.message === "User is not confirmed.") {

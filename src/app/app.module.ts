@@ -42,6 +42,7 @@ import { AdaConfirmTransactionPage } from '../pages/ada-confirm-transaction/ada-
 import { AdaWalletRecoverUsingIdPage } from '../pages/ada-wallet-recover-using-id/ada-wallet-recover-using-id';
 import { AdaCreateNewWalletPage } from '../pages/ada-create-new-wallet/ada-create-new-wallet';
 import { AdaSendReceivePage } from '../pages/ada-send-receive/ada-send-receive';
+import { AdaTransactionDetailPage } from '../pages/ada-transaction-detail/ada-transaction-detail';
 
 // crypto providers 
 import { BtcProvider } from '../providers/btc/btc';
@@ -89,7 +90,8 @@ import { ConfirmPage } from '../pages/confirm/confirm';
     AdaWalletRecoverUsingIdPage,
     AdaCreateNewWalletPage,
     AdaBuySellPage,
-    AdaSendReceivePage
+    AdaSendReceivePage,
+    AdaTransactionDetailPage
   ],
   imports: [
     BrowserModule,
@@ -127,8 +129,8 @@ import { ConfirmPage } from '../pages/confirm/confirm';
         { component: AdaWalletRecoverUsingIdPage, name: 'AdaWalletRecoverUsingIdPage', segment: 'ada-wallet-recover-using-id-page' },
         { component: AdaCreateNewWalletPage, name: 'AdaCreateNewWalletPage', segment: 'ada-create-new-wallet-page' },
         { component: AdaBuySellPage, name: 'AdaBuySellPage', segment: 'ada-buy-sell-page' },
-        { component: AdaSendReceivePage, name: 'AdaSendReceivePage', segment: 'ada-send-receive-page' }
-        
+        { component: AdaSendReceivePage, name: 'AdaSendReceivePage', segment: 'ada-send-receive-page' },
+        { component: AdaTransactionDetailPage, name: 'AdaTransactionDetailPage', segment: 'ada-transaction-detail-page' }
       ]
     })
   ],
@@ -163,7 +165,8 @@ import { ConfirmPage } from '../pages/confirm/confirm';
     AdaWalletRecoverUsingIdPage,
     AdaCreateNewWalletPage,
     AdaBuySellPage,
-    AdaSendReceivePage
+    AdaSendReceivePage,
+    AdaTransactionDetailPage
   ],
   providers: [
     { provide: ErrorHandler, useClass: IonicErrorHandler },

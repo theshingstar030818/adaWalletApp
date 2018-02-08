@@ -264,10 +264,17 @@ export class AdaProvider {
     try {
       const history: AdaTransactions = await getAdaHistoryByWallet({ ca, walletId, skip, limit });
       Logger.debug('AdaApi::searchHistory success: ' + stringifyData(history));
-      return {
+      let transactions = {
         transactions: history[0].map(data => this._createTransactionFromServerData(data)),
         total: history[1]
-      };
+      }
+      this.transactions[walletId] = transactions;
+      this.localStorageApi.setTransactions(this.transactions).then((transactions)=>{
+        this.transactions = transactions;
+      }).catch((error)=>{
+        console.log(error);
+      });
+      return transactions;
     } catch (error) {
       Logger.error('AdaApi::searchHistory error: ' + stringifyError(error));
       throw new GenericApiError();
@@ -756,6 +763,11 @@ export class AdaProvider {
     });
     actionSheet.present();
   }
+  
+  viewTransactionDetails(transaction: AdaTransaction){
+    let modal = this.modalCtrl.create('AdaTransactionDetailPage', {transaction: transaction});
+    modal.present();
+  }
 
   showAdaWalletRecoverUsingIdPage(){
     let modal = this.modalCtrl.create('AdaWalletRecoverUsingIdPage', {});
@@ -1128,7 +1140,12 @@ export class AdaProvider {
           console.log(walletIndex);
           console.log(wallet);
           this.getAccount(wallet.id);
-          this.getAdaHistoryByWallet(wallet.id,this.skip,1000);
+          this.getTransactions({
+            walletId: wallet.id,
+            searchTerm: '',
+            skip: this.skip,
+            limit: 1000,
+          });
           this.wallets[walletIndex] = wallet;
           this.localStorageApi.setWallets(this.wallets).then(()=>{
             resolve(wallet);

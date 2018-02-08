@@ -2,7 +2,6 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import environment from '../ada/environment';
-import { AdaTransactions } from '../ada/types';
 import { Wallet } from '../ada/domain/Wallet';
 
 /*
@@ -32,7 +31,7 @@ export class LocalStoreProvider {
     try {
       this.storage.get(storageKeys.TRANSACTIONS).then((transactions)=>{
         if (!transactions) return resolve({});
-        resolve(transactions);
+        resolve(JSON.parse(transactions));
       }).catch((error)=>{
         return reject(error);
       })
@@ -41,11 +40,11 @@ export class LocalStoreProvider {
     }
   });
 
-  setTransactions = (accounts: Array<AdaTransactions>) => new Promise((resolve, reject) => {
+  setTransactions = (transactions: any) => new Promise((resolve, reject) => {
     try {
-      this.storage.set(storageKeys.TRANSACTIONS, accounts).then((transactions)=>{
+      this.storage.set(storageKeys.TRANSACTIONS, JSON.stringify(transactions)).then((transactions)=>{
         if (!transactions) return resolve({});
-        resolve();
+        resolve(JSON.parse(transactions));
       }).catch((error)=>{
         return reject(error);
       })
