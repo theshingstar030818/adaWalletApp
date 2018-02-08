@@ -21,19 +21,6 @@ import { DECIMAL_PLACES_IN_ADA } from '../../providers/ada/config/numbersConfig'
 })
 export class AdaTradePage {
 
-  shownGroup = null;
-
-  toggleGroup(group) {
-    if (this.isGroupShown(group)) {
-        this.shownGroup = null;
-    } else {
-        this.shownGroup = group;
-    }
-  };
-  isGroupShown(group) {
-      return this.shownGroup === group;
-  };
-
   tabComponent: string = 'AdaPage';
   trade: string = "sendReceive";
   wallet: Wallet;
@@ -51,7 +38,6 @@ export class AdaTradePage {
   amount = new FormControl('0.000000', Validators.required);
 
   isReceiverValid = true;
-  public walletTransactions: any ;
 
   private sendAdaFormGroup : FormGroup;
 
@@ -259,24 +245,6 @@ export class AdaTradePage {
   next() {
     let modal = this.modalCtrl.create('AdaConfirmTransactionPage', {});
     modal.present();
-  }
-
-  selectedSegment(segment){
-    console.log(segment);
-    if(segment == 'Transactions'){
-      this.ada.getTransactions({
-        walletId: this.wallet.id,
-        searchTerm: '',
-        skip: 0,
-        limit: 10,
-      }).then((res)=>{
-        this.walletTransactions = res.transactions;
-      }).catch((error)=>{
-        this.ada.presentToast(error.defaultMessage);
-        console.log(error);
-      });
-    }
-    
   }
 
   ionViewDidLoad(){

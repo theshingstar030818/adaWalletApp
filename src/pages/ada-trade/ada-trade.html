@@ -20,7 +20,7 @@
 <ion-content padding>  
 
   <ion-segment [(ngModel)]="Stab">
-    <ion-segment-button *ngFor="let tab of tabs" [value]="tab.name" (ionSelect)="selectedSegment(tab.name)">
+    <ion-segment-button *ngFor="let tab of tabs" [value]="tab.name">
       <img class="svgicon" [src]="tab.iconsvg" [alt]="tab.name">
     </ion-segment-button>
   </ion-segment>
@@ -46,33 +46,20 @@
         </ion-card>
 
         <ion-list>          
-          <ion-item-group *ngFor="let transaction of ada.transactions[wallet.id].transactions; let i=index" [ngClass]="{active: isGroupShown(i)}">
+          <ion-item-group *ngFor="let transaction of ada.transactions[wallet.id].transactions">
             <ion-datetime disabled displayFormat="MM/DD/YYYY" pickerFormat="h mm A" [(ngModel)]="transaction.date"></ion-datetime>
             <ion-item>
-              <div (click)="toggleGroup(i)" >
-                <ion-avatar item-start>
-                  <img item-start src="assets/img/{{transaction.type}}-ic.svg" >
-                </ion-avatar>
+              <ion-avatar item-start>
+                <img item-start src="assets/img/{{transaction.type}}-ic.svg" >
+              </ion-avatar>
               
-                <h3><b>{{transaction.title}}</b></h3>
-                <p></p>
-                <ion-note item-end>
-                  <small>{{transaction.amount}} A</small><br>
-                  <ion-badge *ngIf="transaction.numberOfConfirmations<10" item-end color="danger">Low</ion-badge>
-                  <ion-badge *ngIf="transaction.numberOfConfirmations>9" item-end color="secondary">High</ion-badge>                
-                </ion-note>
-                <ion-icon color="success" item-right [name]="isGroupShown(i) ? 'arrow-dropdown' : 'arrow-dropright'"></ion-icon>
-              </div>
-              <div *ngIf="isGroupShown(i)">
-                <h3>From addresses</h3>
-                <p></p>
-                <h3>To addresses</h3>
-                <p></p>
-                <h3>Transaction assurance level</h3>
-                <p>{{transaction.numberOfConfirmations}} confirmations</p>
-                <h3>Transaction ID</h3>
-                <p></p>
-              </div>
+              <h3><b>{{transaction.title}}</b></h3>
+              <p>{{transaction.numberOfConfirmations}} confirmations</p>
+              <ion-note item-end>
+                <small>{{transaction.amount}} A</small><br>
+                <ion-badge *ngIf="transaction.numberOfConfirmations<10" item-end color="danger">Low</ion-badge>
+                <ion-badge *ngIf="transaction.numberOfConfirmations>9" item-end color="secondary">High</ion-badge>                
+              </ion-note>
             </ion-item>
 
           </ion-item-group>
@@ -158,33 +145,22 @@
   
       <div *ngSwitchCase="'Transactions'">
         <ion-list>          
-          <ion-item-group *ngFor="let transaction of walletTransactions; let i=index" [ngClass]="{active: isGroupShown(i)}">
+          <ion-item-group *ngFor="let transaction of ada.transactions[wallet.id].transactions">
             <ion-datetime disabled displayFormat="MM/DD/YYYY" pickerFormat="h mm A" [(ngModel)]="transaction.date"></ion-datetime>
             <ion-item>
-              <div (click)="toggleGroup(i)" >
-                <ion-avatar item-start>
-                  <img item-start src="assets/img/{{transaction.type}}-ic.svg" >
-                </ion-avatar>
+              <ion-avatar item-start>
+                <img item-start src="assets/img/{{transaction.type}}-ic.svg" >
+              </ion-avatar>
               
-                <h3><b>{{transaction.title}}</b></h3>
-                <ion-note item-end>
-                  <small>{{transaction.amount}} A</small><br>
-                  <ion-badge *ngIf="transaction.numberOfConfirmations<10" item-end color="danger">Low</ion-badge>
-                  <ion-badge *ngIf="transaction.numberOfConfirmations>9" item-end color="secondary">High</ion-badge>                
-                </ion-note>
-                <ion-icon color="success" item-right [name]="isGroupShown(i) ? 'arrow-dropdown' : 'arrow-dropright'"></ion-icon>
-              </div>
-              <div *ngIf="isGroupShown(i)">
-                <h3>From addresses</h3>
-                <p>{{transaction.addresses.from}}</p>
-                <h3>To addresses</h3>
-                <p>{{transaction.addresses.to}}</p>
-                <h3>Transaction assurance level</h3>
-                <p>{{transaction.numberOfConfirmations}} confirmations</p>
-                <h3>Transaction ID</h3>
-                <p>{{transaction.id}}</p>
-              </div>
+              <h3><b>{{transaction.title}}</b></h3>
+              <p>{{transaction.numberOfConfirmations}} confirmations</p>
+              <ion-note item-end>
+                <small>{{transaction.amount}} A</small><br>
+                <ion-badge *ngIf="transaction.numberOfConfirmations<10" item-end color="danger">Low</ion-badge>
+                <ion-badge *ngIf="transaction.numberOfConfirmations>9" item-end color="secondary">High</ion-badge>                
+              </ion-note>
             </ion-item>
+
           </ion-item-group>
         </ion-list>
       </div>
