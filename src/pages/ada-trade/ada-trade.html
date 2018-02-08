@@ -147,7 +147,7 @@
         <ion-list>          
           <ion-item-group *ngFor="let transaction of ada.transactions[wallet.id].transactions">
             <ion-datetime disabled displayFormat="MM/DD/YYYY" pickerFormat="h mm A" [(ngModel)]="transaction.date"></ion-datetime>
-            <ion-item>
+            <ion-item (click)="ada?.viewTransactionDetails(transaction)" >
               <ion-avatar item-start>
                 <img item-start src="assets/img/{{transaction.type}}-ic.svg" >
               </ion-avatar>
