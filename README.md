@@ -38,29 +38,26 @@ To make the full application work there are multiple components that need to be 
 
 ## Use Cases
 
-* Action Sheet - [ [template](https://github.com/ionic-team/ionic-conference-app/blob/master/src/pages/speaker-list/speaker-list.html) | [code](https://github.com/ionic-team/ionic-conference-app/blob/master/src/pages/speaker-list/speaker-list.ts) ]
-* Alert - [ [code](https://github.com/ionic-team/ionic-conference-app/blob/master/src/pages/schedule/schedule.ts) ]
-* Cards - [ [template](https://github.com/ionic-team/ionic-conference-app/blob/master/src/pages/speaker-list/speaker-list.html) ]
-* Datetime - [ [template](https://github.com/ionic-team/ionic-conference-app/blob/master/src/pages/about/about.html) ]
-* Grid - [ [template](https://github.com/ionic-team/ionic-conference-app/blob/master/src/pages/login/login.html) ]
-* Inputs - [ [template](https://github.com/ionic-team/ionic-conference-app/blob/master/src/pages/login/login.html) ]
-* Items (Sliding) - [ [template](https://github.com/ionic-team/ionic-conference-app/blob/master/src/pages/schedule/schedule.html) | [code](https://github.com/ionic-team/ionic-conference-app/blob/master/src/pages/schedule/schedule.ts) ]
-* Menu - [ [template](https://github.com/ionic-team/ionic-conference-app/blob/master/src/app/app.template.html) |
-[code](https://github.com/ionic-team/ionic-conference-app/blob/master/src/app/app.component.ts) ]
-* Modal - [ [template](https://github.com/ionic-team/ionic-conference-app/blob/master/src/pages/schedule-filter/schedule-filter.html) | [code](https://github.com/ionic-team/ionic-conference-app/blob/master/src/pages/schedule/schedule.ts) ]
-* Searchbar - [ [template](https://github.com/ionic-team/ionic-conference-app/blob/master/src/pages/schedule/schedule.html) | [code](https://github.com/ionic-team/ionic-conference-app/blob/master/src/pages/schedule/schedule.ts) ]
-* Segment - [ [template](https://github.com/ionic-team/ionic-conference-app/blob/master/src/pages/schedule/schedule.html) | [code](https://github.com/ionic-team/ionic-conference-app/blob/master/src/pages/schedule/schedule.ts) ]
-* Slides - [ [template](https://github.com/ionic-team/ionic-conference-app/blob/master/src/pages/tutorial/tutorial.html) |
-* Sticky headers - [ [template](https://github.com/ionic-team/ionic-conference-app/blob/master/src/pages/schedule/schedule.html) ]
-* Tabs - [ [template](https://github.com/ionic-team/ionic-conference-app/blob/master/src/pages/tabs/tabs.html) | [code](https://github.com/ionic-team/ionic-conference-app/blob/master/src/pages/tabs/tabs.ts) ]
-* Toggle - [ [template](https://github.com/ionic-team/ionic-conference-app/blob/master/src/pages/schedule-filter/schedule-filter.html) ]
-[code](https://github.com/ionic-team/ionic-conference-app/blob/master/src/pages/tutorial/tutorial.ts) ]
-* Using Angular HTTP for JSON - [ [code](https://github.com/ionic-team/ionic-conference-app/blob/master/src/providers/conference-data.ts) | [usage](https://github.com/ionic-team/ionic-conference-app/blob/master/src/pages/schedule/schedule.ts) ]
-
+* ADA Tx Fee - [ [code](https://github.com/tanzeelrana/adaWalletApp/blob/master/src/providers/ada/api/adaTxFee.ts) ]
+* Change Ada Wallet Passphrase - [ [code](https://github.com/tanzeelrana/adaWalletApp/blob/master/src/providers/ada/api/changeAdaWalletPassphrase.ts)]
+* Delete Ada Wallet - [ [code](https://github.com/tanzeelrana/adaWalletApp/blob/master/src/providers/ada/api/deleteAdaWallet.ts	)]
+* Export Ada Backup JSON - [ [code](https://github.com/tanzeelrana/adaWalletApp/blob/master/src/providers/ada/api/exportAdaBackupJSON.ts	)]
+* Get Ada History By Wallet - [ [code](https://github.com/tanzeelrana/adaWalletApp/blob/master/src/providers/ada/api/getAdaHistoryByWallet.ts	)]
+* Get Ada Local Time Difference - [ [code](https://github.com/tanzeelrana/adaWalletApp/blob/master/src/providers/ada/api/getAdaLocalTimeDifference.ts	)]
+* Get Ada Sync Progress - [ [code](https://github.com/tanzeelrana/adaWalletApp/blob/master/src/providers/ada/api/getAdaSyncProgress.ts	)]
+* Get Ada Wallet Accounts - [ [code](https://github.com/tanzeelrana/adaWalletApp/blob/master/src/providers/ada/api/getAdaWalletAccounts.ts	)]
+* Import Ada Backup JSON - [ [code](https://github.com/tanzeelrana/adaWalletApp/blob/master/src/providers/ada/api/importAdaBackupJSON.ts	)]
+* Import Ada Wallet - [ [code](https://github.com/tanzeelrana/adaWalletApp/blob/master/src/providers/ada/api/importAdaWallet.ts	)]
+* Is Valid Ada Address - [ [code](https://github.com/tanzeelrana/adaWalletApp/blob/master/src/providers/ada/api/isValidAdaAddress.ts	)]
+* New Ada Payment - [ [code](https://github.com/tanzeelrana/adaWalletApp/blob/master/src/providers/ada/api/newAdaPayment.ts	)]
+* New Ada Wallet - [ [code](https://github.com/tanzeelrana/adaWalletApp/blob/master/src/providers/ada/api/newAdaWallet.ts	)]
+* New Ada Wallet Address - [ [code](https://github.com/tanzeelrana/adaWalletApp/blob/master/src/providers/ada/api/newAdaWalletAddress.ts	)]
+* Redeem Ada - [ [code](https://github.com/tanzeelrana/adaWalletApp/blob/master/src/providers/ada/api/redeemAda.ts	)]
+* Redeem Ada Paper Vend - [ [code](https://github.com/tanzeelrana/adaWalletApp/blob/master/src/providers/ada/api/redeemAdaPaperVend.ts	)]
+* Restore Ada Wallet - [ [code](https://github.com/tanzeelrana/adaWalletApp/blob/master/src/providers/ada/api/restoreAdaWallet.ts	)]
+* Update Ada Wallet - [ [code](https://github.com/tanzeelrana/adaWalletApp/blob/master/src/providers/ada/api/updateAdaWallet.ts	)]
 
 ## App Preview
-
-[Try it live](https://ionic-team.github.io/ionic-conference-app/www)
 
 All app preview screenshots were taken by running `ionic serve --lab` on a retina display.
 
