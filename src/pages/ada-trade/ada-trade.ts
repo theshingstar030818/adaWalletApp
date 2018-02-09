@@ -229,10 +229,20 @@ export class AdaTradePage {
       // {"cancelled":0,"text":"DdzFFzCqrhspgVMkDvrJSfRJbFrFa31TDkCjyt5RqibCcJLh1XiTfhKuKWrvFkrgpSvHyLfpons5BHdtqthr3aRBoE3a8V43uiskTyFc","format":"QR_CODE"}
       // this.receiver.value =
       console.log(data);
+      this.showAlert(JSON.stringify(data));
       this.receiver.setValue((<any>data).text);
     }).catch((error)=>{
       console.log(error);
     })
+  }
+
+  showAlert(data) {
+    let alert = this.alertCtrl.create({
+      title: 'QR code data',
+      subTitle: data,
+      buttons: ['OK']
+    });
+    alert.present();
   }
 
   copyOlderAddress(address){
