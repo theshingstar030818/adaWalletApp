@@ -39,5 +39,22 @@
 				<button ion-button (click)="onSignup()" color="light" block>Signup</button>
 			</ion-col>
 		</ion-row>
+
+		<ion-row responsive-sm>
+			<ion-col>
+			</ion-col>
+			<ion-col>
+				<button ion-button (click)="onFbSignup()" icon-only color="primary" block>
+					<ion-icon name="logo-facebook"></ion-icon>
+				</button>
+			</ion-col>
+			<ion-col>
+				<button icon-only ion-button (click)="onGoogleSignup()" color="danger" block>
+					<ion-icon name="logo-google"></ion-icon>
+				</button>
+			</ion-col>
+			<ion-col>
+			</ion-col>
+		</ion-row>
 	</form>
 </ion-content>

@@ -229,6 +229,8 @@ export class AdaTradePage {
       // {"cancelled":0,"text":"DdzFFzCqrhspgVMkDvrJSfRJbFrFa31TDkCjyt5RqibCcJLh1XiTfhKuKWrvFkrgpSvHyLfpons5BHdtqthr3aRBoE3a8V43uiskTyFc","format":"QR_CODE"}
       // this.receiver.value =
       console.log(data);
+      console.log('check if can read data right ....');
+      console.log((<any>data).text);
       this.showAlert(JSON.stringify(data));
       this.receiver.setValue((<any>data).text);
     }).catch((error)=>{
@@ -237,6 +239,7 @@ export class AdaTradePage {
   }
 
   showAlert(data) {
+    console.log('alert called ....');
     let alert = this.alertCtrl.create({
       title: 'QR code data',
       subTitle: data,

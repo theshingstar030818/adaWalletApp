@@ -29,6 +29,14 @@ export class LoginPage {
   ){
     this.loginDetails = { username: '', password: '' };
   }
+  
+  onFbSignup(){
+
+  }
+
+  onGoogleSignup(){
+    
+  }
 
   onLogin(form: NgForm) {
     this.submitted = true;
