@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { AdaProvider } from '../../providers/ada/ada';
 
 /**
  * Generated class for the AdaRedemptionPage page.
@@ -18,8 +19,12 @@ export class AdaRedemptionPage {
   public tabs: any ;
   Stab: string = "Regular";
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-
+  constructor(
+    public navCtrl: NavController, 
+    public navParams: NavParams,
+    public ada: AdaProvider
+  ) {
+    
   }
 
   ionViewDidLoad() {

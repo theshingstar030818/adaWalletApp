@@ -9,92 +9,46 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title> ADA Settings</ion-title>
+    <ion-title>Settings</ion-title>
   </ion-navbar>
 </ion-header>
 
 
 <ion-content padding>
   <ion-list no-border>
-
     <ion-list-header>
-      Classes
+      General
     </ion-list-header>
-
     <ion-item>
-      <ion-icon name='planet' item-start></ion-icon>
-      Astronomy
-      <ion-note item-end>
-      To the moon
-      </ion-note>
-    </ion-item>
-
-    <ion-item>
-      <ion-toggle checked="false"></ion-toggle>
-      <ion-label>
-        Muggle Studies
-      </ion-label>
-      <ion-icon name='body' item-start></ion-icon>
-    </ion-item>
-
-    <ion-item>
-      <ion-icon name='leaf' item-start></ion-icon>
-      Herbology
-      <ion-icon name='rose' item-end color="secondary"></ion-icon>
-    </ion-item>
-
-    <ion-item>
-      <ion-icon name='flask' item-start></ion-icon>
-      Potions
-      <ion-note item-end>
-      Poisonous
-      </ion-note>
+      <ion-label>Languages</ion-label>
+      <ion-select [(ngModel)]="language">
+        <ion-option value="en">English</ion-option>
+        <ion-option value="ja">Japanese</ion-option>
+      </ion-select>
     </ion-item>
   </ion-list>
 
-  <ion-list>
-
+  <ion-list no-border>
     <ion-list-header>
-      Activities
+      Themes
     </ion-list-header>
     <ion-item>
-      Incantation
-      <ion-icon name='color-wand' item-start></ion-icon>
-      <ion-note item-end>Crucio!</ion-note>
-    </ion-item>
-
-    <ion-item>
-      <ion-toggle checked="true"></ion-toggle>
-      <ion-label>
-        Quidditch Practice
-      </ion-label>
-      <ion-icon name='brush' item-start></ion-icon>
-    </ion-item>
-    <ion-item>
-      <ion-icon name='wine' item-start></ion-icon>
-      Mead Drinking
-      <ion-note item-end>Yes please</ion-note>
+      <ion-label>Theme</ion-label>
+      <ion-select [(ngModel)]="theme">
+        <ion-option value="lb">Light blue</ion-option>
+        <ion-option value="cardano">Cardano</ion-option>
+        <ion-option value="db">Dark blue</ion-option>
+      </ion-select>
     </ion-item>
   </ion-list>
-  <ion-list>
+
+  <ion-list no-border>
     <ion-list-header>
-      Friends
+      Terms of use
     </ion-list-header>
-    <ion-item>
-      <ion-icon name='flash' item-start></ion-icon>
-      Harry
-      <ion-note item-end>The boy who lived</ion-note>
-    </ion-item>
-    <ion-item>
-      <ion-icon name='book' item-start></ion-icon>
-      Hermoine
-      <ion-note item-end>Muggle-born</ion-note>
-    </ion-item>
-    <ion-item>
-      <ion-icon name='beer' item-start></ion-icon>
-      Ron
-      <ion-note item-end>Brilliant!</ion-note>
-    </ion-item>
+    <button ion-item (click)="ada?.viewTermsOfServiceAgreementModal()">
+      Terms of Service Agreement
+    </button>
   </ion-list>
 
 </ion-content>

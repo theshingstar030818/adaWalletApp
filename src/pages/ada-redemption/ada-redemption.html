@@ -7,7 +7,10 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Ada Redemption</ion-title>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>ADA REDEMPTION</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -31,10 +34,12 @@
     <div *ngSwitchCase="'Regular'">
 
       <ion-card class="card">
-        <ion-card-header>
-          <p>add text here</p>
-        </ion-card-header>
         <ion-card-content>
+          <ion-item>
+            <button item-end clear ion-button icon-only (click)="ada?.showRegularAdaRedemptionInfoAlert()">
+              <ion-icon name="ios-information-circle-outline" ></ion-icon>
+            </button>
+          </ion-item>
           <ion-row>
             <ion-col col-8>
               <ion-item>
@@ -43,7 +48,7 @@
               </ion-item>
               <ion-item>
                   <ion-label stacked>Choose Wallet</ion-label>
-                  <ion-select [(ngModel)]="wallet" interface="popover">
+                  <ion-select [(ngModel)]="wallet">
                     <ion-option value="my">My Wallet</ion-option>
                     <ion-option value="my2">My Wallet2</ion-option>
                   </ion-select>
@@ -71,10 +76,12 @@
 
     <div *ngSwitchCase="'Force'">
       <ion-card class="card">
-        <ion-card-header>
-          <p>add text here</p>
-        </ion-card-header>
         <ion-card-content>
+          <ion-item>
+            <button item-end clear ion-button icon-only (click)="ada?.showForcedAdaRedemptionInfoAlert()">
+              <ion-icon name="ios-information-circle-outline" ></ion-icon>
+            </button>
+          </ion-item>
           <ion-row>
             <ion-col col-8>
               <ion-item>
@@ -83,7 +90,7 @@
               </ion-item>
               <ion-item>
                   <ion-label stacked>Choose Wallet</ion-label>
-                  <ion-select [(ngModel)]="wallet" interface="popover">
+                  <ion-select [(ngModel)]="wallet">
                       <ion-option value="my">My Wallet</ion-option>
                       <ion-option value="my2">My Wallet2</ion-option>
                     </ion-select>
@@ -111,18 +118,17 @@
 
     <div *ngSwitchCase="'Paper'">
       <ion-card class="card">
-        <ion-card-header>
-          <p>add text here</p>
-        </ion-card-header>
         <ion-card-content>
-
+          <ion-item>
+            <p>To redeem your Ada, enter your shielded vending key from the certificate, choose a wallet where Ada should be redeemed and enter 9 word mnemonic passphrase.</p>
+          </ion-item>
           <ion-item>
             <ion-label stacked>Sheilded vending Key</ion-label>
             <ion-input type="text" placeholder="Enter your sheilded vending key" ></ion-input>
           </ion-item>
           <ion-item>
             <ion-label stacked>Choose Wallet</ion-label>
-            <ion-select [(ngModel)]="wallet" interface="popover">
+            <ion-select [(ngModel)]="wallet">
               <ion-option value="my">My Wallet</ion-option>
               <ion-option value="my2">My Wallet2</ion-option>
             </ion-select>

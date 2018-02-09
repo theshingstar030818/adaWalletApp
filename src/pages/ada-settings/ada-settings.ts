@@ -17,6 +17,8 @@ export class AdaSettingsPage {
 
   tabComponent: string = 'AdaPage';
   transactionAssuranceSecurityLevel: string = "normal";
+  language: string = 'en';
+  theme: string = 'lb';
 
   constructor(
     public navCtrl: NavController, 

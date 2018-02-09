@@ -26,7 +26,6 @@ import { AdaRecoveryPhraseVerifyModalPage } from '../pages/ada-recovery-phrase-v
 import { AdaChangeWalletPassphraseModalPage } from '../pages/ada-change-wallet-passphrase-modal/ada-change-wallet-passphrase-modal';
 import { ConferenceData } from '../providers/conference-data';
 import { UserData } from '../providers/user-data';
-import { AdaRedemptionPage } from '../pages/ada-redemption/ada-redemption';
 
 // crypto pages
 import { AdaPage } from '../pages/ada/ada';
@@ -44,6 +43,8 @@ import { AdaWalletRecoverUsingIdPage } from '../pages/ada-wallet-recover-using-i
 import { AdaCreateNewWalletPage } from '../pages/ada-create-new-wallet/ada-create-new-wallet';
 import { AdaSendReceivePage } from '../pages/ada-send-receive/ada-send-receive';
 import { AdaTransactionDetailPage } from '../pages/ada-transaction-detail/ada-transaction-detail';
+import { AdaRedemptionPage } from '../pages/ada-redemption/ada-redemption';
+import { AdaTermsOfServiceAgreementPage } from '../pages/ada-terms-of-service-agreement/ada-terms-of-service-agreement';
 
 // crypto providers 
 import { BtcProvider } from '../providers/btc/btc';
@@ -93,7 +94,8 @@ import { ConfirmPage } from '../pages/confirm/confirm';
     AdaBuySellPage,
     AdaSendReceivePage,
     AdaTransactionDetailPage,
-    AdaRedemptionPage
+    AdaRedemptionPage,
+    AdaTermsOfServiceAgreementPage
   ],
   imports: [
     BrowserModule,
@@ -133,7 +135,8 @@ import { ConfirmPage } from '../pages/confirm/confirm';
         { component: AdaBuySellPage, name: 'AdaBuySellPage', segment: 'ada-buy-sell-page' },
         { component: AdaSendReceivePage, name: 'AdaSendReceivePage', segment: 'ada-send-receive-page' },
         { component: AdaTransactionDetailPage, name: 'AdaTransactionDetailPage', segment: 'ada-transaction-detail-page' },
-        { component: AdaRedemptionPage, name: 'AdaRedemptionPage', segment: 'ada-transaction-detail' }
+        { component: AdaRedemptionPage, name: 'AdaRedemptionPage', segment: 'ada-transaction-detail' },
+        { component: AdaTermsOfServiceAgreementPage, name: 'AdaTermsOfServiceAgreementPage', segment: 'ada-terms-of-service-agreement-page' }
       ]
     })
   ],
@@ -170,7 +173,8 @@ import { ConfirmPage } from '../pages/confirm/confirm';
     AdaBuySellPage,
     AdaSendReceivePage,
     AdaTransactionDetailPage,
-    AdaRedemptionPage
+    AdaRedemptionPage,
+    AdaTermsOfServiceAgreementPage
   ],
   providers: [
     { provide: ErrorHandler, useClass: IonicErrorHandler },

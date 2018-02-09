@@ -862,6 +862,53 @@ export class AdaProvider {
     confirm.present();
   }
 
+  showForcedAdaRedemptionInfoAlert(){
+    let alert = this.alertCtrl.create({
+      title: 'Force ADA Redemption',
+      message: `<p text-wrap>To redeem your Ada, upload your certificate or copy and paste your redemption code from the certificate. Below is an example of a redemption key. Your key will look similar:
+      <br><br>
+      B_GQOAffMBeRIn6vh1hJmeOT3ViS_TmaT4XAHAfDVH0=
+      <br><br>
+      If you upload a PDF file with your certificate, a redemption code will be automatically extracted.
+      <br><br>
+      If you upload an encrypted certificate, you will need to provide your email address, Ada passcode and Ada amount to decrypt your certificate and your redemption code will be automatically extracted.</p>`,
+      buttons: [{
+        text: 'Ok',
+        handler: () => {
+          console.log('Ok');
+          return true;
+        }
+      }]
+    });
+    alert.present();
+  }
+
+  showRegularAdaRedemptionInfoAlert(){
+    let alert = this.alertCtrl.create({
+      title: 'Regular ADA Redemption',
+      message: `<p text-wrap>To redeem your Ada, upload your certificate or copy and paste your redemption code from the certificate. Below is an example of a redemption key. Your key will look similar:
+      <br><br>
+      B_GQOAffMBeRIn6vh1hJmeOT3ViS_TmaT4XAHAfDVH0=
+      <br><br>
+      If you upload a PDF file with your certificate, a redemption code will be automatically extracted.
+      <br><br>
+      If you upload an encrypted certificate, you will need to provide a 9 word mnemonic passphrase to decrypt your certificate and your redemption code will be automatically extracted.</p>`,
+      buttons: [{
+        text: 'Ok',
+        handler: () => {
+          console.log('Ok');
+          return true;
+        }
+      }]
+    });
+    alert.present();
+  }
+
+  viewTermsOfServiceAgreementModal(){
+    let modal = this.modalCtrl.create('AdaTermsOfServiceAgreementPage', {});
+    modal.present();
+  }
+
   showPhraseWrittenDownConfirm() {
     let alert = this.alertCtrl.create({
       title: `<h1>RECOVERY PHRASE</h1> 
