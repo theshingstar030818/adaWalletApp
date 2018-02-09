@@ -22,7 +22,6 @@ This is purely a front end application layer of Daedalus wallet built with Ionic
 * Clone this repository: `https://github.com/tanzeelrana/adaWalletApp.git`.
 * Run `npm install` from the project root.
 * Run `ionic serve` in a terminal from the project root.
-* Profit. :tada:
 
 _Note: You may need to add “sudo” in front of any global commands to install the utilities._
 
