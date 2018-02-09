@@ -36,10 +36,6 @@ To make the full application work there are multiple components that need to be 
 
 <img src="resources/screenshots/DaedalusMobileClient.png" alt="Overall Design and Architecture">
 
-## Contributing
-See [CONTRIBUTING.md](https://github.com/ionic-team/ionic-conference-app/blob/master/.github/CONTRIBUTING.md) :tada::+1:
-
-
 ## Use Cases
 
 * Action Sheet - [ [template](https://github.com/ionic-team/ionic-conference-app/blob/master/src/pages/speaker-list/speaker-list.html) | [code](https://github.com/ionic-team/ionic-conference-app/blob/master/src/pages/speaker-list/speaker-list.ts) ]
