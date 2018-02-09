@@ -27,7 +27,14 @@ This is purely a front end application layer of Daedalus wallet built with Ionic
 _Note: You may need to add “sudo” in front of any global commands to install the utilities._
 
 ## Overall Design Architecture
+To make the full application work there are multiple components that need to be put into place before it can run properly.
 
+* Daedalus Mobile Client App (Ionic Hybrid App in AngularJS & TypeScript)
+* AWS Mobile hub with cognito authentication services 
+* [Cardano SL Node](https://github.com/input-output-hk/cardano-sl)
+* [Daedalus Wallet](https://github.com/input-output-hk/daedalus)
+
+<img src="resources/screenshots/DaedalusMobileClient.png" alt="Overall Design and Architecture">
 
 ## Contributing
 See [CONTRIBUTING.md](https://github.com/ionic-team/ionic-conference-app/blob/master/.github/CONTRIBUTING.md) :tada::+1:
