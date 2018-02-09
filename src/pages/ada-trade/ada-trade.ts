@@ -226,8 +226,10 @@ export class AdaTradePage {
 
   scanBarcode(){
     this.ada.scanBarCode().then((data)=>{
+      // {"cancelled":0,"text":"DdzFFzCqrhspgVMkDvrJSfRJbFrFa31TDkCjyt5RqibCcJLh1XiTfhKuKWrvFkrgpSvHyLfpons5BHdtqthr3aRBoE3a8V43uiskTyFc","format":"QR_CODE"}
       // this.receiver.value =
       console.log(data);
+      this.receiver.setValue((<any>data).text);
     }).catch((error)=>{
       console.log(error);
     })
