@@ -10,6 +10,7 @@ import { AdaSendReceivePage } from '../ada-send-receive/ada-send-receive';
 import { AdaBuySellPage } from '../ada-buy-sell/ada-buy-sell';
 import { AdaSettingsPage } from '../ada-settings/ada-settings';
 import { AdaProvider } from '../../providers/ada/ada';
+import { AdaRedemptionPage } from '../ada-redemption/ada-redemption';
 
 /**
  * Generated class for the AdaPage page.
@@ -27,7 +28,8 @@ export class AdaPage {
 
   settings: any = AdaSettingsPage;
   adaBuySell: any = AdaBuySellPage;
-  adaSendReceive: any = AdaSendReceivePage;
+  adaSendReceive: any = AdaSendReceivePage; 
+  adaRedem: any = AdaRedemptionPage;
   mySelectedIndex: number;
 
   constructor(

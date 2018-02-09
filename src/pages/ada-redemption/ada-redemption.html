@@ -1,0 +1,143 @@
+<!--
+  Generated template for the AdaRedemptionPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Ada Redemption</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-segment [(ngModel)]="Stab">
+    <ion-segment-button value="Regular">
+      Regular
+    </ion-segment-button>
+    <ion-segment-button value="Force">
+      Force vended
+    </ion-segment-button>
+    <ion-segment-button value="Paper">
+      Paper vended
+    </ion-segment-button>
+  </ion-segment>
+
+  <div [ngSwitch]="Stab">
+    <div *ngSwitchCase="'Regular'">
+
+      <ion-card class="card">
+        <ion-card-header>
+          <p>add text here</p>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-row>
+            <ion-col col-8>
+              <ion-item>
+                <ion-label stacked>Redemption Key</ion-label>
+                <ion-input type="text" placeholder="Enter Redemption key" ></ion-input>
+              </ion-item>
+              <ion-item>
+                  <ion-label stacked>Choose Wallet</ion-label>
+                  <ion-select [(ngModel)]="wallet" interface="popover">
+                    <ion-option value="my">My Wallet</ion-option>
+                    <ion-option value="my2">My Wallet2</ion-option>
+                  </ion-select>
+              </ion-item>
+            </ion-col>
+            <ion-col col-4>
+              <ion-item class="padding-left0">
+                <label fixed>Certificate</label>
+                <div class="preview-img"> <img id="myImage" width="100%" height="100"  size="30" /> </div>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <ion-item>
+                <ion-label stacked>Password</ion-label>
+                <ion-input type="password" placeholder="Password" ></ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </ion-card-content>
+      </ion-card>
+      <button ion-button full>Redeem your Ada</button>
+    </div>
+
+    <div *ngSwitchCase="'Force'">
+      <ion-card class="card">
+        <ion-card-header>
+          <p>add text here</p>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-row>
+            <ion-col col-8>
+              <ion-item>
+                  <ion-label stacked>Redemption Key</ion-label>
+                  <ion-input type="text" placeholder="Enter Redemption key" ></ion-input>
+              </ion-item>
+              <ion-item>
+                  <ion-label stacked>Choose Wallet</ion-label>
+                  <ion-select [(ngModel)]="wallet" interface="popover">
+                      <ion-option value="my">My Wallet</ion-option>
+                      <ion-option value="my2">My Wallet2</ion-option>
+                    </ion-select>
+              </ion-item>
+            </ion-col>
+            <ion-col col-4>
+              <ion-item class="padding-left0">
+                <label fixed>Certificate</label>
+                <div class="preview-img"> <img id="myImage" width="100%" height="100"  size="30" /> </div>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <ion-item>
+                  <ion-label stacked>Password</ion-label>
+                  <ion-input type="password" placeholder="Password" ></ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </ion-card-content>
+      </ion-card>
+      <button ion-button full>Redeem your Ada</button>
+    </div>
+
+    <div *ngSwitchCase="'Paper'">
+      <ion-card class="card">
+        <ion-card-header>
+          <p>add text here</p>
+        </ion-card-header>
+        <ion-card-content>
+
+          <ion-item>
+            <ion-label stacked>Sheilded vending Key</ion-label>
+            <ion-input type="text" placeholder="Enter your sheilded vending key" ></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label stacked>Choose Wallet</ion-label>
+            <ion-select [(ngModel)]="wallet" interface="popover">
+              <ion-option value="my">My Wallet</ion-option>
+              <ion-option value="my2">My Wallet2</ion-option>
+            </ion-select>
+          </ion-item>
+          <ion-item>
+            <ion-label stacked>Password</ion-label>
+            <ion-input type="password" placeholder="Password" ></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label stacked>Passphrase to Decrypt the Ada Voucher Certificate</ion-label>
+            <ion-input type="password" placeholder="Enter your 9-Word Passphrase here" ></ion-input>
+          </ion-item>
+        </ion-card-content>
+      </ion-card>
+      <button ion-button full>Redeem your Ada</button>
+    </div>
+  </div>
+</ion-content>

@@ -26,6 +26,7 @@ import { AdaRecoveryPhraseVerifyModalPage } from '../pages/ada-recovery-phrase-v
 import { AdaChangeWalletPassphraseModalPage } from '../pages/ada-change-wallet-passphrase-modal/ada-change-wallet-passphrase-modal';
 import { ConferenceData } from '../providers/conference-data';
 import { UserData } from '../providers/user-data';
+import { AdaRedemptionPage } from '../pages/ada-redemption/ada-redemption';
 
 // crypto pages
 import { AdaPage } from '../pages/ada/ada';
@@ -91,7 +92,8 @@ import { ConfirmPage } from '../pages/confirm/confirm';
     AdaCreateNewWalletPage,
     AdaBuySellPage,
     AdaSendReceivePage,
-    AdaTransactionDetailPage
+    AdaTransactionDetailPage,
+    AdaRedemptionPage
   ],
   imports: [
     BrowserModule,
@@ -130,7 +132,8 @@ import { ConfirmPage } from '../pages/confirm/confirm';
         { component: AdaCreateNewWalletPage, name: 'AdaCreateNewWalletPage', segment: 'ada-create-new-wallet-page' },
         { component: AdaBuySellPage, name: 'AdaBuySellPage', segment: 'ada-buy-sell-page' },
         { component: AdaSendReceivePage, name: 'AdaSendReceivePage', segment: 'ada-send-receive-page' },
-        { component: AdaTransactionDetailPage, name: 'AdaTransactionDetailPage', segment: 'ada-transaction-detail-page' }
+        { component: AdaTransactionDetailPage, name: 'AdaTransactionDetailPage', segment: 'ada-transaction-detail-page' },
+        { component: AdaRedemptionPage, name: 'AdaRedemptionPage', segment: 'ada-transaction-detail' }
       ]
     })
   ],
@@ -166,7 +169,8 @@ import { ConfirmPage } from '../pages/confirm/confirm';
     AdaCreateNewWalletPage,
     AdaBuySellPage,
     AdaSendReceivePage,
-    AdaTransactionDetailPage
+    AdaTransactionDetailPage,
+    AdaRedemptionPage
   ],
   providers: [
     { provide: ErrorHandler, useClass: IonicErrorHandler },
