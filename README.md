@@ -1,15 +1,15 @@
-# Ionic Conference Application
+# Daedalus Mobile Client Application
 
-This is purely a demo of Ionic with TypeScript. It is still in development.
+This is purely a front end application layer of Daedalus wallet built with Ionic Hybrid mobile application in TypeScript. It is still in development.
 
 
 ## Important!
-**There is not an actual Ionic Conference at this time.** This project is just to show off Ionic components in a real-world application. Please go through the steps in [CONTRIBUTING.md](https://github.com/ionic-team/ionic-conference-app/blob/master/.github/CONTRIBUTING.md) before submitting an issue.
+**There is no user wallet sensitive data stored by the application at any given time.** This project is a hybrid mobile applications using Ionic framework that makes use of the [Cardano SL Wallet Web API](https://cardanodocs.com/technical/wallet/api/). There are multiple components that conenct together to make this application work which are listed in detail in a later section of this document. 
 
 
 ## Table of Contents
+ - [Overall Design/Architecture](#overall-design-architecture)
  - [Getting Started](#getting-started)
- - [Contributing](#contributing)
  - [Use Cases](#use-cases)
  - [App Preview](#app-preview)
  - [File Structure of App](#file-structure-of-app)
@@ -25,6 +25,9 @@ This is purely a demo of Ionic with TypeScript. It is still in development.
 * Profit. :tada:
 
 _Note: You may need to add “sudo” in front of any global commands to install the utilities._
+
+## Overall Design Architecture
+
 
 ## Contributing
 See [CONTRIBUTING.md](https://github.com/ionic-team/ionic-conference-app/blob/master/.github/CONTRIBUTING.md) :tada::+1:
