@@ -63,6 +63,8 @@ export class LoginPage {
         console.log('Error :', err);
         loading.dismiss();
       });
+    }else{
+      loading.dismiss();
     }
   }
 

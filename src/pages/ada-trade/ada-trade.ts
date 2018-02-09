@@ -6,6 +6,7 @@ import 'rxjs/add/operator/debounceTime';
 import {Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { BigNumber } from 'bignumber.js';
 import { DECIMAL_PLACES_IN_ADA } from '../../providers/ada/config/numbersConfig';
+import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 
 /**
  * Generated class for the AdaTradePage page.
@@ -50,6 +51,7 @@ export class AdaTradePage {
     public actionSheetCtrl: ActionSheetController,
     public toastCtrl: ToastController,
     private formBuilder: FormBuilder,
+    private barcodeScanner: BarcodeScanner,
     ) {
       if(!navParams.data){this.navCtrl.setRoot('AdaPage')}
       this.accountIndex = navParams.data.accountIndex;
@@ -225,17 +227,16 @@ export class AdaTradePage {
   }
 
   scanBarcode(){
-    this.ada.scanBarCode().then((data)=>{
+    this.barcodeScanner.scan().then((barcodeData) => {
+      // Success! Barcode data is here
       // {"cancelled":0,"text":"DdzFFzCqrhspgVMkDvrJSfRJbFrFa31TDkCjyt5RqibCcJLh1XiTfhKuKWrvFkrgpSvHyLfpons5BHdtqthr3aRBoE3a8V43uiskTyFc","format":"QR_CODE"}
-      // this.receiver.value =
-      console.log(data);
-      console.log('check if can read data right ....');
-      console.log((<any>data).text);
-      this.showAlert(JSON.stringify(data));
-      this.receiver.setValue((<any>data).text);
-    }).catch((error)=>{
-      console.log(error);
-    })
+      console.log(barcodeData);
+      this.receiver.setValue(barcodeData.text);
+    }, (err) => {
+      // An error occurred
+      console.log(err);
+      this.ada.presentToast(err.message);
+    });
   }
 
   showAlert(data) {

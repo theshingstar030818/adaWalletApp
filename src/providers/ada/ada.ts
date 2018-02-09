@@ -504,6 +504,8 @@ export class AdaProvider {
       this.barcodeScanner.scan().then((barcodeData) => {
         // Success! Barcode data is here
         console.log(barcodeData);
+        console.log(barcodeData);
+        console.log(barcodeData);
         resolve(barcodeData);
       }, (err) => {
         // An error occurred
